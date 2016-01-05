@@ -22,30 +22,30 @@ Available commands:
 
 $mmrz_list = {} # {word => [pronounce, remindTime]}
 
+def my_readline prompt
+=begin 
+  Get user's input with CR||LF and front||end spaces removed.
+=end
+  Readline.readline(prompt, true).chomp.gsub(/^\s*|\s*$/, "")
+end
+
 def add_word
 =begin 
     Add Japanese word and its pronunciation to database.
     TODO: add data to data base.
 =end
   system "clear"
-  puts "Adding mode (単語 平仮名):"
-  print "Add => "
+  puts "Adding mode (word pronunciation):"
 
-  command = STDIN.gets.chomp.gsub(/^\s*|\s*$/, "")
-  while not "exit" == command
+  while not "exit" == ( command = my_readline("Add => ") )
     words = command.split
     if not words.size == 2
-      puts "format not correct"
-      print "Add => "
-      command = STDIN.gets.chomp.gsub(/^\s*|\s*$/, "")
+      puts "Add: format not correct"
       next
     end
     
     word, pronounce = words[0], words[1]
     $mmrz_list[word] = {:pronounce => pronounce, :remindTime => 111}
-
-    print "Add => "
-    command = STDIN.gets.chomp.gsub(/^\s*|\s*$/, "")
   end
   system "clear"
 end
@@ -61,8 +61,7 @@ if __FILE__ == $0
   puts welcome_str
 
   while true
-    print "Mmrz => "
-    command = STDIN.gets.chomp.gsub(/^\s*|\s*$/, "")
+    command = my_readline("Mmrz => ")
     case command
     when "exit"
       exit()
