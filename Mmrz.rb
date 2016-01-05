@@ -1,11 +1,12 @@
 #!/env/bin/ruby
 # encoding: utf-8
 
-require "readline"
+require 'rubygems'
+require 'readline'
 require 'sqlite3'
 
-Encoding.default_external = Encoding::UTF_8
-Encoding.default_internal = Encoding::UTF_8
+# Encoding.default_external = Encoding::UTF_8
+# Encoding.default_internal = Encoding::UTF_8
   
 # db = SQLite3::Database.new "ummrz.db"
 
@@ -18,6 +19,7 @@ Available commands:
  - add:  Add words(espacilly Japanese) to word book.
  - list: List all your words in word book.
  - exit: Exit the application.
+ \
 "
 
 $mmrz_list = {} # { $word => {:pronounce => $pronounce, :remindTime => $remindTime} }
