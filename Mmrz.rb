@@ -20,7 +20,7 @@ Available commands:
  - exit: Exit the application.
 "
 
-$mmrz_list = {} # {word => [pronounce, remindTime]}
+$mmrz_list = {} # { $word => {:pronounce => $pronounce, :remindTime => $remindTime} }
 
 def my_readline prompt
 =begin 
