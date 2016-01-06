@@ -4,8 +4,9 @@
 require 'rubygems'
 require 'readline'
 require 'sqlite3'
-require './db.rb'
 require 'rbconfig'
+require 'io/console'
+require './db.rb'
 
 # Encoding.default_external = Encoding::UTF_8
 # Encoding.default_internal = Encoding::UTF_8
@@ -44,7 +45,7 @@ def pause
     system "pause>nul"
   # Linux/Mac
   else
-    system "read"
+    STDIN.getch
   end
 end
 
