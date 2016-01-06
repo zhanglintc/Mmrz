@@ -181,7 +181,8 @@ def mmrz_word
           # after "mark remembered as true", row_as_key can be changed
           # update database
           row_as_key[2] += 1
-          row_as_key[3] = cal_remind_time(row_as_key[2])
+          row_as_key[3] = cal_remind_time row_as_key[2], "int"
+          row_as_key[4] = cal_remind_time row_as_key[2], "str"
           dbMgr.updateDB row_as_key
         elsif command == "exit"
           clear_sreen()
