@@ -49,30 +49,36 @@ def pause
   end
 end
 
-def cal_remind_time memTimes
-  curTime = Time.now.to_i
+def cal_remind_time memTimes, type
+  curTime = Time.now
 
   case memTimes
   when 0
-    return curTime + (60 * 5) # 5 minuts
+    remindTime = curTime + (60 * 5) # 5 minuts
   when 1
-    return curTime + (60 * 30) # 30 minuts
+    remindTime = curTime + (60 * 30) # 30 minuts
   when 2
-    return curTime + (60 * 60 * 12) # 12 hours
+    remindTime = curTime + (60 * 60 * 12) # 12 hours
   when 3
-    return curTime + (60 * 60 * 24) # 1 day
+    remindTime = curTime + (60 * 60 * 24) # 1 day
   when 4
-    return curTime + (60 * 30 * 24 * 2) # 2 days
+    remindTime = curTime + (60 * 30 * 24 * 2) # 2 days
   when 5
-    return curTime + (60 * 30 * 24 * 4) # 4 days
+    remindTime = curTime + (60 * 30 * 24 * 4) # 4 days
   when 6
-    return curTime + (60 * 30 * 24 * 7) # 7 days
+    remindTime = curTime + (60 * 30 * 24 * 7) # 7 days
   when 7
-    return curTime + (60 * 30 * 24 * 15) # 15 days
+    remindTime = curTime + (60 * 30 * 24 * 15) # 15 days
   else
-    return 0
+    remindTime = curTime
   end
-    
+
+  case type
+  when "int"
+    return remindTime.to_i
+  when "str"
+    return remindTime.to_s[0..-7]
+  end
 end
 
 def add_word
@@ -87,13 +93,15 @@ def add_word
       next
     end
     
-    word       = words[0]
-    pronounce  = words[1]
-    memTimes   = 0
-    remindTime = cal_remind_time(memTimes)
+    word          = words[0]
+    pronounce     = words[1]
+    memTimes      = 0
+    remindTime    = cal_remind_time(memTimes, "int")
+    remindTimeStr = cal_remind_time(memTimes, "str")
+    wordID        = dbMgr.getMaxWordID + 1
     
-    row = [word, pronounce, memTimes, remindTime]
-    dbMgr.insertDB row 
+    row = [word, pronounce, memTimes, remindTime, remindTimeStr, wordID]
+    dbMgr.insertDB row
   end
 
   dbMgr.closeDB 
@@ -102,8 +110,18 @@ end
 
 def list_word
   dbMgr = MmrzDBManager.new
-  dbMgr.readDB.each {|row| p row}
+  dbMgr.readDB.each do |row|
+    word          = row[0]
+    pronounce     = row[1]
+    memTimes      = row[2]
+    remindTime    = row[3]
+    remindTimeStr = row[4]
+    wordID        = row[5]
+    printf("%d => next at \"%s\", %s, %s, %d times\n", wordID, remindTimeStr, word, pronounce, memTimes)
+  end
+
   dbMgr.closeDB
+  puts ""
 end
 
 def mmrz_word
@@ -130,11 +148,11 @@ def mmrz_word
       if not remembered
         # TODO: do not update memTimes if not remembered at first choose
         clear_sreen()
-        puts "Memorize mode:\n\n"
-        puts "[#{left_words}] #{ left_words == 1 ? 'word' : 'words'} left:\n\n"
-        puts "単語: #{row_as_key[0]}"
-        puts "-------------------"
-        print "発音: "
+        puts  "Memorize mode:\n\n"
+        puts  "[#{left_words}] #{ left_words == 1 ? 'word' : 'words'} left:\n\n"
+        puts  "単語: #{row_as_key[0]}"
+        puts  "-------------------"
+        print "秘密: "
         pause
         puts "#{row_as_key[1]}\n\n"
         command = my_readline("Do you remember => ")
