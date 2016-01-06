@@ -50,6 +50,27 @@ def pause
   end
 end
 
+def get_memorize_words
+  # Return a hash contains words reach remind time.
+
+  dbMgr = MmrzDBManager.new
+  read_rows  = dbMgr.readDB
+
+  # select words that need to be memorized
+  selected_rows = {} # { list: row_as_key => boolean: remembered }
+  read_rows.each do |r|
+    selected_rows[r] = false if r[3] < Time.now.to_i
+  end
+
+  dbMgr.closeDB
+  return selected_rows
+end
+
+def show_unmemorized_count
+  count = get_memorize_words.size
+  puts "Note: #{count} words need to be memorized"
+end
+
 def cal_remind_time memTimes, type
   curTime = Time.now
 
@@ -142,14 +163,8 @@ end
 
 def mmrz_word
   dbMgr = MmrzDBManager.new
-  read_rows  = dbMgr.readDB
 
-  # select words that need to be memorized
-  selected_rows = {} # { list: row_as_key => boolean: remembered }
-  read_rows.each do |r|
-    selected_rows[r] = false if r[3] < Time.now.to_i
-  end
-
+  selected_rows = get_memorize_words
   left_words = selected_rows.size
   if left_words == 0
     clear_sreen()
@@ -210,6 +225,7 @@ if __FILE__ == $0
   puts welcome_str
 
   while true
+    show_unmemorized_count()
     raw_str  = my_readline("Mmrz => ")
     raw_list = raw_str.split
     command  = raw_list.shift
