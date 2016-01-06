@@ -69,6 +69,8 @@ def cal_remind_time memTimes
     return curTime + (60 * 30 * 24 * 7) # 7 days
   when 7
     return curTime + (60 * 30 * 24 * 15) # 15 days
+  else
+    return 0
   end
     
 end
@@ -126,7 +128,6 @@ def mmrz_word
     completed = true
     selected_rows.each do |row_as_key, remembered|
       if not remembered
-        # TODO: delete? words after 8 times memorize
         # TODO: do not update memTimes if not remembered at first choose
         clear_sreen()
         puts "Memorize mode:\n\n"

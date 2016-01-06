@@ -22,7 +22,7 @@ class MmrzDBManager
   end
 
   def readDB
-    @db.execute "select * from UNMMRZ"
+    @db.execute "select * from UNMMRZ where memTimes < 8"
   end
 
   def closeDB
