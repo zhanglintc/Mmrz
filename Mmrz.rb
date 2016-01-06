@@ -154,7 +154,7 @@ def list_word
     remindTime    = row[3]
     remindTimeStr = row[4]
     wordID        = row[5]
-    printf("%d => next at \"%s\", %s, %s, %d times\n", wordID, remindTimeStr, word, pronounce, memTimes)
+    printf("%4d => next at \"%s\", %s, %s, %d times\n", wordID, remindTimeStr, word, pronounce, memTimes)
   end
 
   dbMgr.closeDB
