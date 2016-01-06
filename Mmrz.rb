@@ -89,7 +89,7 @@ def add_word
   while not "exit" == ( command = my_readline("Add => ") )
     words = command.split
     if not words.size == 2
-      puts "\nAdd: format not correct"
+      puts "Add: format not correct\n\n"
       next
     end
     
@@ -106,6 +106,21 @@ def add_word
 
   dbMgr.closeDB 
   clear_sreen()
+end
+
+def del_word paras
+  if paras.size != 1
+    puts "del: command not correct\n\n"
+  else
+    wordID = paras[0]
+    dbMgr = MmrzDBManager.new
+    if dbMgr.deleteDB(wordID)
+      puts "del: data with wordID \"#{wordID}\" has successfully removed\n\n"
+    else
+      puts "del: wordID \"#{wordID}\" not found\n\n"
+    end
+    dbMgr.closeDB
+  end
 end
 
 def list_word
@@ -193,18 +208,23 @@ if __FILE__ == $0
   puts welcome_str
 
   while true
-    command = my_readline("Mmrz => ")
+    raw_str  = my_readline("Mmrz => ")
+    raw_list = raw_str.split
+    command  = raw_list.shift
+    paras    = raw_list
     case command
     when "exit"
       exit()
     when "add"
-      add_word
+      add_word()
+    when "del"
+      del_word(paras)
     when "list"
       list_word()
     when "mmrz"
       mmrz_word()
     else
-      puts "\nMmrz: command not found"
+      puts "Mmrz: command not found\n\n"
     end
   end
 end

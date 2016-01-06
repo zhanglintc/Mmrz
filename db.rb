@@ -31,13 +31,20 @@ class MmrzDBManager
     @db.execute "update UNMMRZ set memTimes = #{row[2]}, remindTime = #{row[3]} where word = '#{row[0]}'"
   end
 
+  def deleteDB wordID
+    found = @db.execute("select * from UNMMRZ where wordID = #{wordID}").size != 0 ? true : false
+    @db.execute "delete from UNMMRZ where wordID = #{wordID}"
+
+    return found
+  end
+
   def readDB
     @db.execute "select * from UNMMRZ where memTimes < 8"
   end
 
   def getMaxWordID
     # format of maxWordID is like: maxWordID = [[33]], thus use maxWordID[0][0] to access it
-    @db.execute("select max(wordID) from UNMMRZ")[0][0]
+    @db.execute("select max(wordID) from UNMMRZ")[0][0] or 0
   end
 
   def closeDB
