@@ -222,8 +222,6 @@ def mmrz_word
             selected_rows[row_as_key][0] = true # remembered = true
             left_words -= 1
             row_as_key[2] = 8
-            p row_as_key
-            gets
             dbMgr.updateDB row_as_key
             break # break "Do you remember"
           when "no"
