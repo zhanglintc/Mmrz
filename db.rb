@@ -43,7 +43,7 @@ class MmrzDBManager
   end
 
   def readAllDB
-    @db.execute "select * from UNMMRZ where memTimes"
+    @db.execute "select * from UNMMRZ"
   end
 
   def getMaxWordID
