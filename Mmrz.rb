@@ -37,7 +37,7 @@ def my_readline prompt
     print prompt
     gets.chomp.gsub(/^\s*|\s*$/, "")
   else
-    Readline.readline(prompt).chomp.gsub(/^\s*|\s*$/, "")
+    Readline.readline(prompt, true).chomp.gsub(/^\s*|\s*$/, "")
   end
 end
 
