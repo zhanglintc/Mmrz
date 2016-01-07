@@ -172,8 +172,7 @@ def mmrz_word
   end
 
   # memorize!!!
-  while true
-    completed = true
+  while left_words > 0
     selected_rows.each do |row_as_key, paras|
       remembered    = paras[0] # selected_rows[row_as_key][0]
       firstTimeFail = paras[1] # selected_rows[row_as_key][1]
@@ -212,7 +211,6 @@ def mmrz_word
             break # break "Do you remember"
           when "no"
             selected_rows[row_as_key][1] = true # firstTimeFail = true
-            completed = false
             break # break "Do you remember"
           when "exit"
             clear_screen()
@@ -223,8 +221,6 @@ def mmrz_word
         end
       end
     end
-
-    break if completed
   end
 
   clear_screen()
