@@ -16,9 +16,9 @@ class MmrzDBManager
 
   def initialize
     if DB_BUILD_WINDOWS_EXE
-      @db = SQLite3::Database.new ( File.dirname(__FILE__) + "./wordbook.db" )
-    else
       @db = SQLite3::Database.new "./wordbook.db"
+    else
+      @db = SQLite3::Database.new ( File.dirname(__FILE__) + "./wordbook.db" )
     end
   end
 
