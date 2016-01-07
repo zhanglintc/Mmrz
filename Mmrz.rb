@@ -30,7 +30,7 @@ def my_readline prompt
   Readline.readline(prompt, true).chomp.gsub(/^\s*|\s*$/, "")
 end
 
-def clear_sreen
+def clear_screen
   # Windows
   if RbConfig::CONFIG['target_os'] == "mingw32"
     system "cls"
@@ -105,7 +105,7 @@ end
 
 def add_word
   dbMgr = MmrzDBManager.new
-  clear_sreen()
+  clear_screen()
   puts "Adding mode:"
 
   while not "exit" == ( command = my_readline("Add => ") )
@@ -127,7 +127,7 @@ def add_word
   end
 
   dbMgr.closeDB 
-  clear_sreen()
+  clear_screen()
 end
 
 def del_word paras
@@ -154,7 +154,7 @@ def list_word
     remindTime    = row[3]
     remindTimeStr = row[4]
     wordID        = row[5]
-    printf("%4d => next at \"%s\", %s, %s, %d times\n", wordID, remindTimeStr, word, pronounce, memTimes)
+    printf("%4d => next at \"%s\", %d times, %s, %s\n", wordID, remindTimeStr, memTimes, word, pronounce)
   end
 
   dbMgr.closeDB
@@ -167,7 +167,7 @@ def mmrz_word
   selected_rows = get_memorize_words
   left_words = selected_rows.size
   if left_words == 0
-    clear_sreen()
+    clear_screen()
     puts "No word need to be memorized...\n\n"
     return
   end
@@ -178,7 +178,7 @@ def mmrz_word
     selected_rows.each do |row_as_key, remembered|
       if not remembered
         # TODO: do not update memTimes if not remembered at first choose
-        clear_sreen()
+        clear_screen()
         puts  "Memorize mode:\n\n"
         puts  "[#{left_words}] #{ left_words == 1 ? 'word' : 'words'} left:\n\n"
         puts  "単語: #{row_as_key[0]}"
@@ -200,7 +200,7 @@ def mmrz_word
           row_as_key[4] = cal_remind_time row_as_key[2], "str"
           dbMgr.updateDB row_as_key
         elsif command == "exit"
-          clear_sreen()
+          clear_screen()
           return
         else
           completed = false
@@ -211,7 +211,7 @@ def mmrz_word
     break if completed
   end
 
-  clear_sreen()
+  clear_screen()
   puts "Memorize completed...\n\n"
   dbMgr.closeDB
 end
@@ -221,7 +221,7 @@ if __FILE__ == $0
   dbMgr.createDB
   dbMgr.closeDB
 
-  clear_sreen()
+  clear_screen()
   puts welcome_str
 
   while true
@@ -232,6 +232,7 @@ if __FILE__ == $0
     paras    = raw_list
     case command
     when "exit"
+      clear_screen()
       exit()
     when "add"
       add_word()
