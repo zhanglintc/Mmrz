@@ -13,7 +13,7 @@ class MmrzDBManager
 =end
 
   def initialize
-    @db = SQLite3::Database.new "wordbook.db"
+    @db = SQLite3::Database.new ( File.dirname(__FILE__) + "/wordbook.db" )
   end
 
   def createDB

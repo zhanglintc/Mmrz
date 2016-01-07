@@ -9,7 +9,7 @@ require 'readline'
 require 'sqlite3'
 require 'rbconfig'
 require 'io/console'
-require './db.rb'
+require File.dirname(__FILE__) + '/db.rb'
 
 welcome_str = "\
 Welcome to Mmrz !!! -- Memorize words easily.
