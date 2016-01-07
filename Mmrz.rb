@@ -1,13 +1,18 @@
 #!/env/bin/ruby
 # encoding: utf-8
 
-Encoding.default_external = Encoding::UTF_8
-Encoding.default_internal = Encoding::UTF_8
+MMRZ_BUILD_WINDOWS_EXE = false
 
-require 'rubygems'
+if MMRZ_BUILD_WINDOWS_EXE
+  Encoding.default_external = Encoding::CP932
+  Encoding.default_internal = Encoding::CP932
+else
+  Encoding.default_external = Encoding::UTF_8
+  Encoding.default_internal = Encoding::UTF_8
+end
+
 require 'readline'
 require 'sqlite3'
-require 'rbconfig'
 require 'io/console'
 require File.dirname(__FILE__) + '/db.rb'
 
@@ -27,7 +32,13 @@ Available commands:
 
 def my_readline prompt
   # Get user's input with CR||LF and front||end spaces removed.
-  Readline.readline(prompt, true).chomp.gsub(/^\s*|\s*$/, "")
+
+  if MMRZ_BUILD_WINDOWS_EXE
+    print prompt
+    gets.chomp.gsub(/^\s*|\s*$/, "")
+  else
+    Readline.readline(prompt).chomp.gsub(/^\s*|\s*$/, "")
+  end
 end
 
 def clear_screen
@@ -181,9 +192,15 @@ def mmrz_word
         clear_screen()
         puts  "Memorize mode:\n\n"
         puts  "[#{left_words}] #{ left_words == 1 ? 'word' : 'words'} left:\n\n"
-        puts  "単語: #{row_as_key[0]}"
-        puts  "-------------------"
-        print "秘密: "
+        if MMRZ_BUILD_WINDOWS_EXE
+          puts  "単語: ".encode("cp932") + row_as_key[0]
+          puts  "-------------------"
+          print "秘密: ".encode("cp932")
+        else
+          puts  "単語: #{row_as_key[0]}"
+          puts  "-------------------"
+          print "秘密: "
+        end
         pause
         puts "#{row_as_key[1]}\n\n"
 
