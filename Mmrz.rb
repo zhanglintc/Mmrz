@@ -1,15 +1,15 @@
 #!/env/bin/ruby
 # encoding: utf-8
 
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
+
 require 'rubygems'
 require 'readline'
 require 'sqlite3'
 require 'rbconfig'
 require 'io/console'
 require './db.rb'
-
-Encoding.default_external = Encoding::UTF_8
-Encoding.default_internal = Encoding::UTF_8
 
 welcome_str = "\
 Welcome to Mmrz !!! -- Memorize words easily.
@@ -45,15 +45,19 @@ def pause
 end
 
 def get_memorize_words
-  # Return a hash contains words reach remind time.
+=begin
+  Return a hash contains words reach remind time.
+  Hash fomrat:
+    selected_rows -- { list: row_as_key => [boolean: remembered, boolean: firstTimeFail] }
+=end
 
   dbMgr = MmrzDBManager.new
   read_rows  = dbMgr.readDB
 
   # select words that need to be memorized
-  selected_rows = {} # { list: row_as_key => boolean: remembered }
+  selected_rows = {}
   read_rows.each do |r|
-    selected_rows[r] = false if r[3] < Time.now.to_i
+    selected_rows[r] = [false, false] if r[3] < Time.now.to_i
   end
 
   dbMgr.closeDB
@@ -71,6 +75,7 @@ def cal_remind_time memTimes, type
   case memTimes
   when 0
     remindTime = curTime + (60 * 5) # 5 minuts
+    # remindTime = curTime # 0 minuts, debug mode
   when 1
     remindTime = curTime + (60 * 30) # 30 minuts
   when 2
@@ -141,7 +146,7 @@ end
 
 def list_word
   dbMgr = MmrzDBManager.new
-  dbMgr.readDB.each do |row|
+  dbMgr.readAllDB.each do |row|
     word          = row[0]
     pronounce     = row[1]
     memTimes      = row[2]
@@ -169,9 +174,11 @@ def mmrz_word
   # memorize!!!
   while true
     completed = true
-    selected_rows.each do |row_as_key, remembered|
+    selected_rows.each do |row_as_key, paras|
+      remembered    = paras[0] # selected_rows[row_as_key][0]
+      firstTimeFail = paras[1] # selected_rows[row_as_key][1]
+
       if not remembered
-        # TODO: do not update memTimes if not remembered at first choose
         clear_screen()
         puts  "Memorize mode:\n\n"
         puts  "[#{left_words}] #{ left_words == 1 ? 'word' : 'words'} left:\n\n"
@@ -180,24 +187,39 @@ def mmrz_word
         print "秘密: "
         pause
         puts "#{row_as_key[1]}\n\n"
-        command = my_readline("Do you remember => ")
 
-        if command == "yes"
-          # mark remembered as true
-          selected_rows[row_as_key] = true
-          left_words -= 1
-
-          # after "mark remembered as true", row_as_key can be changed
-          # update database
-          row_as_key[2] += 1
-          row_as_key[3] = cal_remind_time row_as_key[2], "int"
-          row_as_key[4] = cal_remind_time row_as_key[2], "str"
-          dbMgr.updateDB row_as_key
-        elsif command == "exit"
-          clear_screen()
-          return
-        else
-          completed = false
+        # Do you remember
+        while true
+          puts "Do you remember? (yes/no/pass)"
+          command = my_readline("=> ")
+          case command
+          when "yes"
+            # mark remembered as true
+            selected_rows[row_as_key][0] = true # remembered = true
+            left_words -= 1
+            row_as_key[2] += 1 if not firstTimeFail
+            row_as_key[3] = cal_remind_time row_as_key[2], "int"
+            row_as_key[4] = cal_remind_time row_as_key[2], "str"
+            dbMgr.updateDB row_as_key
+            break # break "Do you remember"
+          when "pass"
+            selected_rows[row_as_key][0] = true # remembered = true
+            left_words -= 1
+            row_as_key[2] = 8
+            p row_as_key
+            gets
+            dbMgr.updateDB row_as_key
+            break # break "Do you remember"
+          when "no"
+            selected_rows[row_as_key][1] = true # firstTimeFail = true
+            completed = false
+            break # break "Do you remember"
+          when "exit"
+            clear_screen()
+            return # return mmrz_word()
+          else
+            redo # redo "Do you remember"
+          end
         end
       end
     end
@@ -228,6 +250,9 @@ if __FILE__ == $0
     when "exit"
       clear_screen()
       exit()
+    when "reset"
+      clear_screen()
+      puts welcome_str
     when "add"
       add_word()
     when "delete"

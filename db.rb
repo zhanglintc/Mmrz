@@ -42,6 +42,10 @@ class MmrzDBManager
     @db.execute "select * from UNMMRZ where memTimes < 8"
   end
 
+  def readAllDB
+    @db.execute "select * from UNMMRZ where memTimes"
+  end
+
   def getMaxWordID
     # format of maxWordID is like: maxWordID = [[33]], thus use maxWordID[0][0] to access it
     @db.execute("select max(wordID) from UNMMRZ")[0][0] or 0
