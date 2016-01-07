@@ -41,13 +41,7 @@ def clear_screen
 end
 
 def pause
-  # Windows
-  if RbConfig::CONFIG['target_os'] == "mingw32"
-    system "pause>nul"
-  # Linux/Mac
-  else
-    STDIN.getch
-  end
+  while not " " == STDIN.getch do end
 end
 
 def get_memorize_words
