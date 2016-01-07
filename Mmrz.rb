@@ -17,7 +17,7 @@ Mmrz is tool help you to memorize words.
 Powered by zhanglintc. [v0.1]
 
 Available commands:
- - add:     Add words(espacilly Japanese) to word book.
+ - add:     Add words to word book.
  - delete:  Delete data with given wordID => eg. delete 3
  - list:    List all your words in word book.
  - mmrz:    Memorize words.
