@@ -144,50 +144,57 @@ end
 def load_file paras
   if paras.size != 1
     puts "load: command not correct\n\n"
-  else
-    if MMRZ_BUILD_WINDOWS_EXE
-      file_path = paras[0]
-    else
-      file_path = "#{File.dirname(__FILE__)}/#{paras[0]}"
-    end
-    begin
-      fr = open file_path
-    rescue
-      puts "load: open file \"#{paras[0]}\" failed\n\n"
-      return
-    end
-
-    clear_screen()
-    puts "load: file load start\n\n"
-    dbMgr = MmrzDBManager.new
-
-    line_idx = 0
-    added = 0
-    fr.each_line do |line|
-      line_idx += 1
-      wordInfo = line.split
-      if not [2, 3].include? wordInfo.size
-        puts "format not correct, line #{line_idx} aborted"
-        next
-      else
-        word          = wordInfo[0]
-        pronounce     = (wordInfo.size == 2 ? wordInfo[1] : "#{wordInfo[1]} -- #{wordInfo[2]}")
-        memTimes      = 0
-        remindTime    = cal_remind_time(memTimes, "int")
-        remindTimeStr = cal_remind_time(memTimes, "str")
-        wordID        = dbMgr.getMaxWordID + 1
-
-        row = [word, pronounce, memTimes, remindTime, remindTimeStr, wordID]
-        dbMgr.insertDB row
-
-        added += 1
-      end
-    end
-
-    fr.close
-    dbMgr.closeDB
-    puts "\nload: load file \"#{paras[0]}\" completed, #{added} words added\n\n"
+    return
   end
+
+  if not paras[0].include? ".mmz"
+    puts "load: only support \".mmz\" file\n\n"
+    return
+  end
+
+  if MMRZ_BUILD_WINDOWS_EXE
+    file_path = paras[0]
+  else
+    file_path = "#{File.dirname(__FILE__)}/#{paras[0]}"
+  end
+
+  begin
+    fr = open file_path
+  rescue
+    puts "load: open file \"#{paras[0]}\" failed\n\n"
+    return
+  end
+
+  clear_screen()
+  puts "load: file load start\n\n"
+  dbMgr = MmrzDBManager.new
+
+  line_idx = 0
+  added = 0
+  fr.each_line do |line|
+    line_idx += 1
+    wordInfo = line.split
+    if not [2, 3].include? wordInfo.size
+      puts "format not correct, line #{line_idx} aborted"
+      next
+    else
+      word          = wordInfo[0]
+      pronounce     = (wordInfo.size == 2 ? wordInfo[1] : "#{wordInfo[1]} -- #{wordInfo[2]}")
+      memTimes      = 0
+      remindTime    = cal_remind_time(memTimes, "int")
+      remindTimeStr = cal_remind_time(memTimes, "str")
+      wordID        = dbMgr.getMaxWordID + 1
+
+      row = [word, pronounce, memTimes, remindTime, remindTimeStr, wordID]
+      dbMgr.insertDB row
+
+      added += 1
+    end
+  end
+
+  fr.close
+  dbMgr.closeDB
+  puts "\nload: load file \"#{paras[0]}\" completed, #{added} words added\n\n"
 end
 
 def del_word paras
