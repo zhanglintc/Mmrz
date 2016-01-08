@@ -120,13 +120,13 @@ def add_word
 
   while not "exit" == ( command = my_readline("Add => ") )
     words = command.split
-    if not words.size == 2
+    if not [2, 3].include? words.size
       puts "Add: format not correct\n\n"
       next
     end
     
     word          = words[0]
-    pronounce     = words[1]
+    pronounce     = (words.size == 2 ? words[1] : "#{words[1]} -- #{words[2]}")
     memTimes      = 0
     remindTime    = cal_remind_time(memTimes, "int")
     remindTimeStr = cal_remind_time(memTimes, "str")
@@ -136,7 +136,7 @@ def add_word
     dbMgr.insertDB row
   end
 
-  dbMgr.closeDB 
+  dbMgr.closeDB
   clear_screen()
 end
 
