@@ -19,12 +19,12 @@ require File.dirname(__FILE__) + '/db.rb'
 welcome_str = "\
 Welcome to Mmrz !!! -- Memorize words easily.
 Mmrz is tool help you to memorize words.
-Powered by zhanglintc. [v0.1]
+Powered by zhanglintc. [v0.1.1]
 
 Available commands:
  - add:     Add words to word book.
  - delete:  Delete data with given wordID => e.g. delete 3
- - load:    Load formatted file to word book => e.g. load voc.txt
+ - load:    Load formatted file to word book => e.g. load voc.mmz
  - list:    List all your words in word book.
  - mmrz:    Memorize words.
  - exit:    Exit the application.
