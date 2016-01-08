@@ -145,7 +145,11 @@ def load_file paras
   if paras.size != 1
     puts "load: command not correct\n\n"
   else
-    file_path = "#{File.dirname(__FILE__)}/#{paras[0]}"
+    if MMRZ_BUILD_WINDOWS_EXE
+      file_path = paras[0]
+    else
+      file_path = "#{File.dirname(__FILE__)}/#{paras[0]}"
+    end
     begin
       fr = open file_path
     rescue
