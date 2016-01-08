@@ -169,13 +169,16 @@ def load_file paras
   puts "load: file load start\n\n"
   dbMgr = MmrzDBManager.new
 
+  not_loaded_line = ""
   line_idx = 0
+  no_added = 0
   added = 0
   fr.each_line do |line|
     line_idx += 1
     wordInfo = line.split
     if not [2, 3].include? wordInfo.size
-      puts "format not correct, line #{line_idx} aborted"
+      not_loaded_line += "*not loaded: line #{line_idx}, format error\n"
+      no_added += 1
       next
     else
       word          = wordInfo[0]
@@ -186,6 +189,7 @@ def load_file paras
       wordID        = dbMgr.getMaxWordID + 1
 
       row = [word, pronounce, memTimes, remindTime, remindTimeStr, wordID]
+      printf("loaded: %s <==> %s\n", word, pronounce)
       dbMgr.insertDB row
 
       added += 1
@@ -194,7 +198,9 @@ def load_file paras
 
   fr.close
   dbMgr.closeDB
-  puts "\nload: load file \"#{paras[0]}\" completed, #{added} words added\n\n"
+  puts ""
+  puts not_loaded_line
+  puts "\nload: load file \"#{paras[0]}\" completed, #{added} words added, #{no_added} aborted\n\n"
 end
 
 def del_word paras
