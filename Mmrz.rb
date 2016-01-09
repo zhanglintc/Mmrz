@@ -1,6 +1,7 @@
 #!/env/bin/ruby
 # encoding: utf-8
 
+VERSION = "v0.1.2"
 MMRZ_BUILD_WINDOWS_EXE = false
 
 if MMRZ_BUILD_WINDOWS_EXE
@@ -19,7 +20,7 @@ require File.dirname(__FILE__) + '/db.rb'
 welcome_str = "\
 Welcome to Mmrz !!! -- Memorize words easily.
 Mmrz is tool help you to memorize words.
-Powered by zhanglintc. [v0.1.1]
+Powered by zhanglintc. [#{VERSION}]
 
 Available commands:
  - add:     Add words to word book.
