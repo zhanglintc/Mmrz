@@ -220,14 +220,28 @@ end
 
 def list_word
   dbMgr = MmrzDBManager.new
-  dbMgr.readAllDB.each do |row|
+  rows = dbMgr.readAllDB
+  rows.sort! { |r1, r2| r2[3] <=> r1[3] } # remindTime from long to short
+
+  rows.each do |row|
     word          = row[0]
     pronounce     = row[1]
     memTimes      = row[2]
     remindTime    = row[3]
     remindTimeStr = row[4]
     wordID        = row[5]
-    printf("%4d => next at \"%s\", %d times, %s, %s\n", wordID, remindTimeStr, memTimes, word, pronounce)
+
+    remindTime -= Time.now.to_i
+    if remindTime > 0
+      day  = remindTime / (60 * 60 * 24)
+      hour = remindTime % (60 * 60 * 24) / (60 * 60)
+      min  = remindTime % (60 * 60 * 24) % (60 * 60) / 60
+    else
+      day = hour = min = 0
+    end
+
+    remindTimeStr = format("%sd-%sh-%sm", day, hour, min)
+    printf("%4d => next after %10s, %d times, %s, %s\n", wordID, remindTimeStr, memTimes, word, pronounce)
   end
 
   dbMgr.closeDB
