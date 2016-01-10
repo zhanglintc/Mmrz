@@ -12,6 +12,12 @@ else
   Encoding.default_internal = Encoding::UTF_8
 end
 
+if RbConfig::CONFIG['target_os'] == "mingw32"
+  WINDOWS = true
+else
+  WINDOWS = false
+end
+
 require 'readline'
 require 'sqlite3'
 require 'io/console'
@@ -44,10 +50,8 @@ def my_readline prompt
 end
 
 def clear_screen
-  # Windows
-  if RbConfig::CONFIG['target_os'] == "mingw32"
+  if WINDOWS
     system "cls"
-  # Linux/Mac
   else
     system "clear"
   end
@@ -242,11 +246,15 @@ def list_word
     end
 
     remindTimeStr = format("%sd-%sh-%sm", day, hour, min)
-    str_to_less += format("%4d => next after %10s, %d times, %s, %s\n", wordID, remindTimeStr, memTimes, word, pronounce)
+    str_to_less  += format("%4d => next: %11s, %d times, %s, %s\n", wordID, remindTimeStr, memTimes, word, pronounce)
   end
 
-  system "echo '#{str_to_less}' | less"
   dbMgr.closeDB
+  if WINDOWS
+    system "echo '#{str_to_less}' | morw"
+  else
+    system "echo '#{str_to_less}' | less"
+  end
   puts ""
 end
 
