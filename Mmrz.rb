@@ -251,7 +251,11 @@ def list_word
 
   dbMgr.closeDB
   if WINDOWS
-    system "echo '#{str_to_less}' | morw"
+    fw = open File.dirname(__FILE__) + "/temp", "wb"
+    fw.write str_to_less.encode("gbk")
+    fw.close
+
+    system "type temp | more & del temp"
   else
     system "echo '#{str_to_less}' | less"
   end
