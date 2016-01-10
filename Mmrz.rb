@@ -1,7 +1,7 @@
 #!/env/bin/ruby
 # encoding: utf-8
 
-VERSION = "v0.1.2"
+VERSION = "v0.1.3"
 MMRZ_BUILD_WINDOWS_EXE = false
 
 if MMRZ_BUILD_WINDOWS_EXE
@@ -222,8 +222,8 @@ end
 def list_word
   dbMgr = MmrzDBManager.new
   rows = dbMgr.readAllDB
-  rows.sort! { |r1, r2| r2[3] <=> r1[3] } # remindTime from long to short
-
+  rows.sort! { |r1, r2| r1[3] <=> r2[3] } # remindTime from short to long
+  str_to_less = "Wordbook is shown below:\n\n"
   rows.each do |row|
     word          = row[0]
     pronounce     = row[1]
@@ -242,9 +242,10 @@ def list_word
     end
 
     remindTimeStr = format("%sd-%sh-%sm", day, hour, min)
-    printf("%4d => next after %10s, %d times, %s, %s\n", wordID, remindTimeStr, memTimes, word, pronounce)
+    str_to_less += format("%4d => next after %10s, %d times, %s, %s\n", wordID, remindTimeStr, memTimes, word, pronounce)
   end
 
+  system "echo '#{str_to_less}' | less"
   dbMgr.closeDB
   puts ""
 end
