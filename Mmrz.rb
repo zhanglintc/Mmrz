@@ -236,6 +236,7 @@ def list_word
     remindTimeStr = row[4]
     wordID        = row[5]
 
+    str_to_less_tail = ""
     remindTime -= Time.now.to_i
     if remindTime > 0
       day  = remindTime / (60 * 60 * 24)
@@ -245,10 +246,17 @@ def list_word
       day = hour = min = 0
     end
 
+    if memTimes >= 8
+      remindTimeStr = format("%sd-%sh-%sm", day, hour, min)
+      str_to_less_tail += format("%4d => next: %11s, %d times, %s, %s\n", wordID, remindTimeStr, memTimes, word, pronounce)
+      next
+    end
+
     remindTimeStr = format("%sd-%sh-%sm", day, hour, min)
     str_to_less  += format("%4d => next: %11s, %d times, %s, %s\n", wordID, remindTimeStr, memTimes, word, pronounce)
   end
 
+  str_to_less += str_to_less_tail
   dbMgr.closeDB
   if WINDOWS
     fw = open File.dirname(__FILE__) + "/temp", "wb"
