@@ -228,6 +228,7 @@ def list_word
   rows = dbMgr.readAllDB
   rows.sort! { |r1, r2| r1[3] <=> r2[3] } # remindTime from short to long
   str_to_less = "Wordbook is shown below:\n\n"
+  str_to_less_tail = ""
   rows.each do |row|
     word          = row[0]
     pronounce     = row[1]
@@ -236,7 +237,6 @@ def list_word
     remindTimeStr = row[4]
     wordID        = row[5]
 
-    str_to_less_tail = ""
     remindTime -= Time.now.to_i
     if remindTime > 0
       day  = remindTime / (60 * 60 * 24)
