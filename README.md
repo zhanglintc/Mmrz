@@ -11,6 +11,7 @@
 ![hidden](http://115.29.192.240/hidden.jpg)</br>
 ![shown](http://115.29.192.240/shown.jpg)</br>
 ![finish](http://115.29.192.240/finish.jpg)</br>
+![wordbook](http://115.29.192.240/wordbook.jpg)</br>
 
 - 命令行版本:
 
