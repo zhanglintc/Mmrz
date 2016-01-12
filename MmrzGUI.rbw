@@ -5,12 +5,12 @@ require 'tk'
 require 'sqlite3'
 require File.dirname(__FILE__) + '/db.rb'
 
-VERSION = "v0.1.0"
+VERSION = "v0.1.1"
 TITLE   = "Mmrz"
 
 $version_info = "\
 Welcome to Mmrz !!!
-Mmrz is tool help you to memorize words easily.
+Mmrz is tool help you memorizing words easily.
 
 https://github.com/zhanglintc/Mmrz
 Powered by zhanglintc. [#{VERSION}]
@@ -90,8 +90,8 @@ $menu_click = Proc.new {
   Tk.messageBox(
     'type'    => "ok",  
     'icon'    => "info",
-    'title'   => "Title",
-    'message' => "Message"
+    'title'   => "Coming soon",
+    'message' => "Under developing"
   )
 }
 
