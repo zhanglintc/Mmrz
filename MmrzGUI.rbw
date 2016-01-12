@@ -5,10 +5,16 @@ require 'tk'
 require 'sqlite3'
 require File.dirname(__FILE__) + '/db.rb'
 
-# TODO: 增加 Menu 栏
+VERSION = "v0.1.0"
+TITLE   = "Mmrz"
 
-Version = "v0.1.0"
-Title   = "Mmrz"
+$version_info = "\
+Welcome to Mmrz !!!
+Mmrz is tool help you to memorize words easily.
+
+https://github.com/zhanglintc/Mmrz
+Powered by zhanglintc. [#{VERSION}]
+"
 
 $tk_root_height = 230
 $tk_root_width = 400
@@ -72,11 +78,69 @@ def cal_remind_time memTimes, type
 end
 
 $root = TkRoot.new do
-  title Title
+  title TITLE
   minsize $tk_root_width, $tk_root_height
   maxsize $tk_root_width, $tk_root_height
 end
 
+"""
+Main menu configurations.
+"""
+$menu_click = Proc.new {
+  Tk.messageBox(
+    'type'    => "ok",  
+    'icon'    => "info",
+    'title'   => "Title",
+    'message' => "Message"
+  )
+}
+
+$file_menu = TkMenu.new($root)
+$file_menu.add('command',
+              'label'     => "Import",
+              'command'   => $menu_click,
+              'underline' => 0)
+$file_menu.add('separator')
+$file_menu.add('command',
+              'label'     => "Exit",
+              'command'   => Proc.new {exit},
+              'underline' => 0)
+
+$view_menu = TkMenu.new($root)
+$view_menu.add('command',
+              'label'     => "Wordbook",
+              'command'   => $menu_click,
+              'underline' => 0)
+
+$help_menu = TkMenu.new($root)
+$help_menu.add('command',
+              'label'     => "About",
+              'underline' => 0,
+              'command'   => Proc.new {
+                Tk.messageBox(
+                  'type'    => "ok",  
+                  'icon'    => "info",
+                  'title'   => "About",
+                  'message' => $version_info
+                )
+              })
+
+$menu_bar = TkMenu.new
+$menu_bar.add('cascade',
+             'menu'  => $file_menu,
+             'label' => "File")
+$menu_bar.add('cascade',
+             'menu'  => $view_menu,
+             'label' => "View")
+$menu_bar.add('cascade',
+             'menu'  => $help_menu,
+             'label' => "Help")
+$root.menu($menu_bar)
+
+
+"""
+Main window configurations, label, button, etc.
+"""
 $tk_word = TkLabel.new $root do
   borderwidth 0
   font TkFont.new 'simsun 20 bold'
@@ -141,6 +205,35 @@ $tk_no = TkButton.new do
   end
 end
 
+"""
+Main functions.
+"""
+def get_shortest_remind
+  dbMgr = MmrzDBManager.new
+  rows = dbMgr.readDB
+  return "No words in schedule" if rows == []
+
+  rows.sort! { |r1, r2| r1[3] <=> r2[3] } # remindTime from short to long
+  word          = rows[0][0]
+  pronounce     = rows[0][1]
+  memTimes      = rows[0][2]
+  remindTime    = rows[0][3]
+  remindTimeStr = rows[0][4]
+  wordID        = rows[0][5]
+
+  remindTime -= Time.now.to_i
+  if remindTime > 0
+    day  = remindTime / (60 * 60 * 24)
+    hour = remindTime % (60 * 60 * 24) / (60 * 60)
+    min  = remindTime % (60 * 60 * 24) % (60 * 60) / 60
+  else
+    day = hour = min = 0
+  end
+
+  remindTimeStr = format("%sd-%sh-%sm", day, hour, min)
+  format("Next after %s", remindTimeStr)
+end
+
 def move_cursor
   $cursor += 1
   $cursor = 0 if $cursor == $rows.size
@@ -148,12 +241,12 @@ end
 
 def show_word
   if $rows.size == 0
-    $root.title "#{Title} -- Powered by zhanglintc"
+    $root.title "#{TITLE} -- #{get_shortest_remind}"
     $tk_word.text "本次背诵完毕"
     $tk_exit.place 'height' => $tk_show_height, 'width' => $tk_show_width, 'x' => $tk_show_x, 'y' => $tk_show_y
   else
     $tk_word.text $rows[$cursor][0]
-    $root.title "#{Title} -- #{$rows.size} words left"
+    $root.title "#{TITLE} -- #{$rows.size} words left"
   end
 end
 
@@ -179,19 +272,24 @@ def hide_secret remember
   $tk_pronounce.text ""
 end
 
-dbMgr = MmrzDBManager.new
-dbMgr.createDB
-dbMgr.closeDB
+"""
+Entry point
+"""
+if __FILE__ == $0
+  dbMgr = MmrzDBManager.new
+  dbMgr.createDB
+  dbMgr.closeDB
 
-dbMgr = MmrzDBManager.new
-$rows = []
-dbMgr.readDB.each do |row|
-  $rows << row if row[3] < Time.now.to_i
+  dbMgr = MmrzDBManager.new
+  $rows = []
+  dbMgr.readDB.each do |row|
+    $rows << row if row[3] < Time.now.to_i
+  end
+  $cursor = 0
+  dbMgr.closeDB
+
+  show_word
+  Tk.mainloop
 end
-$cursor = 0
-dbMgr.closeDB
-
-show_word
-Tk.mainloop
 
 
