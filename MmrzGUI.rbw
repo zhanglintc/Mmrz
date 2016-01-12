@@ -261,9 +261,13 @@ def hide_secret remember
     row[3] = cal_remind_time row[2], "int"
     row[4] = cal_remind_time row[2], "str"
 
-    dbMgr = MmrzDBManager.new
-    dbMgr.updateDB row
-    dbMgr.closeDB
+    # use thread to avoid UI refresh lagging
+    Thread.start do
+      sleep 0.1 # sleep some seconds to avoid updateDB and refresh UI at same time
+      dbMgr = MmrzDBManager.new
+      dbMgr.updateDB row
+      dbMgr.closeDB
+    end
 
     $rows.delete_at $cursor
   else
