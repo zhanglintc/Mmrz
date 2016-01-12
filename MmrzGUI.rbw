@@ -5,8 +5,10 @@ require 'tk'
 require 'sqlite3'
 require File.dirname(__FILE__) + '/db.rb'
 
-VERSION = "v0.1.1"
+VERSION = "v0.1.2"
 TITLE   = "Mmrz"
+
+# TODO: memeTimes do not +1 if not remembered at first click
 
 $version_info = "\
 Welcome to Mmrz !!!
@@ -15,7 +17,7 @@ Mmrz is tool help you memorizing words easily.
 https://github.com/zhanglintc/Mmrz
 Powered by zhanglintc. [#{VERSION}]
 "
-
+# Main window
 $tk_root_height = 230
 $tk_root_width = 400
 
@@ -43,6 +45,19 @@ $tk_no_height = 50
 $tk_no_width  = 100
 $tk_no_x = $tk_root_width - $tk_no_width - $tk_yes_x
 $tk_no_y = 150
+
+# Wordbook window
+$tk_wb_height = 500
+$tk_wb_width  = 700
+
+$tk_wb_list_height = $tk_wb_height - 20
+$tk_wb_list_width = $tk_wb_width - 30
+$tk_wb_list_x = 10
+$tk_wb_list_y = 10
+
+$tk_wb_scroll_height = $tk_wb_height - 20
+$tk_wb_scroll_x = $tk_wb_width - 20
+$tk_wb_scroll_y = $tk_wb_list_y
 
 def cal_remind_time memTimes, type
   curTime = Time.now
@@ -95,6 +110,70 @@ $menu_click = Proc.new {
   )
 }
 
+$make_wb_win = Proc.new do
+  $tk_win_wordbook = TkToplevel.new do
+    minsize $tk_wb_width, $tk_wb_height
+    maxsize $tk_wb_width, $tk_wb_height
+  end
+
+  $tk_wb_list = TkListbox.new($tk_win_wordbook) do
+    font TkFont.new ""
+    place 'width' => $tk_wb_list_width, 'height' => $tk_wb_list_height, 'x' => $tk_wb_list_x, 'y' => $tk_wb_list_y
+  end
+
+  $tk_wb_scroll = TkScrollbar.new($tk_win_wordbook) do
+    orient 'vertical'
+    place 'height' => $tk_wb_scroll_height, 'x' => $tk_wb_scroll_x, 'y' => $tk_wb_scroll_y
+  end
+
+  $tk_wb_list.yscrollcommand( Proc.new { |*args| $tk_wb_scroll.set(*args) } )
+  $tk_wb_scroll.command( Proc.new { |*args| $tk_wb_list.yview(*args) } )
+
+  # $tk_wb_list.insert 0, "yellow", "gray", "green",
+  #   "blue", "red", "black", "white", "cyan",
+  #   "pink", "yellow", "orange", "gray"
+  dbMgr = MmrzDBManager.new
+  rows = dbMgr.readAllDB
+  $tk_win_wordbook.title = "Wordbook -- #{rows.size} words"
+
+  tail_of_8_times = []
+  rows.sort! { |r1, r2| r1[3] <=> r2[3] } # remindTime from short to long
+  rows.each do |row|
+    word          = row[0]
+    pronounce     = row[1]
+    memTimes      = row[2]
+    remindTime    = row[3]
+    remindTimeStr = row[4]
+    wordID        = row[5]
+
+    remindTime -= Time.now.to_i
+    if remindTime > 0
+      day  = remindTime / (60 * 60 * 24)
+      hour = remindTime % (60 * 60 * 24) / (60 * 60)
+      min  = remindTime % (60 * 60 * 24) % (60 * 60) / 60
+    else
+      day = hour = min = 0
+    end
+
+    if memTimes >= 8
+      remindTimeStr = format("%sd-%sh-%sm", day, hour, min)
+      one_word_line = format("%4d => next: %11s, %d times, %s, %s", wordID, remindTimeStr, memTimes, word, pronounce)
+      tail_of_8_times << one_word_line
+      next
+    end
+
+    remindTimeStr = format("%sd-%sh-%sm", day, hour, min)
+    one_word_line = format("%4d => next: %11s, %d times, %s, %s", wordID, remindTimeStr, memTimes, word, pronounce)
+    $tk_wb_list.insert $tk_wb_list.size, one_word_line
+  end
+
+  tail_of_8_times.each do |one_word_line|
+    $tk_wb_list.insert $tk_wb_list.size, one_word_line
+  end
+
+  dbMgr.closeDB
+end
+
 $file_menu = TkMenu.new($root)
 $file_menu.add('command',
               'label'     => "Import",
@@ -109,7 +188,7 @@ $file_menu.add('command',
 $view_menu = TkMenu.new($root)
 $view_menu.add('command',
               'label'     => "Wordbook",
-              'command'   => $menu_click,
+              'command'   => $make_wb_win,
               'underline' => 0)
 
 $help_menu = TkMenu.new($root)
