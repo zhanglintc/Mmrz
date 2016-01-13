@@ -367,6 +367,11 @@ def get_shortest_remind
 end
 
 def move_cursor
+  if $cursor == $rows.size
+    $cursor = 0
+    return
+  end
+
   $cursor += 1
   $cursor = 0 if $cursor == $rows.size
 end
@@ -403,8 +408,8 @@ def hide_secret remember
 
     $rows.delete_at $cursor
   else
-    move_cursor
   end
+  move_cursor
   $tk_pronounce.text ""
 end
 
