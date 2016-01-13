@@ -120,6 +120,7 @@ def import_file path
   added = 0
   fr.each_line do |line|
     line_idx += 1
+    $root.title "#{TITLE} -- Importing line #{line_idx}"
     wordInfo = line.encode.split
     if not [2, 3].include? wordInfo.size
       not_loaded_line += "- line #{line_idx}, format error\n"
@@ -143,8 +144,7 @@ def import_file path
 
   fr.close
   dbMgr.closeDB
-  p ""
-  p not_loaded_line
+  show_word # refresh title
   Tk.messageBox  'message' => "Import file \"#{path}\" completed\n\n#{added} words added\n#{no_added} words aborted\n\n\nNot loaded lines are shown below:\n\n#{not_loaded_line}"
 end
 
