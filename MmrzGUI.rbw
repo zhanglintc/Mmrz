@@ -5,10 +5,13 @@ require 'tk'
 require 'sqlite3'
 require File.dirname(__FILE__) + '/db.rb'
 
-VERSION = "v0.1.2"
+VERSION = "v0.1.3"
 TITLE   = "Mmrz"
 
 # TODO: memeTimes do not +1 if not remembered at first click
+
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
 
 $version_info = "\
 Welcome to Mmrz !!!
@@ -48,7 +51,7 @@ $tk_no_y = 150
 
 # Wordbook window
 $tk_wb_height = 500
-$tk_wb_width  = 700
+$tk_wb_width  = 800
 
 $tk_wb_list_height = $tk_wb_height - 20
 $tk_wb_list_width = $tk_wb_width - 30
@@ -92,6 +95,55 @@ def cal_remind_time memTimes, type
   end
 end
 
+def import_file path
+  if not path.include? ".mmz"
+    Tk.messageBox 'message' => "Only support \".mmz\" file"
+    return
+  end
+
+  begin
+    fr = open path
+  rescue
+    Tk.messageBox 'message' => "Open file \"#{path}\" failed"
+    return
+  end
+
+  dbMgr = MmrzDBManager.new
+
+  not_loaded_line = ""
+  line_idx = 0
+  no_added = 0
+  added = 0
+  fr.each_line do |line|
+    line_idx += 1
+    wordInfo = line.encode.split
+    if not [2, 3].include? wordInfo.size
+      not_loaded_line += "- line #{line_idx}, format error\n"
+      no_added += 1
+      next
+    else
+      word          = wordInfo[0]
+      pronounce     = (wordInfo.size == 2 ? wordInfo[1] : "#{wordInfo[1]} -- #{wordInfo[2]}")
+      memTimes      = 0
+      remindTime    = cal_remind_time(memTimes, "int")
+      remindTimeStr = cal_remind_time(memTimes, "str")
+      wordID        = dbMgr.getMaxWordID + 1
+
+      row = [word, pronounce, memTimes, remindTime, remindTimeStr, wordID]
+      p format("loaded: %s <==> %s\n", word, pronounce)
+      dbMgr.insertDB row
+
+      added += 1
+    end
+  end
+
+  fr.close
+  dbMgr.closeDB
+  p ""
+  p not_loaded_line
+  Tk.messageBox  'message' => "Import file \"#{path}\" completed\n\n#{added} words added\n#{no_added} words aborted\n\n\nNot loaded lines are shown below:\n\n#{not_loaded_line}"
+end
+
 $root = TkRoot.new do
   title TITLE
   minsize $tk_root_width, $tk_root_height
@@ -117,7 +169,7 @@ $make_wb_win = Proc.new do
   end
 
   $tk_wb_list = TkListbox.new($tk_win_wordbook) do
-    font TkFont.new ""
+    font TkFont.new "simsun"
     place 'width' => $tk_wb_list_width, 'height' => $tk_wb_list_height, 'x' => $tk_wb_list_x, 'y' => $tk_wb_list_y
   end
 
@@ -129,9 +181,6 @@ $make_wb_win = Proc.new do
   $tk_wb_list.yscrollcommand( Proc.new { |*args| $tk_wb_scroll.set(*args) } )
   $tk_wb_scroll.command( Proc.new { |*args| $tk_wb_list.yview(*args) } )
 
-  # $tk_wb_list.insert 0, "yellow", "gray", "green",
-  #   "blue", "red", "black", "white", "cyan",
-  #   "pink", "yellow", "orange", "gray"
   dbMgr = MmrzDBManager.new
   rows = dbMgr.readAllDB
   $tk_win_wordbook.title = "Wordbook -- #{rows.size} words"
@@ -177,7 +226,7 @@ end
 $file_menu = TkMenu.new($root)
 $file_menu.add('command',
               'label'     => "Import",
-              'command'   => $menu_click,
+              'command'   => Proc.new { Thread.start do import_file Tk.getOpenFile end },
               'underline' => 0)
 $file_menu.add('separator')
 $file_menu.add('command',
