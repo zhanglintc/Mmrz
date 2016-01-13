@@ -100,9 +100,17 @@ def import_file path
     return
   end
 
-  if not path.include? ".mmz"
-    Tk.messageBox 'message' => "Only support \".mmz\" file"
+  if not path.include? ".mmz" and not path.include? ".yb"
+    Tk.messageBox 'message' => "Only support \"*.mmz *.yb\" file"
     return
+  end
+
+  if path.include? ".mmz"
+    suffix = ".mmz"
+  elsif path.include? ".yb"
+    suffix = ".yb"
+  else
+    suffix = ".*"
   end
 
   begin
@@ -121,25 +129,41 @@ def import_file path
   fr.each_line do |line|
     line_idx += 1
     $root.title "#{TITLE} -- Importing line #{line_idx}"
-    wordInfo = line.encode.split
-    if not [2, 3].include? wordInfo.size
-      not_loaded_line += "- line #{line_idx}, format error\n"
-      no_added += 1
-      next
-    else
-      word          = wordInfo[0]
-      pronounce     = (wordInfo.size == 2 ? wordInfo[1] : "#{wordInfo[1]} -- #{wordInfo[2]}")
-      memTimes      = 0
-      remindTime    = cal_remind_time(memTimes, "int")
-      remindTimeStr = cal_remind_time(memTimes, "str")
-      wordID        = dbMgr.getMaxWordID + 1
-
-      row = [word, pronounce, memTimes, remindTime, remindTimeStr, wordID]
-      p format("loaded: %s <==> %s\n", word, pronounce)
-      dbMgr.insertDB row
-
-      added += 1
+    if suffix == ".mmz"
+      wordInfo = line.encode.split
+      if not [2, 3].include? wordInfo.size
+        not_loaded_line += "- line #{line_idx}, format error\n"
+        no_added += 1
+        next
+      end
     end
+
+    if suffix == ".yb"
+      line.chomp.gsub!(/ /, "")
+      if line =~ /(.*)「(.*)」(.*)/
+        if $2 == ""
+          wordInfo = [$1, $3]
+        else
+          wordInfo = [$1, $2, $3]
+        end
+      else
+        not_loaded_line += "- line #{line_idx}, format error\n"
+        no_added += 1
+      end
+    end
+    
+    word          = wordInfo[0]
+    pronounce     = (wordInfo.size == 2 ? wordInfo[1] : "#{wordInfo[1]} -- #{wordInfo[2]}")
+    memTimes      = 0
+    remindTime    = cal_remind_time(memTimes, "int")
+    remindTimeStr = cal_remind_time(memTimes, "str")
+    wordID        = dbMgr.getMaxWordID + 1
+
+    row = [word, pronounce, memTimes, remindTime, remindTimeStr, wordID]
+    p format("loaded: %s <==> %s\n", word, pronounce)
+    dbMgr.insertDB row
+
+    added += 1
   end
 
   fr.close
@@ -230,7 +254,7 @@ end
 $file_menu = TkMenu.new($root)
 $file_menu.add('command',
               'label'     => "Import",
-              'command'   => Proc.new { Thread.start do import_file Tk.getOpenFile 'filetypes' => "{MMZ {.mmz}} {ALL {.*}}" end },
+              'command'   => Proc.new { Thread.start do import_file Tk.getOpenFile 'filetypes' => "{MMZ {.mmz}} {YB {.yb}} {ALL {.*}}" end },
               'underline' => 0)
 $file_menu.add('separator')
 $file_menu.add('command',
