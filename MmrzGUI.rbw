@@ -8,7 +8,7 @@ require File.dirname(__FILE__) + '/db.rb'
 VERSION = "v0.1.4"
 TITLE   = "Mmrz"
 
-# TODO: memeTimes do not +1 if not remembered at first click
+# TODO: try use thread process instead of the mass of global variables
 
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
@@ -128,7 +128,7 @@ def import_file path
   added = 0
   fr.each_line do |line|
     line_idx += 1
-    $root.title "#{TITLE} -- Importing line #{line_idx}"
+    $tk_root.title "#{TITLE} -- Importing line #{line_idx}"
     if suffix == ".mmz"
       wordInfo = line.encode.split
       if not [2, 3].include? wordInfo.size
@@ -172,7 +172,7 @@ def import_file path
   Tk.messageBox  'message' => "Import file \"#{path}\" completed\n\n#{added} words added\n#{no_added} words aborted\n\n\nNot loaded lines are shown below:\n\n#{not_loaded_line}"
 end
 
-$root = TkRoot.new do
+$tk_root = TkRoot.new do
   title TITLE # would be overrided
   minsize $tk_root_width, $tk_root_height
   maxsize $tk_root_width, $tk_root_height
@@ -251,7 +251,7 @@ $make_wb_win = Proc.new do
   dbMgr.closeDB
 end
 
-$file_menu = TkMenu.new($root)
+$file_menu = TkMenu.new($tk_root)
 $file_menu.add('command',
               'label'     => "Import",
               'command'   => Proc.new { Thread.start do import_file Tk.getOpenFile 'filetypes' => "{MMZ {.mmz}} {YB {.yb}} {ALL {.*}}" end },
@@ -262,13 +262,13 @@ $file_menu.add('command',
               'command'   => Proc.new {exit},
               'underline' => 0)
 
-$view_menu = TkMenu.new($root)
+$view_menu = TkMenu.new($tk_root)
 $view_menu.add('command',
               'label'     => "Wordbook",
               'command'   => $make_wb_win,
               'underline' => 0)
 
-$help_menu = TkMenu.new($root)
+$help_menu = TkMenu.new($tk_root)
 $help_menu.add('command',
               'label'     => "About",
               'underline' => 0,
@@ -291,13 +291,13 @@ $menu_bar.add('cascade',
 $menu_bar.add('cascade',
              'menu'  => $help_menu,
              'label' => "Help")
-$root.menu($menu_bar)
+$tk_root.menu($menu_bar)
 
 
 """
 Main window configurations, label, button, etc.
 """
-$tk_word = TkLabel.new $root do
+$tk_word = TkLabel.new $tk_root do
   borderwidth 0
   font TkFont.new 'simsun 20 bold'
   foreground "black"
@@ -305,7 +305,7 @@ $tk_word = TkLabel.new $root do
   place 'height' => $tk_word_height, 'width' => $tk_word_width, 'x' => $tk_word_x, 'y' => $tk_word_y
 end
 
-$tk_pronounce = TkLabel.new $root do
+$tk_pronounce = TkLabel.new $tk_root do
   borderwidth 0
   font TkFont.new 'simsun 15'
   foreground "black"
@@ -402,12 +402,12 @@ end
 
 def show_word
   if $rows.size == 0
-    $root.title "#{TITLE} -- #{get_shortest_remind}"
+    $tk_root.title "#{TITLE} -- #{get_shortest_remind}"
     $tk_word.text "本次背诵完毕"
     $tk_exit.place 'height' => $tk_show_height, 'width' => $tk_show_width, 'x' => $tk_show_x, 'y' => $tk_show_y
   else
     $tk_word.text $rows[$cursor][0]
-    $root.title "#{TITLE} -- #{$rows.size} words left"
+    $tk_root.title "#{TITLE} -- #{$rows.size} words left"
   end
 end
 
