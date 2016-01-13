@@ -5,7 +5,7 @@ require 'tk'
 require 'sqlite3'
 require File.dirname(__FILE__) + '/db.rb'
 
-VERSION = "v0.1.3"
+VERSION = "v0.1.4"
 TITLE   = "Mmrz"
 
 # TODO: memeTimes do not +1 if not remembered at first click
@@ -394,7 +394,8 @@ end
 def hide_secret remember
   if remember
     row = $rows[$cursor]
-    row[2] += 1
+    firstTimeFail = row[6]
+    row[2] += 1 if not firstTimeFail
     row[3] = cal_remind_time row[2], "int"
     row[4] = cal_remind_time row[2], "str"
 
@@ -408,6 +409,7 @@ def hide_secret remember
 
     $rows.delete_at $cursor
   else
+    $rows[$cursor][6] = true # firstTimeFail: false => true
   end
   move_cursor
   $tk_pronounce.text ""
@@ -424,6 +426,8 @@ if __FILE__ == $0
   dbMgr = MmrzDBManager.new
   $rows = []
   dbMgr.readDB.each do |row|
+    # [0~5]read from DB, [6]new added firstTimeFail
+    row[6] = false # initialize firstTimeFail as false
     $rows << row if row[3] < Time.now.to_i
   end
   $cursor = 0
