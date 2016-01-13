@@ -96,6 +96,10 @@ def cal_remind_time memTimes, type
 end
 
 def import_file path
+  if "".include? path
+    return
+  end
+
   if not path.include? ".mmz"
     Tk.messageBox 'message' => "Only support \".mmz\" file"
     return
@@ -145,7 +149,7 @@ def import_file path
 end
 
 $root = TkRoot.new do
-  title TITLE
+  title TITLE # would be overrided
   minsize $tk_root_width, $tk_root_height
   maxsize $tk_root_width, $tk_root_height
 end
@@ -226,7 +230,7 @@ end
 $file_menu = TkMenu.new($root)
 $file_menu.add('command',
               'label'     => "Import",
-              'command'   => Proc.new { Thread.start do import_file Tk.getOpenFile end },
+              'command'   => Proc.new { Thread.start do import_file Tk.getOpenFile 'filetypes' => "{MMZ {.mmz}} {ALL {.*}}" end },
               'underline' => 0)
 $file_menu.add('separator')
 $file_menu.add('command',
