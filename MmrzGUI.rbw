@@ -1,12 +1,27 @@
 #!/env/bin/ruby
 # encoding: utf-8
 
+WINDOWS = RbConfig::CONFIG['target_os'] == "mingw32" ? true : false
+
 require 'tk'
 require 'sqlite3'
+require 'win32ole' if WINDOWS
 require File.dirname(__FILE__) + '/db.rb'
 
-VERSION = "v0.1.5"
+VERSION = "v0.1.6"
 TITLE   = "Mmrz"
+
+misaki_found = false
+$announcer = WIN32OLE.new('Sapi.SpVoice')
+$announcer.GetVoices().each do |engine|
+  if engine.GetDescription().include? "Misaki"
+    $announcer.Voice = engine
+    $announcer.volume = 100 # range 0(low) - 100(loud)
+    $announcer.rate  = -3 # range -10(slow) - 10(fast)
+    misaki_found = true
+  end
+end
+TTSSupport = misaki_found
 
 # TODO: try use thread process instead of the mass of global variables
 
@@ -172,6 +187,10 @@ def import_file path
   Tk.messageBox  'message' => "Import file \"#{path}\" completed\n\n#{added} words added\n#{no_added} words aborted\n\n\nNot loaded lines are shown below:\n\n#{not_loaded_line}"
 end
 
+def speak_word
+  $announcer.speak $rows[$cursor][0]
+end
+
 $tk_root = TkRoot.new do
   title TITLE # would be overrided
   minsize $tk_root_width, $tk_root_height
@@ -295,17 +314,20 @@ $help_menu.add('command',
 
 $menu_bar = TkMenu.new
 $menu_bar.add('cascade',
-             'menu'  => $file_menu,
-             'label' => "File")
+              'menu'  => $file_menu,
+              'label' => "File")
 $menu_bar.add('cascade',
-             'menu'  => $edit_menu,
-             'label' => "Edit")
+              'menu'  => $edit_menu,
+              'label' => "Edit")
 $menu_bar.add('cascade',
-             'menu'  => $view_menu,
-             'label' => "View")
+              'menu'  => $view_menu,
+              'label' => "View")
+$menu_bar.add('command',
+              'command' => Proc.new { speak_word },
+              'label'   => "Speak") if TTSSupport
 $menu_bar.add('cascade',
-             'menu'  => $help_menu,
-             'label' => "Help")
+              'menu'  => $help_menu,
+              'label' => "Help")
 $tk_root.menu($menu_bar)
 
 
