@@ -1,6 +1,9 @@
 #!/env/bin/ruby
 # encoding: utf-8
 
+# TODO: try use thread process instead of the mass of global variables
+# TODO: add TTS options(engine select | speed select | etc.)
+
 WINDOWS = RbConfig::CONFIG['target_os'] == "mingw32" ? true : false
 
 require 'tk'
@@ -22,8 +25,6 @@ $announcer.GetVoices().each do |engine|
   end
 end
 TTSSupport = misaki_found
-
-# TODO: try use thread process instead of the mass of global variables
 
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
