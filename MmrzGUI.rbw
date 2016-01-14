@@ -15,13 +15,15 @@ VERSION = "v0.1.6"
 TITLE   = "Mmrz"
 
 misaki_found = false
-$announcer = WIN32OLE.new('Sapi.SpVoice')
-$announcer.GetVoices().each do |engine|
-  if engine.GetDescription().include? "Misaki"
-    $announcer.Voice = engine
-    $announcer.volume = 100 # range 0(low) - 100(loud)
-    $announcer.rate  = -3 # range -10(slow) - 10(fast)
-    misaki_found = true
+if WINDOWS
+  $announcer = WIN32OLE.new('Sapi.SpVoice')
+  $announcer.GetVoices().each do |engine|
+    if engine.GetDescription().include? "Misaki"
+      $announcer.Voice = engine
+      $announcer.volume = 100 # range 0(low) - 100(loud)
+      $announcer.rate  = -3 # range -10(slow) - 10(fast)
+      misaki_found = true
+    end
   end
 end
 TTSSupport = misaki_found
