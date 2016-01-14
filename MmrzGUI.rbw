@@ -188,7 +188,7 @@ def import_file path
 end
 
 def speak_word
-  $announcer.speak $rows[$cursor][0]
+  $announcer.speak $rows[$cursor][0] if $rows != []
 end
 
 $tk_root = TkRoot.new do
