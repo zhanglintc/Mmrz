@@ -425,7 +425,7 @@ def hide_secret remember
 
     # use thread to avoid UI refresh lagging
     Thread.start do
-      sleep 0.1 # sleep some seconds to avoid updateDB and refresh UI at same time
+      sleep 0.01 # sleep some seconds to avoid updateDB and refresh UI at same time
       dbMgr = MmrzDBManager.new
       dbMgr.updateDB row
       dbMgr.closeDB
