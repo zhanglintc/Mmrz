@@ -262,6 +262,12 @@ $file_menu.add('command',
               'command'   => Proc.new {exit},
               'underline' => 0)
 
+$edit_menu = TkMenu.new($tk_root)
+$edit_menu.add('command',
+              'label'     => "Pass",
+              'command'   => $menu_click,
+              'underline' => 0)
+
 $view_menu = TkMenu.new($tk_root)
 $view_menu.add('command',
               'label'     => "Wordbook",
@@ -285,6 +291,9 @@ $menu_bar = TkMenu.new
 $menu_bar.add('cascade',
              'menu'  => $file_menu,
              'label' => "File")
+$menu_bar.add('cascade',
+             'menu'  => $edit_menu,
+             'label' => "Edit")
 $menu_bar.add('cascade',
              'menu'  => $view_menu,
              'label' => "View")
