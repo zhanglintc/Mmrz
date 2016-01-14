@@ -5,7 +5,7 @@ require 'tk'
 require 'sqlite3'
 require File.dirname(__FILE__) + '/db.rb'
 
-VERSION = "v0.1.4"
+VERSION = "v0.1.5"
 TITLE   = "Mmrz"
 
 # TODO: try use thread process instead of the mass of global variables
@@ -265,7 +265,13 @@ $file_menu.add('command',
 $edit_menu = TkMenu.new($tk_root)
 $edit_menu.add('command',
               'label'     => "Pass",
-              'command'   => $menu_click,
+              'command'   => Proc.new { 
+                                hide_secret false, true
+                                show_word
+                                $tk_show.place 'height' => $tk_show_height, 'width' => $tk_show_width, 'x' => $tk_show_x, 'y' => $tk_show_y
+                                $tk_yes.unplace
+                                $tk_no.unplace
+                              },
               'underline' => 0)
 
 $view_menu = TkMenu.new($tk_root)
@@ -349,7 +355,7 @@ $tk_yes = TkButton.new do
   background "yellow"
   foreground "blue"
   command do
-    hide_secret true
+    hide_secret true, false
     show_word
     $tk_show.place 'height' => $tk_show_height, 'width' => $tk_show_width, 'x' => $tk_show_x, 'y' => $tk_show_y
     $tk_yes.unplace
@@ -362,7 +368,7 @@ $tk_no = TkButton.new do
   background "yellow"
   foreground "blue"
   command do
-    hide_secret false
+    hide_secret false, false
     show_word
     $tk_show.place 'height' => $tk_show_height, 'width' => $tk_show_width, 'x' => $tk_show_x, 'y' => $tk_show_y
     $tk_yes.unplace
@@ -424,11 +430,12 @@ def show_secret
   $tk_pronounce.text $rows[$cursor][1]
 end
 
-def hide_secret remember
-  if remember
+def hide_secret remember, pass
+  if remember or pass
     row = $rows[$cursor]
     firstTimeFail = row[6]
     row[2] += 1 if not firstTimeFail
+    row[2] = 8 if pass
     row[3] = cal_remind_time row[2], "int"
     row[4] = cal_remind_time row[2], "str"
 
