@@ -431,6 +431,11 @@ def show_secret
 end
 
 def hide_secret remember, pass
+  if $rows.empty?
+    Tk.messageBox 'message' => "No word specified"
+    return
+  end
+
   if remember or pass
     row = $rows[$cursor]
     firstTimeFail = row[6]
