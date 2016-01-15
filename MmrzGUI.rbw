@@ -147,7 +147,8 @@ def import_file path
 end
 
 def speak_word
-  $speaker.speak $rows_from_DB[$cursor_of_rows][0] if $rows_from_DB != []
+  # speaker.speak( text, syncType )
+  $speaker.speak $rows_from_DB[$cursor_of_rows][0], 1 if $rows_from_DB != []
 end
 
 $tk_root = TkRoot.new do
