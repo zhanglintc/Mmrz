@@ -4,7 +4,6 @@
 # TODO: try use thread process instead of the mass of global variables
 # TODO: add TTS options(engine select | speed select | etc.)
 # TODO: use namespace
-# TODO: optimize variable names
 
 require File.dirname(__FILE__) + '/comm.rb'
 require File.dirname(__FILE__) + '/db.rb'
@@ -147,7 +146,7 @@ def import_file path
 end
 
 def speak_word
-  $announcer.speak $rows[$cursor][0] if $rows != []
+  $speaker.speak $rows_from_DB[$cursor_of_rows][0] if $rows_from_DB != []
 end
 
 $tk_root = TkRoot.new do
@@ -405,38 +404,38 @@ def get_shortest_remind
 end
 
 def move_cursor
-  if $cursor == $rows.size
-    $cursor = 0
+  if $cursor_of_rows == $rows_from_DB.size
+    $cursor_of_rows = 0
     return
   end
 
-  $cursor += 1
-  $cursor = 0 if $cursor == $rows.size
+  $cursor_of_rows += 1
+  $cursor_of_rows = 0 if $cursor_of_rows == $rows_from_DB.size
 end
 
 def show_word
-  if $rows.size == 0
+  if $rows_from_DB.size == 0
     $tk_root.title "#{TITLE} -- #{get_shortest_remind}"
     $tk_word.text "本次背诵完毕"
     $tk_exit.place 'height' => $tk_show_height, 'width' => $tk_show_width, 'x' => $tk_show_x, 'y' => $tk_show_y
   else
-    $tk_word.text $rows[$cursor][0]
-    $tk_root.title "#{TITLE} -- #{$rows.size} words left"
+    $tk_word.text $rows_from_DB[$cursor_of_rows][0]
+    $tk_root.title "#{TITLE} -- #{$rows_from_DB.size} words left"
   end
 end
 
 def show_secret
-  $tk_pronounce.text $rows[$cursor][1]
+  $tk_pronounce.text $rows_from_DB[$cursor_of_rows][1]
 end
 
 def hide_secret remember, pass
-  if $rows.empty?
+  if $rows_from_DB.empty?
     Tk.messageBox 'message' => "No word specified"
     return
   end
 
   if remember or pass
-    row = $rows[$cursor]
+    row = $rows_from_DB[$cursor_of_rows]
     firstTimeFail = row[6]
     row[2] += 1 if not firstTimeFail
     row[2] = 8 if pass
@@ -451,9 +450,9 @@ def hide_secret remember, pass
       dbMgr.closeDB
     end
 
-    $rows.delete_at $cursor
+    $rows_from_DB.delete_at $cursor_of_rows
   else
-    $rows[$cursor][6] = true # firstTimeFail: false => true
+    $rows_from_DB[$cursor_of_rows][6] = true # firstTimeFail: false => true
   end
   move_cursor
   $tk_pronounce.text ""
@@ -468,13 +467,13 @@ if __FILE__ == $0
   dbMgr.closeDB
 
   dbMgr = MmrzDBManager.new
-  $rows = []
+  $rows_from_DB = []
   dbMgr.readDB.each do |row|
     # [0~5]read from DB, [6]new added firstTimeFail
     row[6] = false # initialize firstTimeFail as false
-    $rows << row if row[3] < Time.now.to_i
+    $rows_from_DB << row if row[3] < Time.now.to_i
   end
-  $cursor = 0
+  $cursor_of_rows = 0
   dbMgr.closeDB
 
   show_word

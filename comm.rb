@@ -10,12 +10,12 @@ WINDOWS = RbConfig::CONFIG['target_os'] == "mingw32" ? true : false
 def find_misaki
   misaki_found = false
   if WINDOWS
-    $announcer = WIN32OLE.new('Sapi.SpVoice')
-    $announcer.GetVoices().each do |engine|
+    $speaker = WIN32OLE.new('Sapi.SpVoice')
+    $speaker.GetVoices().each do |engine|
       if engine.GetDescription().include? "Misaki"
-        $announcer.Voice = engine
-        $announcer.volume = 100 # range 0(low) - 100(loud)
-        $announcer.rate  = -3 # range -10(slow) - 10(fast)
+        $speaker.Voice = engine
+        $speaker.volume = 100 # range 0(low) - 100(loud)
+        $speaker.rate  = -3 # range -10(slow) - 10(fast)
         misaki_found = true
       end
     end
