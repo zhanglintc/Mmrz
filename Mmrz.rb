@@ -2,7 +2,12 @@
 # encoding: utf-8
 
 VERSION = "v0.1.4"
-MMRZ_BUILD_WINDOWS_EXE = false
+
+require File.dirname(__FILE__) + '/comm.rb'
+require File.dirname(__FILE__) + '/db.rb'
+require 'readline'
+require 'sqlite3'
+require 'io/console'
 
 if MMRZ_BUILD_WINDOWS_EXE
   Encoding.default_external = Encoding::CP932
@@ -11,12 +16,6 @@ else
   Encoding.default_external = Encoding::UTF_8
   Encoding.default_internal = Encoding::UTF_8
 end
-
-require File.dirname(__FILE__) + '/comm.rb'
-require File.dirname(__FILE__) + '/db.rb'
-require 'readline'
-require 'sqlite3'
-require 'io/console'
 
 welcome_str = "\
 Welcome to Mmrz !!! -- Memorize words easily.

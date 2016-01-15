@@ -1,6 +1,10 @@
 #!/env/bin/ruby
 # encoding: utf-8
 
+# user defined constants
+MMRZ_BUILD_WINDOWS_EXE = false
+
+# constants
 WINDOWS = RbConfig::CONFIG['target_os'] == "mingw32" ? true : false
 
 def find_misaki

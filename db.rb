@@ -1,7 +1,7 @@
 #!/env/bin/ruby
 # encoding: utf-8
 
-DB_BUILD_WINDOWS_EXE = false
+require File.dirname(__FILE__) + '/comm.rb'
 
 class MmrzDBManager
 =begin
@@ -15,7 +15,7 @@ class MmrzDBManager
 =end
 
   def initialize
-    if DB_BUILD_WINDOWS_EXE
+    if MMRZ_BUILD_WINDOWS_EXE
       @db = SQLite3::Database.new "./wordbook.db"
     else
       @db = SQLite3::Database.new ( File.dirname(__FILE__) + "/wordbook.db" )
