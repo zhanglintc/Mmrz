@@ -12,16 +12,11 @@ else
   Encoding.default_internal = Encoding::UTF_8
 end
 
-if RbConfig::CONFIG['target_os'] == "mingw32"
-  WINDOWS = true
-else
-  WINDOWS = false
-end
-
+require File.dirname(__FILE__) + '/comm.rb'
+require File.dirname(__FILE__) + '/db.rb'
 require 'readline'
 require 'sqlite3'
 require 'io/console'
-require File.dirname(__FILE__) + '/db.rb'
 
 welcome_str = "\
 Welcome to Mmrz !!! -- Memorize words easily.
@@ -84,39 +79,6 @@ end
 def show_unmemorized_count
   count = get_memorize_words.size
   puts "Note: #{count} words need to be memorized"
-end
-
-def cal_remind_time memTimes, type
-  curTime = Time.now
-
-  case memTimes
-  when 0
-    remindTime = curTime + (60 * 5) # 5 minuts
-    # remindTime = curTime # 0 minuts, debug mode
-  when 1
-    remindTime = curTime + (60 * 30) # 30 minuts
-  when 2
-    remindTime = curTime + (60 * 60 * 12) # 12 hours
-  when 3
-    remindTime = curTime + (60 * 60 * 24) # 1 day
-  when 4
-    remindTime = curTime + (60 * 30 * 24 * 2) # 2 days
-  when 5
-    remindTime = curTime + (60 * 30 * 24 * 4) # 4 days
-  when 6
-    remindTime = curTime + (60 * 30 * 24 * 7) # 7 days
-  when 7
-    remindTime = curTime + (60 * 30 * 24 * 15) # 15 days
-  else
-    remindTime = curTime
-  end
-
-  case type
-  when "int"
-    return remindTime.to_i
-  when "str"
-    return remindTime.to_s[0..-7]
-  end
 end
 
 def add_word
