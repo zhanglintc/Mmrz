@@ -230,46 +230,58 @@ $make_wb_win = Proc.new do
 end
 
 $file_menu = TkMenu.new($tk_root)
-$file_menu.add('command',
-              'label'     => "Import",
-              'command'   => Proc.new { Thread.start do import_file Tk.getOpenFile 'filetypes' => "{MMZ {.mmz}} {YB {.yb}} {ALL {.*}}" end },
-              'underline' => 0)
-$file_menu.add('separator')
-$file_menu.add('command',
-              'label'     => "Exit",
-              'command'   => Proc.new {exit},
-              'underline' => 0)
+$file_menu.add( 'command',
+                'label'     => "Import",
+                'command'   => Proc.new { Thread.start do import_file Tk.getOpenFile 'filetypes' => "{MMZ {.mmz}} {YB {.yb}} {ALL {.*}}" end },
+                'underline' => 0)
+$file_menu.add( 'command',
+                'label'     => "Export",
+                'command'   => $menu_click,
+                'underline' => 0)
+$file_menu.add( 'separator' )
+$file_menu.add( 'command',
+                'label'     => "Exit",
+                'command'   => Proc.new {exit},
+                'underline' => 1)
 
 $edit_menu = TkMenu.new($tk_root)
-$edit_menu.add('command',
-              'label'     => "Pass",
-              'command'   => Proc.new { 
+$edit_menu.add( 'command',
+                'label'     => "Pass",
+                'command'   => Proc.new { 
                                 hide_secret false, true
                                 show_word
                                 $tk_show.place 'height' => $tk_show_height, 'width' => $tk_show_width, 'x' => $tk_show_x, 'y' => $tk_show_y
                                 $tk_yes.unplace
                                 $tk_no.unplace
                               },
-              'underline' => 0)
+                'underline' => 0)
+$edit_menu.add( 'separator' )
+$edit_menu.add( 'command',
+                'label'     => "Setting",
+                'command'   => $menu_click,
+                'underline' => 0)
 
 $view_menu = TkMenu.new($tk_root)
-$view_menu.add('command',
-              'label'     => "Wordbook",
-              'command'   => $make_wb_win,
-              'underline' => 0)
+$view_menu.add( 'command',
+                'label'     => "Wordbook",
+                'command'   => $make_wb_win,
+                'underline' => 0)
 
 $help_menu = TkMenu.new($tk_root)
-$help_menu.add('command',
-              'label'     => "About",
-              'underline' => 0,
-              'command'   => Proc.new {
-                Tk.messageBox(
-                  'type'    => "ok",  
-                  'icon'    => "info",
-                  'title'   => "About",
-                  'message' => $version_info
-                )
-              })
+$help_menu.add( 'command',
+                'label'     => "Usage",
+                'command'   => $menu_click,
+                'underline' => 0)
+$help_menu.add( 'command',
+                'label'     => "About",
+                'underline' => 0,
+                'command'   => Proc.new {
+                  Tk.messageBox(
+                    'type'    => "ok",  
+                    'icon'    => "info",
+                    'title'   => "About",
+                    'message' => $version_info)}
+              )
 
 $menu_bar = TkMenu.new
 $menu_bar.add('cascade',
