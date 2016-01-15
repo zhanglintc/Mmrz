@@ -3,30 +3,19 @@
 
 # TODO: try use thread process instead of the mass of global variables
 # TODO: add TTS options(engine select | speed select | etc.)
+# TODO: use namespace
+# TODO: optimize variable names
 
-WINDOWS = RbConfig::CONFIG['target_os'] == "mingw32" ? true : false
+require File.dirname(__FILE__) + '/comm.rb'
+require File.dirname(__FILE__) + '/db.rb'
 
 require 'tk'
 require 'sqlite3'
 require 'win32ole' if WINDOWS
-require File.dirname(__FILE__) + '/db.rb'
 
 VERSION = "v0.1.6"
 TITLE   = "Mmrz"
-
-misaki_found = false
-if WINDOWS
-  $announcer = WIN32OLE.new('Sapi.SpVoice')
-  $announcer.GetVoices().each do |engine|
-    if engine.GetDescription().include? "Misaki"
-      $announcer.Voice = engine
-      $announcer.volume = 100 # range 0(low) - 100(loud)
-      $announcer.rate  = -3 # range -10(slow) - 10(fast)
-      misaki_found = true
-    end
-  end
-end
-TTSSupport = misaki_found
+TTSSupport = find_misaki
 
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
@@ -79,39 +68,6 @@ $tk_wb_list_y = 10
 $tk_wb_scroll_height = $tk_wb_height - 20
 $tk_wb_scroll_x = $tk_wb_width - 20
 $tk_wb_scroll_y = $tk_wb_list_y
-
-def cal_remind_time memTimes, type
-  curTime = Time.now
-
-  case memTimes
-  when 0
-    remindTime = curTime + (60 * 5) # 5 minuts
-    # remindTime = curTime # 0 minuts, debug mode
-  when 1
-    remindTime = curTime + (60 * 30) # 30 minuts
-  when 2
-    remindTime = curTime + (60 * 60 * 12) # 12 hours
-  when 3
-    remindTime = curTime + (60 * 60 * 24) # 1 day
-  when 4
-    remindTime = curTime + (60 * 30 * 24 * 2) # 2 days
-  when 5
-    remindTime = curTime + (60 * 30 * 24 * 4) # 4 days
-  when 6
-    remindTime = curTime + (60 * 30 * 24 * 7) # 7 days
-  when 7
-    remindTime = curTime + (60 * 30 * 24 * 15) # 15 days
-  else
-    remindTime = curTime
-  end
-
-  case type
-  when "int"
-    return remindTime.to_i
-  when "str"
-    return remindTime.to_s[0..-7]
-  end
-end
 
 def import_file path
   if "".include? path
@@ -318,19 +274,25 @@ $help_menu.add('command',
 $menu_bar = TkMenu.new
 $menu_bar.add('cascade',
               'menu'  => $file_menu,
-              'label' => "File")
+              'label' => "File",
+              'underline' => 0)
 $menu_bar.add('cascade',
               'menu'  => $edit_menu,
-              'label' => "Edit")
+              'label' => "Edit",
+              'underline' => 0)
 $menu_bar.add('cascade',
               'menu'  => $view_menu,
-              'label' => "View")
+              'label' => "View",
+              'underline' => 0)
 $menu_bar.add('command',
-              'command' => Proc.new { speak_word },
-              'label'   => "Speak") if TTSSupport
+              'command'   => Proc.new { speak_word },
+              'label'     => "Speak",
+              'underline' => 0) if TTSSupport
+              
 $menu_bar.add('cascade',
               'menu'  => $help_menu,
-              'label' => "Help")
+              'label' => "Help",
+              'underline' => 0)
 $tk_root.menu($menu_bar)
 
 
