@@ -1,7 +1,7 @@
 #!/env/bin/ruby
 # encoding: utf-8
 
-# TODO: try use thread process instead of the mass of global variables
+# TODO: try to use Class(singleton) to handle the mass of global variables
 # TODO: add TTS options(engine select | speed select | etc.)
 # TODO: use namespace
 
