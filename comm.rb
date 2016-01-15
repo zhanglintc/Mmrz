@@ -55,3 +55,31 @@ def cal_remind_time memTimes, type
     return remindTime.to_s[0..-7]
   end
 end
+
+def get_shortest_remind
+  dbMgr = MmrzDBManager.new
+  rows = dbMgr.readDB
+  return "No words in schedule" if rows == []
+
+  rows.sort! { |r1, r2| r1[3] <=> r2[3] } # remindTime from short to long
+  word          = rows[0][0]
+  pronounce     = rows[0][1]
+  memTimes      = rows[0][2]
+  remindTime    = rows[0][3]
+  remindTimeStr = rows[0][4]
+  wordID        = rows[0][5]
+
+  remindTime -= Time.now.to_i
+  if remindTime > 0
+    day  = remindTime / (60 * 60 * 24)
+    hour = remindTime % (60 * 60 * 24) / (60 * 60)
+    min  = remindTime % (60 * 60 * 24) % (60 * 60) / 60
+  else
+    day = hour = min = 0
+  end
+
+  remindTimeStr = format("%sd-%sh-%sm", day, hour, min)
+  format("Next after %s", remindTimeStr)
+end
+
+

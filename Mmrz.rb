@@ -77,7 +77,7 @@ end
 
 def show_unmemorized_count
   count = get_memorize_words.size
-  puts "Note: #{count} words need to be memorized"
+  puts "Note: #{count} words need to be memorized, #{get_shortest_remind().downcase}"
 end
 
 def add_word
