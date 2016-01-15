@@ -14,6 +14,7 @@ require 'win32ole' if WINDOWS
 
 VERSION = "v0.1.6"
 TITLE   = "Mmrz"
+FAVICON = "./fav.ico"
 TTSSupport = find_misaki
 
 Encoding.default_external = Encoding::UTF_8
@@ -151,6 +152,7 @@ end
 
 $tk_root = TkRoot.new do
   title TITLE # would be overrided
+  iconbitmap FAVICON
   minsize $tk_root_width, $tk_root_height
   maxsize $tk_root_width, $tk_root_height
 end
