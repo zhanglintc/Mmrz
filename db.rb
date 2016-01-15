@@ -34,7 +34,7 @@ class MmrzDBManager
   end
 
   def updateDB row
-    @db.execute "update UNMMRZ set memTimes = #{row[2]}, remindTime = #{row[3]}, remindTimeStr = '#{row[4]}' where word = '#{row[0]}'"
+    @db.execute "update UNMMRZ set memTimes = #{row[2]}, remindTime = #{row[3]}, remindTimeStr = '#{row[4]}' where wordID = '#{row[5]}'"
   end
 
   def deleteDB wordID
