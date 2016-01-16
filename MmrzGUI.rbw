@@ -249,13 +249,26 @@ $file_menu.add( 'command',
 $edit_menu = TkMenu.new($tk_root)
 $edit_menu.add( 'command',
                 'label'     => "Pass",
+                'underline' => 0,
                 'command'   => Proc.new { 
                                 hide_secret false, true
                                 show_word
                                 $tk_show.place 'height' => $tk_show_height, 'width' => $tk_show_width, 'x' => $tk_show_x, 'y' => $tk_show_y
                                 $tk_yes.unplace
                                 $tk_no.unplace
-                              },
+                              })
+$edit_menu.add( 'separator' )
+$edit_menu.add( 'command',
+                'label'     => "Add",
+                'command'   => $menu_click,
+                'underline' => 0)
+$edit_menu.add( 'command',
+                'label'     => "Delete",
+                'command'   => $menu_click,
+                'underline' => 0)
+$edit_menu.add( 'command',
+                'label'     => "Edit",
+                'command'   => $menu_click,
                 'underline' => 0)
 $edit_menu.add( 'separator' )
 $edit_menu.add( 'command',
