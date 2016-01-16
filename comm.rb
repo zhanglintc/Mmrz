@@ -56,9 +56,23 @@ def cal_remind_time memTimes, type
   end
 end
 
+def split_remindTime remindTime
+  if remindTime > 0
+    day  = remindTime / (60 * 60 * 24)
+    hour = remindTime % (60 * 60 * 24) / (60 * 60)
+    min  = remindTime % (60 * 60 * 24) % (60 * 60) / 60
+    sec  = remindTime % (60 * 60 * 24) % (60 * 60) % 60
+  else
+    day = hour = min = sec = 0
+  end
+
+  return day, hour, min, sec
+end
+
 def get_shortest_remind
   dbMgr = MmrzDBManager.new
   rows = dbMgr.readDB
+  dbMgr.closeDB
   return "No words in schedule" if rows == []
 
   rows.sort! { |r1, r2| r1[3] <=> r2[3] } # remindTime from short to long
@@ -70,13 +84,8 @@ def get_shortest_remind
   wordID        = rows[0][5]
 
   remindTime -= Time.now.to_i
-  if remindTime > 0
-    day  = remindTime / (60 * 60 * 24)
-    hour = remindTime % (60 * 60 * 24) / (60 * 60)
-    min  = remindTime % (60 * 60 * 24) % (60 * 60) / 60
-  else
-    day = hour = min = 0
-  end
+  day, hour, min, sec = split_remindTime remindTime
+  min += 1 if sec > 0
 
   remindTimeStr = format("%sd-%sh-%sm", day, hour, min)
   format("Next after %s", remindTimeStr)

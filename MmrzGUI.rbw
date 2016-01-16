@@ -204,13 +204,8 @@ $make_wb_win = Proc.new do
     wordID        = row[5]
 
     remindTime -= Time.now.to_i
-    if remindTime > 0
-      day  = remindTime / (60 * 60 * 24)
-      hour = remindTime % (60 * 60 * 24) / (60 * 60)
-      min  = remindTime % (60 * 60 * 24) % (60 * 60) / 60
-    else
-      day = hour = min = 0
-    end
+    day, hour, min, sec = split_remindTime remindTime
+    min += 1 if sec > 0
 
     if memTimes >= 8
       remindTimeStr = format("%sd-%sh-%sm", day, hour, min)
@@ -438,6 +433,7 @@ def hide_secret remember, pass
       dbMgr = MmrzDBManager.new
       dbMgr.updateDB row
       dbMgr.closeDB
+      $tk_root.title "#{TITLE} -- #{get_shortest_remind}" if $rows_from_DB.size == 0
     end
 
     $rows_from_DB.delete_at $cursor_of_rows

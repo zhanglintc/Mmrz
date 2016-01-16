@@ -199,13 +199,8 @@ def list_word
     wordID        = row[5]
 
     remindTime -= Time.now.to_i
-    if remindTime > 0
-      day  = remindTime / (60 * 60 * 24)
-      hour = remindTime % (60 * 60 * 24) / (60 * 60)
-      min  = remindTime % (60 * 60 * 24) % (60 * 60) / 60
-    else
-      day = hour = min = 0
-    end
+    day, hour, min, sec = split_remindTime remindTime
+    min += 1 if sec > 0
 
     if memTimes >= 8
       remindTimeStr = format("%sd-%sh-%sm", day, hour, min)
