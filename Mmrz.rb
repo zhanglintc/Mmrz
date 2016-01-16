@@ -118,7 +118,7 @@ def load_file paras
     return
   end
 
-  if MMRZ_BUILD_WINDOWS_EXE
+  if COMM::MMRZ_BUILD_WINDOWS_EXE
     file_path = paras[0]
   else
     file_path = "#{File.dirname(__FILE__)}/#{paras[0]}"
@@ -253,7 +253,7 @@ def mmrz_word
         clear_screen()
         puts  "Memorize mode:\n\n"
         puts  "[#{left_words}] #{ left_words == 1 ? 'word' : 'words'} left:\n\n"
-        if MMRZ_BUILD_WINDOWS_EXE
+        if COMM::MMRZ_BUILD_WINDOWS_EXE
           puts  "単語: ".encode("cp932") + row_as_key[0]
           puts  "-------------------"
           print "秘密: ".encode("cp932")
