@@ -195,7 +195,7 @@ def list_word
   dbMgr = MmrzDBManager.new
   rows = dbMgr.readAllDB
   rows.sort! { |r1, r2| r1[3] <=> r2[3] } # remindTime from short to long
-  str_to_less = "Wordbook is shown below:\n\n"
+  str_to_less = "Wordbook is shown below: (#{rows.size} words)\n\n"
   str_to_less_tail = ""
   rows.each do |row|
     word          = row[0]
