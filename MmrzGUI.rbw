@@ -12,7 +12,7 @@ require 'tk'
 require 'sqlite3'
 require 'win32ole' if WINDOWS
 
-VERSION = "v0.1.6"
+VERSION = "v0.1.7"
 TITLE   = "Mmrz"
 FAVICON = "./fav.ico"
 TTSSupport = find_misaki
