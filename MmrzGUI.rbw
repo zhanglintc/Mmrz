@@ -204,8 +204,7 @@ $make_wb_win = Proc.new do
     wordID        = row[5]
 
     remindTime -= Time.now.to_i
-    day, hour, min, sec = split_remindTime remindTime
-    min += 1 if sec > 0
+    day, hour, min, sec = split_remindTime remindTime, true
 
     if memTimes >= 8
       remindTimeStr = format("%sd-%sh-%sm", day, hour, min)

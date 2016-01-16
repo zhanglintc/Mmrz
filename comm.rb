@@ -56,8 +56,9 @@ def cal_remind_time memTimes, type
   end
 end
 
-def split_remindTime remindTime
+def split_remindTime remindTime, adjust = false
   if remindTime > 0
+    remindTime += 59 if adjust
     day  = remindTime / (60 * 60 * 24)
     hour = remindTime % (60 * 60 * 24) / (60 * 60)
     min  = remindTime % (60 * 60 * 24) % (60 * 60) / 60
@@ -84,8 +85,7 @@ def get_shortest_remind
   wordID        = rows[0][5]
 
   remindTime -= Time.now.to_i
-  day, hour, min, sec = split_remindTime remindTime
-  min += 1 if sec > 0
+  day, hour, min, sec = split_remindTime remindTime, true
 
   remindTimeStr = format("%sd-%sh-%sm", day, hour, min)
   format("Next after %s", remindTimeStr)
