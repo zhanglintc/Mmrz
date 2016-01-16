@@ -101,8 +101,15 @@ def import_file path
   no_added = 0
   added = 0
   fr.each_line do |line|
-    line_idx += 1
+    line.chomp!
+
     $tk_root.title "#{TITLE} -- Importing line #{line_idx}"
+    line_idx += 1
+
+    if /^[ |\t]*#.*/ =~ line or line == ""
+      next # ignore comment line or null line
+    end
+
     if suffix == ".mmz"
       wordInfo = line.encode.split
       if not [2, 3].include? wordInfo.size
@@ -123,6 +130,7 @@ def import_file path
       else
         not_loaded_line += "- line #{line_idx}, format error\n"
         no_added += 1
+        next
       end
     end
     

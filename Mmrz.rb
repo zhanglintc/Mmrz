@@ -140,26 +140,33 @@ def load_file paras
   no_added = 0
   added = 0
   fr.each_line do |line|
+    line.chomp!
+
     line_idx += 1
     wordInfo = line.split
+
+    if /^[ |\t]*#.*/ =~ line or line == ""
+      next # ignore comment line or null line
+    end
+
     if not [2, 3].include? wordInfo.size
       not_loaded_line += "*not loaded: line #{line_idx}, format error\n"
       no_added += 1
       next
-    else
-      word          = wordInfo[0]
-      pronounce     = (wordInfo.size == 2 ? wordInfo[1] : "#{wordInfo[1]} -- #{wordInfo[2]}")
-      memTimes      = 0
-      remindTime    = cal_remind_time(memTimes, "int")
-      remindTimeStr = cal_remind_time(memTimes, "str")
-      wordID        = dbMgr.getMaxWordID + 1
-
-      row = [word, pronounce, memTimes, remindTime, remindTimeStr, wordID]
-      printf("loaded: %s <==> %s\n", word, pronounce)
-      dbMgr.insertDB row
-
-      added += 1
     end
+
+    word          = wordInfo[0]
+    pronounce     = (wordInfo.size == 2 ? wordInfo[1] : "#{wordInfo[1]} -- #{wordInfo[2]}")
+    memTimes      = 0
+    remindTime    = cal_remind_time(memTimes, "int")
+    remindTimeStr = cal_remind_time(memTimes, "str")
+    wordID        = dbMgr.getMaxWordID + 1
+
+    row = [word, pronounce, memTimes, remindTime, remindTimeStr, wordID]
+    printf("loaded: %s <==> %s\n", word, pronounce)
+    dbMgr.insertDB row
+
+    added += 1
   end
 
   fr.close
