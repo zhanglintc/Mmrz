@@ -10,12 +10,12 @@ require File.dirname(__FILE__) + '/db.rb'
 
 require 'tk'
 require 'sqlite3'
-require 'win32ole' if WINDOWS
+require 'win32ole' if COMM::WINDOWS
 
 VERSION = "v0.1.7"
 TITLE   = "Mmrz"
 FAVICON = "./fav.ico"
-TTSSupport = find_misaki
+TTSSupport = find_misaki?
 
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
@@ -137,8 +137,8 @@ def import_file path
     word          = wordInfo[0]
     pronounce     = (wordInfo.size == 2 ? wordInfo[1] : "#{wordInfo[1]} -- #{wordInfo[2]}")
     memTimes      = 0
-    remindTime    = cal_remind_time(memTimes, "int")
-    remindTimeStr = cal_remind_time(memTimes, "str")
+    remindTime    = COMM::cal_remind_time(memTimes, "int")
+    remindTimeStr = COMM::cal_remind_time(memTimes, "str")
     wordID        = dbMgr.getMaxWordID + 1
 
     row = [word, pronounce, memTimes, remindTime, remindTimeStr, wordID]
@@ -160,7 +160,7 @@ def speak_word
 end
 
 $tk_root = TkRoot.new do
-  title TITLE # would be overrided
+  title TITLE # would be overridden
   iconbitmap FAVICON
   minsize $tk_root_width, $tk_root_height
   maxsize $tk_root_width, $tk_root_height
@@ -212,7 +212,7 @@ $make_wb_win = Proc.new do
     wordID        = row[5]
 
     remindTime -= Time.now.to_i
-    day, hour, min, sec = split_remindTime remindTime, true
+    day, hour, min, sec = COMM::split_remindTime remindTime, true
 
     if memTimes >= 8
       remindTimeStr = format("%sd-%sh-%sm", day, hour, min)
@@ -407,7 +407,7 @@ end
 
 def show_word
   if $rows_from_DB.size == 0
-    $tk_root.title "#{TITLE} -- #{get_shortest_remind}"
+    $tk_root.title "#{TITLE} -- #{COMM::get_shortest_remind}"
     $tk_word.text "本次背诵完毕"
     $tk_exit.place 'height' => $tk_show_height, 'width' => $tk_show_width, 'x' => $tk_show_x, 'y' => $tk_show_y
   else
@@ -431,8 +431,8 @@ def hide_secret remember, pass
     firstTimeFail = row[6]
     row[2] += 1 if not firstTimeFail
     row[2] = 8 if pass
-    row[3] = cal_remind_time row[2], "int"
-    row[4] = cal_remind_time row[2], "str"
+    row[3] = COMM::cal_remind_time row[2], "int"
+    row[4] = COMM::cal_remind_time row[2], "str"
 
     # use thread to avoid UI refresh lagging
     Thread.start do
@@ -440,7 +440,7 @@ def hide_secret remember, pass
       dbMgr = MmrzDBManager.new
       dbMgr.updateDB row
       dbMgr.closeDB
-      $tk_root.title "#{TITLE} -- #{get_shortest_remind}" if $rows_from_DB.size == 0
+      $tk_root.title "#{TITLE} -- #{COMM::get_shortest_remind}" if $rows_from_DB.size == 0
     end
 
     $rows_from_DB.delete_at $cursor_of_rows

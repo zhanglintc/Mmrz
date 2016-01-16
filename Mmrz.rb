@@ -9,7 +9,7 @@ require 'readline'
 require 'sqlite3'
 require 'io/console'
 
-if MMRZ_BUILD_WINDOWS_EXE
+if COMM::MMRZ_BUILD_WINDOWS_EXE
   Encoding.default_external = Encoding::CP932
   Encoding.default_internal = Encoding::CP932
 else
@@ -35,7 +35,7 @@ Available commands:
 def my_readline prompt
   # Get user's input with CR||LF and front||end spaces removed.
 
-  if MMRZ_BUILD_WINDOWS_EXE
+  if COMM::MMRZ_BUILD_WINDOWS_EXE
     print prompt
     gets.chomp.gsub(/^\s*|\s*$/, "")
   else
@@ -44,7 +44,7 @@ def my_readline prompt
 end
 
 def clear_screen
-  if WINDOWS
+  if COMM::WINDOWS
     system "cls"
   else
     system "clear"
@@ -58,7 +58,7 @@ end
 def get_memorize_words
 =begin
   Return a hash contains words reach remind time.
-  Hash fomrat:
+  Hash format:
     selected_rows -- { list: row_as_key => [boolean: remembered, boolean: firstTimeFail] }
 =end
 
@@ -77,7 +77,7 @@ end
 
 def show_unmemorized_count
   count = get_memorize_words.size
-  puts "Note: #{count} words need to be memorized, #{get_shortest_remind().downcase}"
+  puts "Note: #{count} words need to be memorized, #{COMM::get_shortest_remind().downcase}"
 end
 
 def add_word
@@ -95,8 +95,8 @@ def add_word
     word          = words[0]
     pronounce     = (words.size == 2 ? words[1] : "#{words[1]} -- #{words[2]}")
     memTimes      = 0
-    remindTime    = cal_remind_time(memTimes, "int")
-    remindTimeStr = cal_remind_time(memTimes, "str")
+    remindTime    = COMM::cal_remind_time(memTimes, "int")
+    remindTimeStr = COMM::cal_remind_time(memTimes, "str")
     wordID        = dbMgr.getMaxWordID + 1
     
     row = [word, pronounce, memTimes, remindTime, remindTimeStr, wordID]
@@ -158,8 +158,8 @@ def load_file paras
     word          = wordInfo[0]
     pronounce     = (wordInfo.size == 2 ? wordInfo[1] : "#{wordInfo[1]} -- #{wordInfo[2]}")
     memTimes      = 0
-    remindTime    = cal_remind_time(memTimes, "int")
-    remindTimeStr = cal_remind_time(memTimes, "str")
+    remindTime    = COMM::cal_remind_time(memTimes, "int")
+    remindTimeStr = COMM::cal_remind_time(memTimes, "str")
     wordID        = dbMgr.getMaxWordID + 1
 
     row = [word, pronounce, memTimes, remindTime, remindTimeStr, wordID]
@@ -206,7 +206,7 @@ def list_word
     wordID        = row[5]
 
     remindTime -= Time.now.to_i
-    day, hour, min, sec = split_remindTime remindTime, true
+    day, hour, min, sec = COMM::split_remindTime remindTime, true
 
     if memTimes >= 8
       remindTimeStr = format("%sd-%sh-%sm", day, hour, min)
@@ -220,7 +220,7 @@ def list_word
 
   str_to_less += str_to_less_tail
   dbMgr.closeDB
-  if WINDOWS
+  if COMM::WINDOWS
     fw = open File.dirname(__FILE__) + "/temp", "wb"
     fw.write str_to_less.encode("gbk")
     fw.close
@@ -275,8 +275,8 @@ def mmrz_word
             selected_rows[row_as_key][0] = true # remembered = true
             left_words -= 1
             row_as_key[2] += 1 if not firstTimeFail
-            row_as_key[3] = cal_remind_time row_as_key[2], "int"
-            row_as_key[4] = cal_remind_time row_as_key[2], "str"
+            row_as_key[3] = COMM::cal_remind_time row_as_key[2], "int"
+            row_as_key[4] = COMM::cal_remind_time row_as_key[2], "str"
             dbMgr.updateDB row_as_key
             break # break "Do you remember"
           when "pass"
