@@ -16,6 +16,7 @@ VERSION = "v0.1.7"
 TITLE   = "Mmrz"
 FAVICON = "./fav.ico"
 TTSSupport = find_misaki?
+AUTO_SPEAK = false
 
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
@@ -413,6 +414,7 @@ def show_word
   else
     $tk_word.text $rows_from_DB[$cursor_of_rows][0]
     $tk_root.title "#{TITLE} -- #{$rows_from_DB.size} words left"
+    speak_word if TTSSupport and AUTO_SPEAK
   end
 end
 
