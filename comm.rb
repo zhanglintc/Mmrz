@@ -14,7 +14,7 @@ module COMM
 
   # Make meaning as hint, word and pronunciation as secret
   # set true to enable, false to disable
-  REVERSE_MODE = true
+  REVERSE_MODE = false
 
   ## Constants
   WINDOWS = RbConfig::CONFIG['target_os'] == "mingw32" ? true : false
