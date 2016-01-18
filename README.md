@@ -20,12 +20,14 @@
 ## 使用:
 `clone`仓库, 然后使用`ruby Mmrz.rb`运行程序. 或者双击`MmrzGUI.rbw`直接运行.
 
-可能出现的问题请参照下方`注意`部分.
+**注意事项:**
 
-## 注意:
-- 需要使用`Ruby 2.0.0`以上版本, 请从[官方](http://rubyinstaller.org/)下载地址获取. 如果要使用GUI版本, 安装时请**务必**勾选`Tcl/Tk`支持, 添加到`Path`路径和`rb`  `rbw`后缀名绑定.
-- 可能需要手动安装`sqlite3`. 使用`gem install sqlite3`. 无法安装请参照[这里](https://ruby.taobao.org/)的解决方案, 或者直接双击`autoenv.rb`.
-- 添加了TTS发音支持, 默认处于关闭状态. 如果需要使用, 请[下载](http://pan.baidu.com/s/1nugP7XR)我分享的日语发音库. 安装成功后即会在菜单栏中出现`Speak`选项, 点击即可发音.
+- 需要使用`Ruby 2.0.0`以上版本, 请从[官方下载](http://rubyinstaller.org/)地址获取. 如果要使用GUI版本, 安装时请**务必**勾选`Tcl/Tk`支持, 添加到`Path`路径和`rb`  `rbw`后缀名绑定.
+
+- 可能需要手动安装`sqlite3`. 使用`gem install sqlite3`. 无法安装请参照这里的[解决方案](https://ruby.taobao.org/), 或者直接双击`autoenv.rb`.
+
+- 添加了TTS发音支持, 默认处于关闭状态. 如果需要使用, 请下载我分享的[日语发音库](http://pan.baidu.com/s/1nugP7XR). 安装成功后即会在菜单栏中出现`Speak`选项, 点击即可发音.
+
 - 首次运行即会在当前目录下创建`wordbook.db`数据库. 此数据库**非常重要**, 绝对**不可删除**. 否则所有单词背诵记录将完全丢失, 且无法恢复.
 
 ## 功能:
