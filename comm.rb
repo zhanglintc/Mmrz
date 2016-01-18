@@ -2,10 +2,21 @@
 # encoding: utf-8
 
 module COMM
-  # user defined constants
+  ## User defined constants
+
+  # Build windows executable mode
+  # true to enable, false to disable
   MMRZ_BUILD_WINDOWS_EXE = false
 
-  # constants
+  # Auto speak word's pronunciation when each word appears
+  # set true to enable, false to disable
+  AUTO_SPEAK = false
+
+  # Make meaning as hint, word and pronunciation as secret
+  # set true to enable, false to disable
+  REVERSE_MODE = true
+
+  ## Constants
   WINDOWS = RbConfig::CONFIG['target_os'] == "mingw32" ? true : false
 
   module_function # public functions begin

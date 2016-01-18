@@ -16,7 +16,6 @@ VERSION = "v0.1.7"
 TITLE   = "Mmrz"
 FAVICON = "./fav.ico"
 TTSSupport = find_misaki?
-AUTO_SPEAK = false
 
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
@@ -414,7 +413,7 @@ def show_word
   else
     $tk_word.text $rows_from_DB[$cursor_of_rows][0]
     $tk_root.title "#{TITLE} -- #{$rows_from_DB.size} words left"
-    speak_word if TTSSupport and AUTO_SPEAK
+    speak_word if TTSSupport and COMM::AUTO_SPEAK
   end
 end
 
@@ -464,6 +463,18 @@ if __FILE__ == $0
   dbMgr = MmrzDBManager.new
   $rows_from_DB = []
   dbMgr.readDB.each do |row|
+    if COMM::REVERSE_MODE
+      if row[1].gsub!(/ /, "") =~ /(.*)--(.*)/
+        word = row[0]
+        pronounce = $1
+        meaning   = $2
+        row[0] = meaning
+        row[1] = "#{word} -- #{pronounce}"
+      else
+        row[0], row[1] = row[1], row[0]
+      end
+    end
+
     # [0~5]read from DB, [6]new added firstTimeFail
     row[6] = false # initialize firstTimeFail as false
     $rows_from_DB << row if row[3] < Time.now.to_i
