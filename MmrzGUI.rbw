@@ -13,7 +13,7 @@ require 'sqlite3'
 require 'win32ole' if COMM::WINDOWS
 
 VERSION = "v0.1.7"
-TITLE   = "Mmrz"
+TITLE   = COMM::REVERSE_MODE ? "Mmrz[R]" : "Mmrz"
 FAVICON = "./fav.ico"
 TTSSupport = find_misaki?
 
@@ -456,6 +456,16 @@ end
 Entry point
 """
 if __FILE__ == $0
+  """
+  table UNMMRZ:
+  [0]word           -- char[255]
+  [1]pronounce      -- char[255]
+  [2]memTimes       -- int
+  [3]remindTime     -- int
+  [4]remindTimeStr  -- char[255]
+  [5]wordID         -- int
+  """
+
   dbMgr = MmrzDBManager.new
   dbMgr.createDB
   dbMgr.closeDB
@@ -477,7 +487,12 @@ if __FILE__ == $0
 
     # [0~5]read from DB, [6]new added firstTimeFail
     row[6] = false # initialize firstTimeFail as false
-    $rows_from_DB << row if row[3] < Time.now.to_i
+
+    if COMM::REVERSE_MODE
+      $rows_from_DB << row if row[2] == COMM::REVERSE_MODE_TIMES
+    else
+      $rows_from_DB << row if row[3] < Time.now.to_i
+    end
   end
   $cursor_of_rows = 0
   dbMgr.closeDB

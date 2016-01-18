@@ -4,7 +4,7 @@
 require File.dirname(__FILE__) + '/comm.rb'
 
 class MmrzDBManager
-=begin
+  """
   table UNMMRZ:
   [0]word           -- char[255]
   [1]pronounce      -- char[255]
@@ -12,7 +12,7 @@ class MmrzDBManager
   [3]remindTime     -- int
   [4]remindTimeStr  -- char[255]
   [5]wordID         -- int
-=end
+  """
 
   def initialize
     if COMM::MMRZ_BUILD_WINDOWS_EXE

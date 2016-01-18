@@ -16,6 +16,9 @@ module COMM
   # set true to enable, false to disable
   REVERSE_MODE = false
 
+  # Specify the target you want to memorize in REVERSE_MODE
+  REVERSE_MODE_TIMES = 1
+
   ## Constants
   WINDOWS = RbConfig::CONFIG['target_os'] == "mingw32" ? true : false
 
