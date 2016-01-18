@@ -432,7 +432,7 @@ def hide_secret remember, pass
     row = $rows_from_DB[$cursor_of_rows]
     firstTimeFail = row[6]
     row[2] += 1 if not firstTimeFail
-    row[2] = 8 if pass
+    row[2] = 9 if pass
     row[3] = COMM::cal_remind_time row[2], "int"
     row[4] = COMM::cal_remind_time row[2], "str"
 

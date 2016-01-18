@@ -282,7 +282,7 @@ def mmrz_word
           when "pass"
             selected_rows[row_as_key][0] = true # remembered = true
             left_words -= 1
-            row_as_key[2] = 8
+            row_as_key[2] = 9
             dbMgr.updateDB row_as_key
             break # break "Do you remember"
           when "no"
