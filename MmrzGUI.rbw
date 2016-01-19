@@ -286,6 +286,11 @@ $view_menu.add( 'command',
 
 $help_menu = TkMenu.new($tk_root)
 $help_menu.add( 'command',
+                'label'     => "Roll",
+                'underline' => 0,
+                'command'   => Proc.new { Tk.messageBox('title' => "Roll",'message' => "Roll: #{rand(100)}") })
+$help_menu.add( 'separator' )
+$help_menu.add( 'command',
                 'label'     => "Usage",
                 'command'   => $menu_click,
                 'underline' => 0)
