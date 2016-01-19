@@ -4,8 +4,12 @@
 module COMM
   ## User defined constants
 
+  # Debug mode
+  # set true to enable, false to disable
+  DEBUG_MODE = false
+
   # Build windows executable mode
-  # true to enable, false to disable
+  # set true to enable, false to disable
   MMRZ_BUILD_WINDOWS_EXE = false
 
   # Auto speak word's pronunciation when each word appears
@@ -29,7 +33,7 @@ module COMM
     case memTimes
     when 0
       remindTime = curTime + (60 * 5) # 5 minutes
-      # remindTime = curTime # 0 minutes, debug mode
+      remindTime = curTime if COMM::DEBUG_MODE # 0 minutes, debug mode
     when 1
       remindTime = curTime + (60 * 30) # 30 minutes
     when 2
