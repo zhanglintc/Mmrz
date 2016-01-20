@@ -417,12 +417,12 @@ def show_word
   else
     $tk_word.text $rows_from_DB[$cursor_of_rows][0]
     $tk_root.title "#{TITLE} -- #{$rows_from_DB.size} words left"
-    speak_word if TTSSupport and COMM::AUTO_SPEAK
   end
 end
 
 def show_secret
   $tk_pronounce.text $rows_from_DB[$cursor_of_rows][1]
+  speak_word if TTSSupport and COMM::AUTO_SPEAK
 end
 
 def hide_secret remember, pass

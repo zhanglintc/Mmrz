@@ -30,7 +30,7 @@
 
     // 是否自动发音
     // true: 自动发音  false: 手动发音
-    "AUTO_SPEAK": false,
+    "AUTO_SPEAK": true,
 
     // 反转模式 (释义作为显示部分, 单词作为隐藏部分)
     // true: 启用反转模式  false: 正常模式

@@ -48,6 +48,6 @@ class ConfigManager
     default_setting = get_default_json
     user_setting = get_user_json
 
-    return (user_setting[item] or default_setting[item])
+    return user_setting[item] != nil ? user_setting[item] : default_setting[item]
   end
 end
