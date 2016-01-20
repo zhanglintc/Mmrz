@@ -13,14 +13,14 @@ module COMM
   user_setting = configMgr.get_user_json
 
   ## User defined constants
+  MAIN_WIN_WIDTH = configMgr.get_settings "MAIN_WIN_WIDTH"
+  MAIN_WIN_HEIGHT = configMgr.get_settings "MAIN_WIN_HEIGHT"
+  WB_WIN_WIDTH = configMgr.get_settings "WB_WIN_WIDTH"
+  WB_WIN_HEIGHT = configMgr.get_settings "WB_WIN_HEIGHT"
   DEBUG_MODE = configMgr.get_settings "DEBUG_MODE"
-
   MMRZ_BUILD_WINDOWS_EXE = configMgr.get_settings "MMRZ_BUILD_WINDOWS_EXE"
-
   AUTO_SPEAK = configMgr.get_settings "AUTO_SPEAK"
-
   REVERSE_MODE = configMgr.get_settings "REVERSE_MODE"
-
   REVERSE_MODE_TIMES = configMgr.get_settings "REVERSE_MODE_TIMES"
 
   ## Constants

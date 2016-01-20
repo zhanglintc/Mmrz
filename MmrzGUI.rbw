@@ -28,8 +28,8 @@ https://github.com/zhanglintc/Mmrz
 Powered by zhanglintc. [#{VERSION}]
 "
 # Main window
-$tk_root_height = 230
-$tk_root_width = 400
+$tk_root_width = COMM::MAIN_WIN_WIDTH
+$tk_root_height = COMM::MAIN_WIN_HEIGHT
 
 $tk_word_x = 10
 $tk_word_y = 30
@@ -57,8 +57,8 @@ $tk_no_x = $tk_root_width - $tk_no_width - $tk_yes_x
 $tk_no_y = 150
 
 # Wordbook window
-$tk_wb_height = 500
-$tk_wb_width  = 800
+$tk_wb_width  = COMM::WB_WIN_WIDTH
+$tk_wb_height = COMM::WB_WIN_HEIGHT
 
 $tk_wb_list_height = $tk_wb_height - 20
 $tk_wb_list_width = $tk_wb_width - 30
