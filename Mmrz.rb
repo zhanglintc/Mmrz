@@ -6,7 +6,6 @@ VERSION = "CLI-0.1.4"
 require File.dirname(__FILE__) + '/comm.rb'
 require File.dirname(__FILE__) + '/db.rb'
 require 'readline'
-require 'sqlite3'
 require 'io/console'
 
 if COMM::MMRZ_BUILD_WINDOWS_EXE

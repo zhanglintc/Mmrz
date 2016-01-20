@@ -2,6 +2,7 @@
 # encoding: utf-8
 
 require File.dirname(__FILE__) + '/comm.rb'
+require 'sqlite3'
 
 class MmrzDBManager
   """

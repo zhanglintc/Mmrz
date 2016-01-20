@@ -9,7 +9,6 @@ require File.dirname(__FILE__) + '/comm.rb'
 require File.dirname(__FILE__) + '/db.rb'
 
 require 'tk'
-require 'sqlite3'
 require 'win32ole' if COMM::WINDOWS
 
 VERSION = "GUI-0.1.7"
