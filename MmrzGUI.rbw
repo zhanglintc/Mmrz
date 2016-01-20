@@ -11,8 +11,8 @@ require File.dirname(__FILE__) + '/db.rb'
 require 'tk'
 require 'win32ole' if COMM::WINDOWS
 
-VERSION = "GUI-0.1.7"
 TITLE   = COMM::REVERSE_MODE ? "Mmrz[R]" : "Mmrz"
+VERSION = "GUI-0.1.8"
 FAVICON = "./fav.ico"
 TTSSupport = find_misaki?
 
@@ -469,6 +469,8 @@ if __FILE__ == $0
   [4]remindTimeStr  -- char[255]
   [5]wordID         -- int
   """
+
+  $speaker.speak "", 1 if TTSSupport # speak a null word at beginning
 
   dbMgr = MmrzDBManager.new
   dbMgr.createDB
