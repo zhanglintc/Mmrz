@@ -1,5 +1,12 @@
 {
-    // 配置文件请修改 preference-user.json
+    // preference-default.json 为默认配置文件, 请勿修改
+
+    // 用户配置请修改 preference-user.json, 完成配置后请重启程序
+
+    // 若配置出错, 请删除 preference-user.json, 重新启动 MmrzGUI.rbw
+    // 程序将自动重新拷贝 preference-default.json 然后生成 preference-user.json
+    // 同时意味着恢复默认设置
+
 
     // 主窗口宽度, 默认值 400
     "MAIN_WIN_WIDTH": 400,
