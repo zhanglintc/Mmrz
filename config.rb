@@ -4,8 +4,8 @@
 require 'json'
 
 class ConfigManager
-  @@Default_file_path = "./conf/preferences-default.json"
-  @@User_file_path    = "./preferences-user.json"
+  @@Default_file_path = File.dirname(__FILE__) + "/conf/preferences-default.json"
+  @@User_file_path    = File.dirname(__FILE__) + "/preferences-user.json"
 
   def user_conf_exist?
     begin
