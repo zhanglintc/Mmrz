@@ -12,7 +12,7 @@ require 'tk'
 require 'sqlite3'
 require 'win32ole' if COMM::WINDOWS
 
-VERSION = "v0.1.7"
+VERSION = "GUI-0.1.7"
 TITLE   = COMM::REVERSE_MODE ? "Mmrz[R]" : "Mmrz"
 FAVICON = "./fav.ico"
 TTSSupport = find_misaki?
