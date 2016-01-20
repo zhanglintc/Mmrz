@@ -1,27 +1,27 @@
 #!/env/bin/ruby
 # encoding: utf-8
 
+require File.dirname(__FILE__) + '/config.rb'
+
 module COMM
+  configMgr = ConfigManager.new
+  if not configMgr.user_conf_exist?
+    configMgr.make_user_conf
+  end
+
+  default_setting = configMgr.get_default_json
+  user_setting = configMgr.get_user_json
+
   ## User defined constants
+  DEBUG_MODE = configMgr.get_settings "DEBUG_MODE"
 
-  # Debug mode
-  # set true to enable, false to disable
-  DEBUG_MODE = false
+  MMRZ_BUILD_WINDOWS_EXE = configMgr.get_settings "MMRZ_BUILD_WINDOWS_EXE"
 
-  # Build windows executable mode
-  # set true to enable, false to disable
-  MMRZ_BUILD_WINDOWS_EXE = false
+  AUTO_SPEAK = configMgr.get_settings "AUTO_SPEAK"
 
-  # Auto speak word's pronunciation when each word appears
-  # set true to enable, false to disable
-  AUTO_SPEAK = false
+  REVERSE_MODE = configMgr.get_settings "REVERSE_MODE"
 
-  # Make meaning as hint, word and pronunciation as secret
-  # set true to enable, false to disable
-  REVERSE_MODE = false
-
-  # Specify the target you want to memorize in REVERSE_MODE
-  REVERSE_MODE_TIMES = 1
+  REVERSE_MODE_TIMES = configMgr.get_settings "REVERSE_MODE_TIMES"
 
   ## Constants
   WINDOWS = RbConfig::CONFIG['target_os'] == "mingw32" ? true : false

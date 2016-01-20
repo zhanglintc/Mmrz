@@ -1,0 +1,21 @@
+{
+    // 配置文件请修改 preference-user.json
+
+    // Debug模式
+    "DEBUG_MODE": false,
+
+    // 是否用于编译生成Windows下可执行文件
+    // true: 用于生成exe  false: 不用于生成exe
+    "MMRZ_BUILD_WINDOWS_EXE": false,
+
+    // 是否自动发音
+    // true: 自动发音  false: 手动发音
+    "AUTO_SPEAK": false,
+
+    // 反转模式 (释义作为显示部分, 单词作为隐藏部分)
+    // true: 启用反转模式  false: 正常模式
+    "REVERSE_MODE": false,
+
+    // 仅在反转模式为true时有效, 提取指定已背诵次数(memTimes)的单词
+    "REVERSE_MODE_TIMES": 1
+}
