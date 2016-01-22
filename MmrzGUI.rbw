@@ -7,6 +7,7 @@
 
 require File.dirname(__FILE__) + '/comm.rb'
 require File.dirname(__FILE__) + '/db.rb'
+require File.dirname(__FILE__) + '/sync.rb'
 
 require 'tk'
 require 'win32ole' if COMM::WINDOWS
@@ -26,6 +27,8 @@ Mmrz is tool help you memorizing words easily.
 https://github.com/zhanglintc/Mmrz
 Powered by zhanglintc. [#{VERSION}]
 "
+
+
 # Main window
 $tk_root_width = COMM::MAIN_WIN_WIDTH
 $tk_root_height = COMM::MAIN_WIN_HEIGHT
@@ -67,6 +70,18 @@ $tk_wb_list_y = 10
 $tk_wb_scroll_height = $tk_wb_height - 20
 $tk_wb_scroll_x = $tk_wb_width - 20
 $tk_wb_scroll_y = $tk_wb_list_y
+
+def about_info
+  ms = MmrzSync.new
+  remote_ver = ms.get_remote_version
+  if remote_ver and ms.version_to_int(VERSION) < ms.version_to_int(remote_ver)
+    info = $version_info + "\nNote: new version [#{remote_ver}] available"
+  else
+    info = $version_info
+  end
+
+  return info
+end
 
 def import_file path
   if "".include? path
@@ -301,7 +316,7 @@ $help_menu.add( 'command',
                     'type'    => "ok",  
                     'icon'    => "info",
                     'title'   => "About",
-                    'message' => $version_info)}
+                    'message' => about_info )}
               )
 
 $menu_bar = TkMenu.new
