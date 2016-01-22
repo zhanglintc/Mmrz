@@ -71,12 +71,13 @@ $tk_wb_scroll_height = $tk_wb_height - 20
 $tk_wb_scroll_x = $tk_wb_width - 20
 $tk_wb_scroll_y = $tk_wb_list_y
 
-def about_info
+def show_about
   ms = MmrzSync.new
   remote_ver = ms.get_remote_version
   if remote_ver and ms.version_to_int(VERSION) < ms.version_to_int(remote_ver)
     info = $version_info + "\nNote: new version [#{remote_ver}] available"
   else
+    remote_ver = "unknown" if remote_ver == nil
     info = $version_info + "\nNewest version is: [#{remote_ver}]"
   end
 
@@ -330,7 +331,7 @@ $help_menu.add( 'command',
                     'type'    => "ok",  
                     'icon'    => "info",
                     'title'   => "About",
-                    'message' => about_info )}
+                    'message' => show_about )}
               )
 
 $menu_bar = TkMenu.new
