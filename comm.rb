@@ -17,6 +17,7 @@ module COMM
   MAIN_WIN_HEIGHT = configMgr.get_settings "MAIN_WIN_HEIGHT"
   WB_WIN_WIDTH = configMgr.get_settings "WB_WIN_WIDTH"
   WB_WIN_HEIGHT = configMgr.get_settings "WB_WIN_HEIGHT"
+  AUTO_CHECK_UPDATE = configMgr.get_settings "AUTO_CHECK_UPDATE"
   DEBUG_MODE = configMgr.get_settings "DEBUG_MODE"
   MMRZ_BUILD_WINDOWS_EXE = configMgr.get_settings "MMRZ_BUILD_WINDOWS_EXE"
   AUTO_SPEAK = configMgr.get_settings "AUTO_SPEAK"

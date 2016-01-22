@@ -13,7 +13,7 @@ require 'tk'
 require 'win32ole' if COMM::WINDOWS
 
 TITLE   = COMM::REVERSE_MODE ? "Mmrz[R]" : "Mmrz"
-VERSION = "GUI-0.1.8"
+VERSION = "GUI-0.1.9"
 FAVICON = "./fav.ico"
 TTSSupport = find_misaki?
 
@@ -50,7 +50,7 @@ $tk_show_y = 90
 
 $tk_yes_height = 50
 $tk_yes_width  = 100
-$tk_yes_x = 60
+$tk_yes_x = $tk_root_width / 2 - ($tk_yes_width + 40)
 $tk_yes_y = 150
 
 $tk_no_height = 50
@@ -499,7 +499,7 @@ if __FILE__ == $0
   [5]wordID         -- int
   """
 
-  check_update # automatically check for update at startup
+  check_update if COMM::AUTO_CHECK_UPDATE # automatically check for update at startup
 
   $speaker.speak "", 1 if TTSSupport # speak a null word at beginning
 

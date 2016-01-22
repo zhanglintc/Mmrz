@@ -20,6 +20,10 @@
     // 单词本窗口高度, 默认值 500
     "WB_WIN_HEIGHT": 500,
 
+    // 是否自动检查更新
+    // true: 自动更新  false: 不自动更新
+    "AUTO_CHECK_UPDATE": true,
+
     // Debug模式
     // 如果想导入后立即进入背诵周期而不用等待5分钟， 请设置为 true
     "DEBUG_MODE": false,
