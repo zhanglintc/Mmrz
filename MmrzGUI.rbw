@@ -83,6 +83,20 @@ def about_info
   return info
 end
 
+def check_update
+  Thread.start do
+    ms = MmrzSync.new
+    remote_ver = ms.get_remote_version
+
+    if ms.version_to_int(VERSION) < ms.version_to_int(remote_ver)
+      Tk.messageBox( 
+        'title'   => "Checking for update",
+        'message' => "New version [#{remote_ver}] available\nLocal version is: [#{VERSION}]\n\nPlease use \"SVN update\" to get latest version"
+      )
+    end
+  end
+end
+
 def import_file path
   if "".include? path
     return
@@ -484,6 +498,8 @@ if __FILE__ == $0
   [4]remindTimeStr  -- char[255]
   [5]wordID         -- int
   """
+
+  check_update # automatically check for update at startup
 
   $speaker.speak "", 1 if TTSSupport # speak a null word at beginning
 
