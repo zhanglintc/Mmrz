@@ -9,6 +9,7 @@
 - 根据遗忘曲线设计背诵时间
 - 支持发音功能, 加深记忆
 - 支持批量导入生词
+- 多客户端同步背诵记录. 同步服务项目: [Mmrz-Sync](https://github.com/zhanglintc/mmrz-sync) (开发中)
 
 ## 展示:
 - GUI版本:
