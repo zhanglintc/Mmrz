@@ -77,7 +77,7 @@ def about_info
   if remote_ver and ms.version_to_int(VERSION) < ms.version_to_int(remote_ver)
     info = $version_info + "\nNote: new version [#{remote_ver}] available"
   else
-    info = $version_info
+    info = $version_info + "\nNewest version is: [#{remote_ver}]"
   end
 
   return info
