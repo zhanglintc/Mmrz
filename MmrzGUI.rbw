@@ -429,9 +429,13 @@ end
 """
 Main functions.
 """
-def move_cursor
+def move_cursor need_move
   if $cursor_of_rows == $rows_from_DB.size
     $cursor_of_rows = 0
+    return
+  end
+
+  if not need_move
     return
   end
 
@@ -479,10 +483,11 @@ def hide_secret remember, pass
     end
 
     $rows_from_DB.delete_at $cursor_of_rows
+    move_cursor false
   else
     $rows_from_DB[$cursor_of_rows][6] = true # firstTimeFail: false => true
+    move_cursor true
   end
-  move_cursor
   $tk_pronounce.text ""
 end
 
