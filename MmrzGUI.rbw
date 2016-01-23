@@ -22,7 +22,7 @@ Encoding.default_internal = Encoding::UTF_8
 
 $version_info = "\
 Welcome to Mmrz !!!
-Mmrz is tool help you memorizing words easily.
+Mmrz is a tool help you memorizing words easily.
 
 https://github.com/zhanglintc/Mmrz
 Powered by zhanglintc. [#{VERSION}]
