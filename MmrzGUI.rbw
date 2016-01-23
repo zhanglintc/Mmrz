@@ -512,7 +512,7 @@ if __FILE__ == $0
   $rows_from_DB = []
   dbMgr.readDB.each do |row|
     if COMM::REVERSE_MODE
-      if row[1].gsub!(/ /, "") =~ /(.*)--(.*)/
+      if row[1].gsub(/ /, "") =~ /(.*)--(.*)/
         word = row[0]
         pronounce = $1
         meaning   = $2
