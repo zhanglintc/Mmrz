@@ -13,7 +13,7 @@ require 'tk'
 require 'win32ole' if COMM::WINDOWS
 
 TITLE   = COMM::REVERSE_MODE ? "Mmrz[R]" : "Mmrz"
-VERSION = "GUI-0.1.9"
+VERSION = "GUI-0.2.0"
 FAVICON = "./fav.ico"
 TTSSupport = find_misaki?
 
