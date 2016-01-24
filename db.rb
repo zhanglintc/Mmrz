@@ -46,7 +46,7 @@ class MmrzDBManager
   end
 
   def readDB
-    @db.execute "select * from UNMMRZ where memTimes < 9"
+    @db.execute "select * from UNMMRZ where memTimes < #{COMM::MAX_MEM_TIMES}"
   end
 
   def readAllDB

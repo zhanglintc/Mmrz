@@ -13,6 +13,7 @@ module COMM
   user_setting = configMgr.get_user_json
 
   ## User defined constants
+  MAX_MEM_TIMES = 8
   MAIN_WIN_WIDTH = configMgr.get_settings "MAIN_WIN_WIDTH"
   MAIN_WIN_HEIGHT = configMgr.get_settings "MAIN_WIN_HEIGHT"
   WB_WIN_WIDTH = configMgr.get_settings "WB_WIN_WIDTH"
@@ -29,7 +30,6 @@ module COMM
 
   module_function # public functions begin
   def cal_remind_time memTimes, type
-    # TODO: problems when 7 or 8 ?
     curTime = Time.now
 
     case memTimes

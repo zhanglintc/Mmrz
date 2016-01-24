@@ -207,7 +207,7 @@ def list_word
     remindTime -= Time.now.to_i
     day, hour, min, sec = COMM::split_remindTime remindTime, true
 
-    if memTimes >= 9
+    if memTimes >= COMM::MAX_MEM_TIMES
       remindTimeStr = format("%sd-%sh-%sm", day, hour, min)
       str_to_less_tail += format("%4d => next: %11s, %d times, %s, %s\n", wordID, remindTimeStr, memTimes, word, pronounce)
       next
@@ -281,7 +281,7 @@ def mmrz_word
           when "pass"
             selected_rows[row_as_key][0] = true # remembered = true
             left_words -= 1
-            row_as_key[2] = 9
+            row_as_key[2] = COMM::MAX_MEM_TIMES
             dbMgr.updateDB row_as_key
             break # break "Do you remember"
           when "no"

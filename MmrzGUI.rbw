@@ -243,7 +243,7 @@ $make_wb_win = Proc.new do
     remindTime -= Time.now.to_i
     day, hour, min, sec = COMM::split_remindTime remindTime, true
 
-    if memTimes >= 8
+    if memTimes >= COMM::MAX_MEM_TIMES
       remindTimeStr = format("%sd-%sh-%sm", day, hour, min)
       one_word_line = format("%4d => next: %11s, %d times, %s, %s", wordID, remindTimeStr, memTimes, word, pronounce)
       tail_of_8_times << one_word_line
@@ -469,7 +469,7 @@ def hide_secret remember, pass
     row = $rows_from_DB[$cursor_of_rows]
     firstTimeFail = row[6]
     row[2] += 1 if not firstTimeFail
-    row[2] = 9 if pass
+    row[2] = COMM::MAX_MEM_TIMES if pass
     row[3] = COMM::cal_remind_time row[2], "int"
     row[4] = COMM::cal_remind_time row[2], "str"
 
