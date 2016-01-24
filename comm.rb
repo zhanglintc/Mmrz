@@ -29,6 +29,7 @@ module COMM
 
   module_function # public functions begin
   def cal_remind_time memTimes, type
+    # TODO: problems when 7 or 8 ?
     curTime = Time.now
 
     case memTimes
