@@ -207,7 +207,7 @@ def list_word
     remindTime -= Time.now.to_i
     day, hour, min, sec = COMM::split_remindTime remindTime, true
 
-    if memTimes >= 8
+    if memTimes >= 9
       remindTimeStr = format("%sd-%sh-%sm", day, hour, min)
       str_to_less_tail += format("%4d => next: %11s, %d times, %s, %s\n", wordID, remindTimeStr, memTimes, word, pronounce)
       next
