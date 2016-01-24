@@ -43,13 +43,13 @@ module COMM
     when 3
       remindTime = curTime + (60 * 60 * 24) # 1 day
     when 4
-      remindTime = curTime + (60 * 30 * 24 * 2) # 2 days
+      remindTime = curTime + (60 * 60 * 24 * 2) # 2 days
     when 5
-      remindTime = curTime + (60 * 30 * 24 * 4) # 4 days
+      remindTime = curTime + (60 * 60 * 24 * 4) # 4 days
     when 6
-      remindTime = curTime + (60 * 30 * 24 * 7) # 7 days
+      remindTime = curTime + (60 * 60 * 24 * 7) # 7 days
     when 7
-      remindTime = curTime + (60 * 30 * 24 * 15) # 15 days
+      remindTime = curTime + (60 * 60 * 24 * 15) # 15 days
     else
       remindTime = curTime
     end
