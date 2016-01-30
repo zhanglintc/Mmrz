@@ -98,9 +98,51 @@ def check_update
   end
 end
 
+def add_word
+  word = $tk_add_word.get.encode("utf-8")
+  pron = $tk_add_pron.get.encode("utf-8")
+  mean = $tk_add_mean.get.encode("utf-8")
+
+  if word == ""
+    $tk_win_add.messageBox 'message' => "单词不可为空!"
+    $tk_win_add.focus
+    return
+  end
+
+  if pron == "" and mean == ""
+    $tk_win_add.messageBox 'message' => "发音与解释不可同时为空!"
+    $tk_win_add.focus
+    return
+  end
+
+  dbMgr = MmrzDBManager.new
+
+  wordInfo = []
+  wordInfo << word if not word == ""
+  wordInfo << pron if not pron == ""
+  wordInfo << mean if not mean == ""
+
+  word          = wordInfo[0]
+  pronounce     = (wordInfo.size == 2 ? wordInfo[1] : "#{wordInfo[1]} -- #{wordInfo[2]}")
+  memTimes      = 0
+  remindTime    = COMM::cal_remind_time(memTimes, "int")
+  remindTimeStr = COMM::cal_remind_time(memTimes, "str")
+  wordID        = dbMgr.getMaxWordID + 1
+
+  row = [word, pronounce, memTimes, remindTime, remindTimeStr, wordID]
+  dbMgr.insertDB row
+  dbMgr.closeDB
+
+  $tk_win_add.title "成功添加单词: \"#{word}\""
+
+  $tk_add_word.value = ""
+  $tk_add_pron.value = ""
+  $tk_add_mean.value = ""
+end
+
 def make_add
   frame_width  = 350
-  frame_height = 250
+  frame_height = 230
 
   word_lable_x = 10
   word_lable_y = 10
@@ -123,11 +165,13 @@ def make_add
   mean_y = mean_label_y + 20
   mean_width = frame_width - mean_x * 2
 
-  save_x = frame_width - 130
-  save_y = mean_y + 60
+  close_width = 60
+  close_x = frame_width - 10 - close_width
+  close_y = mean_y + 35
 
-  close_x = save_x + 50
-  close_y = save_y
+  save_width = 60
+  save_x = close_x - 35 - save_width
+  save_y = close_y
 
   $tk_win_add = TkToplevel.new do
     minsize frame_width, frame_height
@@ -164,14 +208,14 @@ def make_add
 
   $tk_add_save = TkButton.new($tk_win_add) do
     text "Save"
-    place 'x' => save_x, 'y' => save_y
-    command Proc.new { p $tk_add_word.get }
+    place 'width' => save_width, 'x' => save_x, 'y' => save_y
+    command Proc.new { add_word }
   end
 
   $tk_add_close = TkButton.new($tk_win_add) do
     text "Close"
-    place 'x' => close_x, 'y' => close_y
-    command Proc.new { p $tk_add_word.get }
+    place 'width' => close_width, 'x' => close_x, 'y' => close_y
+    command Proc.new { $tk_win_add.destroy }
   end
 end
 
