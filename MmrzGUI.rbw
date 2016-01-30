@@ -98,6 +98,83 @@ def check_update
   end
 end
 
+def make_add
+  frame_width  = 350
+  frame_height = 250
+
+  word_lable_x = 10
+  word_lable_y = 10
+
+  word_x = word_lable_x
+  word_y = word_lable_y + 20
+  word_width = frame_width - word_x * 2
+
+  pron_lable_x = word_x
+  pron_lable_y = word_y + 40
+
+  pron_x = pron_lable_x
+  pron_y = pron_lable_y + 20
+  pron_width = frame_width - pron_x * 2
+
+  mean_label_x = pron_x
+  mean_label_y = pron_y + 40
+
+  mean_x = mean_label_x
+  mean_y = mean_label_y + 20
+  mean_width = frame_width - mean_x * 2
+
+  save_x = frame_width - 130
+  save_y = mean_y + 60
+
+  close_x = save_x + 50
+  close_y = save_y
+
+  $tk_win_add = TkToplevel.new do
+    minsize frame_width, frame_height
+    maxsize frame_width, frame_height
+    title "Add mode"
+  end
+
+  $tk_add_word_label = TkLabel.new($tk_win_add) do
+    text "单词:"
+    place 'x' => word_lable_x, 'y' => word_lable_y
+  end
+
+  $tk_add_word = TkEntry.new($tk_win_add) do
+    place 'width' => word_width, 'x' => word_x, 'y' => word_y
+  end
+
+  $tk_add_pron_label = TkLabel.new($tk_win_add) do
+    text "发音(可选):"
+    place 'x' => pron_lable_x, 'y' => pron_lable_y
+  end
+
+  $tk_add_pron = TkEntry.new($tk_win_add) do
+    place 'width' => pron_width, 'x' => pron_x, 'y' => pron_y
+  end
+
+  $tk_add_mean_label = TkLabel.new($tk_win_add) do
+    text "解释:(可选)"
+    place 'x' => mean_label_x, 'y' => mean_label_y
+  end
+
+  $tk_add_mean = TkEntry.new($tk_win_add) do
+    place 'width' => mean_width, 'x' => mean_x, 'y' => mean_y
+  end
+
+  $tk_add_save = TkButton.new($tk_win_add) do
+    text "Save"
+    place 'x' => save_x, 'y' => save_y
+    command Proc.new { p $tk_add_word.get }
+  end
+
+  $tk_add_close = TkButton.new($tk_win_add) do
+    text "Close"
+    place 'x' => close_x, 'y' => close_y
+    command Proc.new { p $tk_add_word.get }
+  end
+end
+
 def import_file path
   if "".include? path
     return
@@ -291,7 +368,7 @@ $edit_menu.add( 'command',
 $edit_menu.add( 'separator' )
 $edit_menu.add( 'command',
                 'label'     => "Add",
-                'command'   => $menu_click,
+                'command'   => Proc.new { make_add },
                 'underline' => 0)
 $edit_menu.add( 'command',
                 'label'     => "Delete",
