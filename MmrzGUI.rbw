@@ -305,6 +305,32 @@ def import_file path
   Tk.messageBox  'message' => "Import file \"#{path}\" completed\n\n#{added} words added\n#{no_added} words aborted\n\n\nNot loaded lines are shown below:\n\n#{not_loaded_line}"
 end
 
+def export_to_file
+  idx = 0
+  to_be_written = ""
+
+  dbMgr = MmrzDBManager.new
+  rows = dbMgr.readAllDB
+  rows.each do |row|
+    idx += 1
+    word = pronounce = meaning = ""
+    if row[1].gsub(/ /, "") =~ /(.*)--(.*)/
+      word      = row[0]
+      pronounce = $1
+      meaning   = $2
+    else
+      word      = row[0]
+      pronounce = row[1]
+    end
+    to_be_written += "#{word}  #{pronounce}  #{meaning}\r\n"
+  end
+  fw = open "export.mmz", "wb"
+  fw.write to_be_written
+  fw.close
+  Tk.messageBox 'message' => "Exported #{idx} words to \"export.mmz\" success"
+  dbMgr.closeDB
+end
+
 def speak_word
   # speaker.speak( text, syncType )
   $speaker.speak $rows_from_DB[$cursor_of_rows][0], 1 if $rows_from_DB != []
@@ -392,7 +418,7 @@ $file_menu.add( 'command',
                 'underline' => 0)
 $file_menu.add( 'command',
                 'label'     => "Export",
-                'command'   => $menu_click,
+                'command'   => Proc.new { export_to_file },
                 'underline' => 0)
 $file_menu.add( 'separator' )
 $file_menu.add( 'command',
