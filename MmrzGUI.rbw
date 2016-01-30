@@ -174,9 +174,10 @@ def make_add
   save_y = close_y
 
   $tk_win_add = TkToplevel.new do
+    title "添加单个单词"
+    iconbitmap FAVICON
     minsize frame_width, frame_height
     maxsize frame_width, frame_height
-    title "Add mode"
   end
 
   $tk_add_word_label = TkLabel.new($tk_win_add) do
@@ -330,6 +331,7 @@ $menu_click = Proc.new {
 
 $make_wb_win = Proc.new do
   $tk_win_wordbook = TkToplevel.new do
+    iconbitmap FAVICON
     minsize $tk_wb_width, $tk_wb_height
     maxsize $tk_wb_width, $tk_wb_height
   end
