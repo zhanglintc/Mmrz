@@ -34,6 +34,14 @@ class MmrzDBManager
     @db.execute "insert into UNMMRZ values(?, ?, ?, ?, ?, ?)", row
   end
 
+  def insert_multi_line rows
+    @db.transaction
+    rows.each do |row|
+      @db.execute "insert into UNMMRZ values(?, ?, ?, ?, ?, ?)", row
+    end
+    @db.commit
+  end
+
   def updateDB row
     @db.execute "update UNMMRZ set memTimes = #{row[2]}, remindTime = #{row[3]}, remindTimeStr = '#{row[4]}' where wordID = '#{row[5]}'" if not COMM::REVERSE_MODE
   end
