@@ -21,6 +21,7 @@ class MmrzDBManager
     else
       @db = SQLite3::Database.new ( File.dirname(__FILE__) + "/wordbook.db" )
     end
+    @db.transaction
   end
 
   def createDB
@@ -67,6 +68,7 @@ class MmrzDBManager
   end
 
   def closeDB
+    @db.commit
     @db.close
   end
 end
