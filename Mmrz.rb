@@ -1,7 +1,7 @@
 #!/env/bin/ruby
 # encoding: utf-8
 
-VERSION = "CLI-0.1.5"
+VERSION = "CLI-0.1.6"
 
 require File.dirname(__FILE__) + '/comm.rb'
 require File.dirname(__FILE__) + '/db.rb'
