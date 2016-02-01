@@ -28,6 +28,19 @@ class ConfigManager
     fw.close
   end
 
+  def format_user_conf
+    fr = open @@User_file_path, "rb"
+    user_setting = fr.read
+    fr.close
+
+    user_setting.gsub!(/\r\n/, "\n")
+    user_setting.gsub!(/\n/, "\r\n")
+
+    fw = open @@User_file_path, "wb"
+    fw.write user_setting
+    fw.close
+  end
+
   def get_default_json
     fr = open @@Default_file_path, "rb"
     setting = JSON.parse fr.read

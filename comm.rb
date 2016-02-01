@@ -8,6 +8,7 @@ module COMM
   if not configMgr.user_conf_exist?
     configMgr.make_user_conf
   end
+  configMgr.format_user_conf
 
   default_setting = configMgr.get_default_json
   user_setting = configMgr.get_user_json
