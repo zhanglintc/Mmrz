@@ -483,6 +483,21 @@ $help_menu.add( 'command',
                     'message' => show_about )}
               )
 
+$sync_menu = TkMenu.new($tk_root)
+$sync_menu.add( 'command',
+                'label'     => "Account",
+                'command'   => $menu_click,
+                'underline' => 0)
+$sync_menu.add( 'separator' )
+$sync_menu.add( 'command',
+                'label'     => "Pull",
+                'command'   => $menu_click,
+                'underline' => 0)
+$sync_menu.add( 'command',
+                'label'     => "Push",
+                'command'   => $menu_click,
+                'underline' => 0)
+
 $menu_bar = TkMenu.new
 $menu_bar.add('cascade',
               'menu'  => $file_menu,
@@ -500,7 +515,10 @@ $menu_bar.add('command',
               'command'   => Proc.new { speak_word },
               'label'     => "Speak",
               'underline' => 0) if TTSSupport
-              
+$menu_bar.add('cascade',
+              'menu'  => $sync_menu,
+              'label' => "Sync",
+              'underline' => 1)
 $menu_bar.add('cascade',
               'menu'  => $help_menu,
               'label' => "Help",
