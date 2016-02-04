@@ -10,6 +10,9 @@ require File.dirname(__FILE__) + '/db.rb'
 require File.dirname(__FILE__) + '/sync.rb'
 
 require 'tk'
+require 'net/http'
+require 'json'
+require 'base64'
 require 'win32ole' if COMM::WINDOWS
 
 TITLE   = COMM::REVERSE_MODE ? "Mmrz[R]" : "Mmrz"
@@ -98,6 +101,133 @@ def check_update
   end
 end
 
+def urlencode params
+  URI.escape(params.collect{|k, v| "#{k}=#{v}"}.join('&'))
+end
+
+def pull_wordbook
+  username = $tk_username.get.encode("utf-8")
+  password = $tk_password.get.encode("utf-8")
+
+  if username == "" or password == ""
+    $tk_win_pull_push.messageBox 'message' => "账户密码不能为空!!!"
+    $tk_win_pull_push.focus
+    return
+  end
+
+  params = {
+    'username' => username,
+    'password' => password,
+  }
+
+  uri = URI('http://zhanglin.work:2603/download_wordbook/?' + urlencode(params))
+  rec = JSON.parse Net::HTTP.get(uri)
+  rows = rec['wordbook']
+
+  dbMgr = MmrzDBManager.new
+  rows.each do |row|
+    dbMgr.insertDB row
+  end
+  dbMgr.closeDB
+
+  $tk_win_pull_push.messageBox 'message' => "pulled"
+  $tk_win_pull_push.focus
+end
+
+def push_wordbook
+  username = $tk_username.get.encode("utf-8")
+  password = $tk_password.get.encode("utf-8")
+
+  if username == "" or password == ""
+    $tk_win_pull_push.messageBox 'message' => "账户密码不能为空!!!"
+    $tk_win_pull_push.focus
+    return
+  end
+
+  dbMgr = MmrzDBManager.new
+  rows_all = dbMgr.readAllDB
+  dbMgr.closeDB
+
+  uri = URI('http://zhanglin.work:2603/upload_wordbook/?')
+  post_data = {"username" => username, "password" => password, "wordbook" => rows_all.to_json}
+  resp = Net::HTTP.post_form(uri, post_data)
+
+  $tk_win_pull_push.messageBox 'message' => resp.body
+  $tk_win_pull_push.focus
+end
+
+def make_win_pull_push type
+  frame_width  = 210
+  frame_height = 110
+
+  $tk_win_pull_push = TkToplevel.new do
+    if type == "pull"
+      title "下载单词本"
+    end
+    if type == "push"
+      title "上传单词本"
+    end
+    iconbitmap FAVICON
+    minsize frame_width, frame_height
+    maxsize frame_width, frame_height
+  end
+
+  tk_username_frame = TkFrame.new($tk_win_pull_push) do
+    padx 10
+    pady 5
+    pack 'side' => 'top', 'fill' => 'x'
+  end
+
+  TkLabel.new(tk_username_frame) do
+    text "帐号："
+    pack 'side' => 'left'
+  end
+
+  $tk_username = TkEntry.new(tk_username_frame) do
+    pack 'side' => 'left', 'fill' => 'x'
+  end
+
+  tk_password_frame = TkFrame.new($tk_win_pull_push) do
+    padx 10
+    pady 5
+    pack 'side' => 'top', 'fill' => 'x'
+  end
+
+  TkLabel.new(tk_password_frame) do
+    text "密码："
+    pack 'side' => 'left'
+  end
+
+  $tk_password = TkEntry.new(tk_password_frame) do
+    show '*'
+    pack 'side' => 'left', 'fill' => 'x'
+  end
+
+  tk_yes_no_frame = TkFrame.new($tk_win_pull_push) do
+    padx 10
+    pady 5
+    pack 'side' => 'top', 'fill' => 'x'
+  end
+
+  TkButton.new(tk_yes_no_frame) do
+    text "取消"
+    command Proc.new { $tk_win_pull_push.destroy }
+    pack 'side' => 'right', 'padx' => '5'
+  end
+
+  TkButton.new(tk_yes_no_frame) do
+    if type == "pull"
+      text "下载"
+      command Proc.new { pull_wordbook }
+    end
+    if type == "push"
+      text "上传"
+      command Proc.new { push_wordbook }
+    end
+    pack 'side' => 'right', 'padx' => '5'
+  end
+end
+
 def add_word
   word = $tk_add_word.get.encode("utf-8")
   pron = $tk_add_pron.get.encode("utf-8")
@@ -140,7 +270,7 @@ def add_word
   $tk_add_mean.value = ""
 end
 
-def make_add
+def make_win_add
   frame_width  = 350
   frame_height = 230
 
@@ -440,7 +570,7 @@ $edit_menu.add( 'command',
 $edit_menu.add( 'separator' )
 $edit_menu.add( 'command',
                 'label'     => "Add",
-                'command'   => Proc.new { make_add },
+                'command'   => Proc.new { make_win_add },
                 'underline' => 0)
 $edit_menu.add( 'command',
                 'label'     => "Delete",
@@ -491,11 +621,11 @@ $sync_menu.add( 'command',
 $sync_menu.add( 'separator' )
 $sync_menu.add( 'command',
                 'label'     => "Pull",
-                'command'   => $menu_click,
+                'command'   => Proc.new { make_win_pull_push "pull" },
                 'underline' => 0)
 $sync_menu.add( 'command',
                 'label'     => "Push",
-                'command'   => $menu_click,
+                'command'   => Proc.new { make_win_pull_push "push" },
                 'underline' => 0)
 
 $menu_bar = TkMenu.new
