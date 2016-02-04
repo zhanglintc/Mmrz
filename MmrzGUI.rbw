@@ -258,8 +258,6 @@ def make_win_sign_up
 end
 
 def push_wordbook
-  TkRoot.messageBox 'title' => "WARNING", 'message' => "测试阶段, 请务必慎重使用! 单词本多做备份!"
-
   username = $tk_username.get.encode("utf-8")
   password = $tk_password.get.encode("utf-8")
 
