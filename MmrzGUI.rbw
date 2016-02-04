@@ -11,6 +11,7 @@ require File.dirname(__FILE__) + '/sync.rb'
 
 require 'tk'
 require 'net/http'
+require 'fileutils'
 require 'json'
 require 'base64'
 require 'win32ole' if COMM::WINDOWS
@@ -121,16 +122,28 @@ def pull_wordbook
   }
 
   uri = URI('http://zhanglin.work:2603/download_wordbook/?' + urlencode(params))
-  rec = JSON.parse Net::HTTP.get(uri)
-  rows = rec['wordbook']
+  received = JSON.parse Net::HTTP.get(uri)
+
+  verified = received['verified']
+  if not verified
+    $tk_win_pull_push.messageBox 'message' => "账户或密码错误, 登录失败"
+    $tk_win_pull_push.focus
+    return
+  end
+  
+  rows = received['wordbook']
+
+  wordbook_bak = "wordbook_#{Time.now.strftime("%Y%m%d%H%M%S")}.bak"
+  FileUtils.cp("./wordbook.db", wordbook_bak)
 
   dbMgr = MmrzDBManager.new
+  dbMgr.pruneDB
   rows.each do |row|
     dbMgr.insertDB row
   end
   dbMgr.closeDB
 
-  $tk_win_pull_push.messageBox 'message' => "pulled"
+  $tk_win_pull_push.messageBox 'message' => "下载成功, 原单词本已备份为#{wordbook_bak}"
   $tk_win_pull_push.focus
 end
 
@@ -151,8 +164,14 @@ def push_wordbook
   uri = URI('http://zhanglin.work:2603/upload_wordbook/?')
   post_data = {"username" => username, "password" => password, "wordbook" => rows_all.to_json}
   resp = Net::HTTP.post_form(uri, post_data)
+  body = JSON.parse resp.body
 
-  $tk_win_pull_push.messageBox 'message' => resp.body
+  verified = body['verified']
+  if verified
+    $tk_win_pull_push.messageBox 'message' => "上传成功!"
+  else
+    $tk_win_pull_push.messageBox 'message' => "账户或密码错误, 登录失败"
+  end
   $tk_win_pull_push.focus
 end
 
@@ -210,7 +229,7 @@ def make_win_pull_push type
   end
 
   TkButton.new(tk_yes_no_frame) do
-    text "取消"
+    text "关闭"
     command Proc.new { $tk_win_pull_push.destroy }
     pack 'side' => 'right', 'padx' => '5'
   end
