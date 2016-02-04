@@ -54,6 +54,10 @@ class MmrzDBManager
     return found
   end
 
+  def pruneDB
+    @db.execute "delete from UNMMRZ"
+  end
+
   def readDB
     @db.execute "select * from UNMMRZ where memTimes < #{COMM::MAX_MEM_TIMES}"
   end
