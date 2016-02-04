@@ -111,7 +111,7 @@ def pull_wordbook
   password = $tk_password.get.encode("utf-8")
 
   if username == "" or password == ""
-    $tk_win_pull_push.messageBox 'message' => "账户密码不能为空!!!"
+    $tk_win_pull_push.messageBox 'message' => "账户和密码均不能为空!!!"
     $tk_win_pull_push.focus
     return
   end
@@ -143,8 +143,116 @@ def pull_wordbook
   end
   dbMgr.closeDB
 
-  $tk_win_pull_push.messageBox 'message' => "下载成功, 原单词本已备份为#{wordbook_bak}"
+  $tk_win_pull_push.messageBox 'message' => "下载成功, 原单词本已备份为\"#{wordbook_bak}\""
   $tk_win_pull_push.focus
+end
+
+def sign_up
+  username     = $tk_signup_username.get.encode("utf-8")
+  password_1st = $tk_signup_password_1st.get.encode("utf-8")
+  password_2nd = $tk_signup_password_2nd.get.encode("utf-8")
+
+  if username == "" or password_1st == ""
+    $tk_win_sign_up.messageBox 'message' => "账户和密码均不能为空!!!"
+    $tk_win_sign_up.focus
+    return
+  end
+
+  if password_1st != password_2nd
+    $tk_win_sign_up.messageBox 'message' => "两次密码不一致, 请确认!"
+    $tk_win_sign_up.focus
+    return
+  end
+
+  uri = URI('http://zhanglin.work:2603/sign_up/?')
+  post_data = {"username" => username, "password" => password_1st}
+  resp = Net::HTTP.post_form(uri, post_data)
+  body = JSON.parse resp.body
+  
+  verified = body['verified']
+  if verified
+    $tk_win_sign_up.messageBox 'title' => "成功", 'message' => "恭喜帐号\"#{username}\"注册成功, 请妥善保管"
+  else
+    $tk_win_sign_up.messageBox 'title' => "失败", 'message' => "帐号\"#{username}\"已被占用, 请修改后重试!!!"
+  end
+  $tk_win_sign_up.focus
+end
+
+def make_win_sign_up
+  frame_width  = 210
+  frame_height = 140
+
+  $tk_win_sign_up = TkToplevel.new do
+    title "注册帐号"
+    iconbitmap FAVICON
+    minsize frame_width, frame_height
+    maxsize frame_width, frame_height
+  end
+
+  tk_username_frame = TkFrame.new($tk_win_sign_up) do
+    padx 10
+    pady 5
+    pack 'side' => 'top', 'fill' => 'x'
+  end
+
+  TkLabel.new(tk_username_frame) do
+    text "帐号："
+    pack 'side' => 'left'
+  end
+
+  $tk_signup_username = TkEntry.new(tk_username_frame) do
+    pack 'side' => 'left', 'fill' => 'x'
+  end
+
+  tk_password_1st_frame = TkFrame.new($tk_win_sign_up) do
+    padx 10
+    pady 5
+    pack 'side' => 'top', 'fill' => 'x'
+  end
+
+  TkLabel.new(tk_password_1st_frame) do
+    text "密码："
+    pack 'side' => 'left'
+  end
+
+  $tk_signup_password_1st = TkEntry.new(tk_password_1st_frame) do
+    show '*'
+    pack 'side' => 'left', 'fill' => 'x'
+  end
+
+  tk_password_2nd_frame = TkFrame.new($tk_win_sign_up) do
+    padx 10
+    pady 5
+    pack 'side' => 'top', 'fill' => 'x'
+  end
+
+  TkLabel.new(tk_password_2nd_frame) do
+    text "确认："
+    pack 'side' => 'left'
+  end
+
+  $tk_signup_password_2nd = TkEntry.new(tk_password_2nd_frame) do
+    show '*'
+    pack 'side' => 'left', 'fill' => 'x'
+  end
+
+  tk_yes_no_frame = TkFrame.new($tk_win_sign_up) do
+    padx 10
+    pady 5
+    pack 'side' => 'top', 'fill' => 'x'
+  end
+
+  TkButton.new(tk_yes_no_frame) do
+    text "关闭"
+    command Proc.new { $tk_win_sign_up.destroy }
+    pack 'side' => 'right', 'padx' => '5'
+  end
+
+  TkButton.new(tk_yes_no_frame) do
+    text "注册"
+    command Proc.new { sign_up }
+    pack 'side' => 'right', 'padx' => '5'
+  end
 end
 
 def push_wordbook
@@ -152,7 +260,7 @@ def push_wordbook
   password = $tk_password.get.encode("utf-8")
 
   if username == "" or password == ""
-    $tk_win_pull_push.messageBox 'message' => "账户密码不能为空!!!"
+    $tk_win_pull_push.messageBox 'message' => "账户和密码均不能为空!!!"
     $tk_win_pull_push.focus
     return
   end
@@ -634,8 +742,8 @@ $help_menu.add( 'command',
 
 $sync_menu = TkMenu.new($tk_root)
 $sync_menu.add( 'command',
-                'label'     => "Account",
-                'command'   => $menu_click,
+                'label'     => "Sign up",
+                'command'   => Proc.new { make_win_sign_up },
                 'underline' => 0)
 $sync_menu.add( 'separator' )
 $sync_menu.add( 'command',
