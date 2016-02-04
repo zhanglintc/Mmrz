@@ -55,7 +55,10 @@ class MmrzDBManager
   end
 
   def pruneDB
+    @db.commit
     @db.execute "delete from UNMMRZ"
+    @db.execute "VACUUM"
+    @db.transaction
   end
 
   def readDB
