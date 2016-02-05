@@ -733,6 +733,10 @@ $help_menu.add( 'command',
                 'command'   => $menu_click,
                 'underline' => 0)
 $help_menu.add( 'command',
+                'label'     => "Home",
+                'underline' => 0,
+                'command'   => Proc.new { system "#{COMM::WINDOWS ? 'start' : 'open'} http://github.com/zhanglintc/Mmrz" })
+$help_menu.add( 'command',
                 'label'     => "About",
                 'underline' => 0,
                 'command'   => Proc.new {
