@@ -28,6 +28,7 @@ module COMM
 
   ## Constants
   WINDOWS = RbConfig::CONFIG['target_os'] == "mingw32" ? true : false
+  SERVERADDR = true ? "http://115.29.192.240:2603" : "http://127.0.0.1:2603"
 
   module_function # public functions begin
   def cal_remind_time memTimes, type

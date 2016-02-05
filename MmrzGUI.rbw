@@ -32,7 +32,6 @@ https://github.com/zhanglintc/Mmrz
 Powered by zhanglintc. [#{VERSION}]
 "
 
-
 # Main window
 $tk_root_width = COMM::MAIN_WIN_WIDTH
 $tk_root_height = COMM::MAIN_WIN_HEIGHT
@@ -121,7 +120,7 @@ def pull_wordbook
     'password' => password,
   }
 
-  uri = URI('http://zhanglin.work:2603/download_wordbook/?' + urlencode(params))
+  uri = URI("#{COMM::SERVERADDR}/download_wordbook/?" + urlencode(params))
   received = JSON.parse Net::HTTP.get(uri)
 
   verified = received['verified']
@@ -164,7 +163,7 @@ def sign_up
     return
   end
 
-  uri = URI('http://zhanglin.work:2603/sign_up/?')
+  uri = URI("#{COMM::SERVERADDR}/sign_up/?")
   post_data = {"username" => username, "password" => password_1st}
   resp = Net::HTTP.post_form(uri, post_data)
   body = JSON.parse resp.body
@@ -271,7 +270,7 @@ def push_wordbook
   rows_all = dbMgr.readAllDB
   dbMgr.closeDB
 
-  uri = URI('http://zhanglin.work:2603/upload_wordbook/?')
+  uri = URI("#{COMM::SERVERADDR}/upload_wordbook/?")
   post_data = {"username" => username, "password" => password, "wordbook" => rows_all.to_json}
   resp = Net::HTTP.post_form(uri, post_data)
   body = JSON.parse resp.body
