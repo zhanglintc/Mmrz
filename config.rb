@@ -2,6 +2,7 @@
 # encoding: utf-8
 
 require 'json'
+require 'nkf'
 
 class ConfigManager
   @@Default_file_path = File.dirname(__FILE__) + "/conf/preferences-default.json"
@@ -33,8 +34,9 @@ class ConfigManager
     user_setting = fr.read
     fr.close
 
-    user_setting.gsub!(/\r\n/, "\n")
-    user_setting.gsub!(/\n/, "\r\n")
+    # remove BOM & add CR
+    # refer to: http://blog.sina.com.cn/s/blog_63eb3eec01015yk1.html
+    user_setting = NKF.nkf("-w -c", user_setting)
 
     fw = open @@User_file_path, "wb"
     fw.write user_setting
