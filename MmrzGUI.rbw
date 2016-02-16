@@ -568,11 +568,16 @@ def import_file path
 end
 
 def export_to_file
+  export_file = Tk.getSaveFile 'filetypes' => "{MMZ {.mmz}} {ALL {.*}}"
+  return if export_file == ""
+
   idx = 0
   to_be_written = ""
 
   dbMgr = MmrzDBManager.new
   rows = dbMgr.readAllDB
+  dbMgr.closeDB
+
   rows.each do |row|
     idx += 1
     word = pronounce = meaning = ""
@@ -586,11 +591,11 @@ def export_to_file
     end
     to_be_written += "#{word}  #{pronounce}  #{meaning}\r\n"
   end
-  fw = open "export.mmz", "wb"
+
+  fw = open export_file, "wb"
   fw.write to_be_written
   fw.close
-  Tk.messageBox 'message' => "Exported #{idx} words to \"export.mmz\" success"
-  dbMgr.closeDB
+  Tk.messageBox 'message' => "Exported #{idx} words to \"#{File.basename export_file}\" success"
 end
 
 def speak_word
