@@ -65,4 +65,11 @@ class ConfigManager
 
     return user_setting[item] != nil ? user_setting[item] : default_setting[item]
   end
+
+  def refresh
+    load File.dirname(__FILE__) + '/comm.rb'
+    $tk_root.minsize $tk_root_width, $tk_root_height
+    $tk_root.maxsize $tk_root_width, $tk_root_height
+    $tk_root.update
+  end
 end

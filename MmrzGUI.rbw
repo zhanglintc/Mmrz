@@ -713,7 +713,7 @@ $edit_menu.add( 'command',
 $edit_menu.add( 'separator' )
 $edit_menu.add( 'command',
                 'label'     => "Setting",
-                'command'   => Proc.new { system "notepad preferences-user.json" },
+                'command'   => Proc.new { system "notepad preferences-user.json"; ConfigManager.new.refresh },
                 'underline' => 0)
 
 $view_menu = TkMenu.new($tk_root)
