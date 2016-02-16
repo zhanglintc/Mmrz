@@ -568,7 +568,7 @@ def import_file path
 end
 
 def export_to_file
-  export_file = Tk.getSaveFile 'filetypes' => "{MMZ {.mmz}} {ALL {.*}}"
+  export_file = Tk.getSaveFile 'filetypes' => "{MMZ {.mmz}} {ALL {.*}}", 'initialfile' => "export", 'defaultextension' => ".mmz"
   return if export_file == ""
 
   idx = 0
