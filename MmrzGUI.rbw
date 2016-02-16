@@ -298,6 +298,7 @@ def make_win_pull_push type
       title "上传单词本"
     end
     iconbitmap FAVICON
+    attributes 'topmost' => true
     minsize frame_width, frame_height
     maxsize frame_width, frame_height
   end
@@ -436,6 +437,7 @@ def make_win_add
   $tk_win_add = TkToplevel.new do
     title "添加单个单词"
     iconbitmap FAVICON
+    attributes 'topmost' => true
     minsize frame_width, frame_height
     maxsize frame_width, frame_height
   end
