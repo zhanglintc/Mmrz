@@ -23,5 +23,31 @@ class MmrzSync
       return nil
     end
   end
+
+  def get_word_book username, password
+    params = {
+      'username' => username,
+      'password' => password,
+    }
+
+    uri = URI("#{COMM::SERVERADDR}/download_wordbook/?" + urlencode(params))
+    received = JSON.parse Net::HTTP.get(uri)
+
+    verified = received['verified']
+    if not verified
+      return false
+    end
+    
+    rows = received['wordbook']
+
+    dbMgr = MmrzDBManager.new
+    dbMgr.pruneDB
+    rows.each do |row|
+      dbMgr.insertDB row
+    end
+    dbMgr.closeDB
+
+    return true
+  end
 end
 
