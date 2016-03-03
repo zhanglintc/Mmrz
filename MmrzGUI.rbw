@@ -32,47 +32,60 @@ https://github.com/zhanglintc/Mmrz
 Powered by zhanglintc. [#{VERSION}]
 "
 
-# Main window
-$tk_root_width = COMM::MAIN_WIN_WIDTH
-$tk_root_height = COMM::MAIN_WIN_HEIGHT
+def make_size
+  # Main window
+  $tk_root_width = COMM::MAIN_WIN_WIDTH
+  $tk_root_height = COMM::MAIN_WIN_HEIGHT
 
-$tk_word_x = 10
-$tk_word_y = 30
-$tk_word_height = 50
-$tk_word_width  = $tk_root_width - ($tk_word_x * 2)
+  $tk_word_x = 10
+  $tk_word_y = 30
+  $tk_word_height = 50
+  $tk_word_width  = $tk_root_width - ($tk_word_x * 2)
 
-$tk_pronounce_x = 10
-$tk_pronounce_y = 80
-$tk_pronounce_height = 50
-$tk_pronounce_width  = $tk_root_width - ($tk_pronounce_x * 2)
+  $tk_pronounce_x = 10
+  $tk_pronounce_y = 80
+  $tk_pronounce_height = 50
+  $tk_pronounce_width  = $tk_root_width - ($tk_pronounce_x * 2)
 
-$tk_show_height = 50
-$tk_show_width  = 100
-$tk_show_x = ($tk_root_width - $tk_show_width) / 2
-$tk_show_y = 90
+  $tk_show_height = 50
+  $tk_show_width  = 100
+  $tk_show_x = ($tk_root_width - $tk_show_width) / 2
+  $tk_show_y = 90
 
-$tk_yes_height = 50
-$tk_yes_width  = 100
-$tk_yes_x = $tk_root_width / 2 - ($tk_yes_width + 40)
-$tk_yes_y = 150
+  $tk_yes_height = 50
+  $tk_yes_width  = 100
+  $tk_yes_x = $tk_root_width / 2 - ($tk_yes_width + 40)
+  $tk_yes_y = 150
 
-$tk_no_height = 50
-$tk_no_width  = 100
-$tk_no_x = $tk_root_width - $tk_no_width - $tk_yes_x
-$tk_no_y = 150
+  $tk_no_height = 50
+  $tk_no_width  = 100
+  $tk_no_x = $tk_root_width - $tk_no_width - $tk_yes_x
+  $tk_no_y = 150
 
-# Wordbook window
-$tk_wb_width  = COMM::WB_WIN_WIDTH
-$tk_wb_height = COMM::WB_WIN_HEIGHT
+  # Wordbook window
+  $tk_wb_width  = COMM::WB_WIN_WIDTH
+  $tk_wb_height = COMM::WB_WIN_HEIGHT
 
-$tk_wb_list_height = $tk_wb_height - 20
-$tk_wb_list_width = $tk_wb_width - 30
-$tk_wb_list_x = 10
-$tk_wb_list_y = 10
+  $tk_wb_list_height = $tk_wb_height - 20
+  $tk_wb_list_width = $tk_wb_width - 30
+  $tk_wb_list_x = 10
+  $tk_wb_list_y = 10
 
-$tk_wb_scroll_height = $tk_wb_height - 20
-$tk_wb_scroll_x = $tk_wb_width - 20
-$tk_wb_scroll_y = $tk_wb_list_y
+  $tk_wb_scroll_height = $tk_wb_height - 20
+  $tk_wb_scroll_x = $tk_wb_width - 20
+  $tk_wb_scroll_y = $tk_wb_list_y
+end
+
+"""
+Main window configurations, label, button, etc.
+"""
+$tk_root = TkRoot.new
+$tk_word = TkLabel.new $tk_root
+$tk_pronounce = TkLabel.new $tk_root
+$tk_show = TkButton.new
+$tk_exit = TkButton.new
+$tk_yes = TkButton.new
+$tk_no = TkButton.new
 
 def show_about
   ms = MmrzSync.new
@@ -603,13 +616,6 @@ def speak_word
   $speaker.speak $rows_from_DB[$cursor_of_rows][0], 1 if $rows_from_DB != []
 end
 
-$tk_root = TkRoot.new do
-  title TITLE # would be overridden
-  iconbitmap FAVICON
-  minsize $tk_root_width, $tk_root_height
-  maxsize $tk_root_width, $tk_root_height
-end
-
 """
 Main menu configurations.
 """
@@ -796,74 +802,6 @@ $menu_bar.add('cascade',
               'underline' => 0)
 $tk_root.menu($menu_bar)
 
-
-"""
-Main window configurations, label, button, etc.
-"""
-$tk_word = TkLabel.new $tk_root do
-  borderwidth 0
-  font TkFont.new 'simsun 20 bold'
-  foreground "black"
-  relief "groove"
-  place 'height' => $tk_word_height, 'width' => $tk_word_width, 'x' => $tk_word_x, 'y' => $tk_word_y
-end
-
-$tk_pronounce = TkLabel.new $tk_root do
-  borderwidth 0
-  font TkFont.new 'simsun 15'
-  foreground "black"
-  relief "groove"
-  place 'height' => $tk_pronounce_height, 'width' => $tk_pronounce_width, 'x' => $tk_pronounce_x, 'y' => $tk_pronounce_y
-end
-
-$tk_show = TkButton.new do
-  text '查看'
-  background "yellow"
-  foreground "blue"
-  place 'height' => $tk_show_height, 'width' => $tk_show_width, 'x' => $tk_show_x, 'y' => $tk_show_y
-  command do
-    show_secret
-    unplace
-    $tk_yes.place 'height' => $tk_yes_height,'width' => $tk_yes_width,'x' => $tk_yes_x,'y' => $tk_yes_y
-    $tk_no.place 'height' => $tk_no_height, 'width' => $tk_no_width, 'x' => $tk_no_x, 'y' => $tk_no_y
-  end
-end
-
-$tk_exit = TkButton.new do
-  text '退出'
-  background "yellow"
-  foreground "blue"
-  command do
-    exit
-  end
-end
-
-$tk_yes = TkButton.new do
-  text '记得住'
-  background "yellow"
-  foreground "blue"
-  command do
-    hide_secret true, false
-    show_word
-    $tk_show.place 'height' => $tk_show_height, 'width' => $tk_show_width, 'x' => $tk_show_x, 'y' => $tk_show_y
-    $tk_yes.unplace
-    $tk_no.unplace
-  end
-end
-
-$tk_no = TkButton.new do
-  text '记不住'
-  background "yellow"
-  foreground "blue"
-  command do
-    hide_secret false, false
-    show_word
-    $tk_show.place 'height' => $tk_show_height, 'width' => $tk_show_width, 'x' => $tk_show_x, 'y' => $tk_show_y
-    $tk_yes.unplace
-    $tk_no.unplace
-  end
-end
-
 """
 Main functions.
 """
@@ -929,6 +867,65 @@ def hide_secret remember, pass
   $tk_pronounce.text ""
 end
 
+def make_GUI
+  $tk_root.title TITLE # would be overridden
+  $tk_root.iconbitmap FAVICON
+  $tk_root.minsize $tk_root_width, $tk_root_height
+  $tk_root.maxsize $tk_root_width, $tk_root_height
+
+  $tk_word.borderwidth 0
+  $tk_word.font TkFont.new 'simsun 20 bold'
+  $tk_word.foreground "black"
+  $tk_word.relief "groove"
+  $tk_word.place 'height' => $tk_word_height, 'width' => $tk_word_width, 'x' => $tk_word_x, 'y' => $tk_word_y
+
+  $tk_pronounce.borderwidth 0
+  $tk_pronounce.font TkFont.new 'simsun 15'
+  $tk_pronounce.foreground "black"
+  $tk_pronounce.relief "groove"
+  $tk_pronounce.place 'height' => $tk_pronounce_height, 'width' => $tk_pronounce_width, 'x' => $tk_pronounce_x, 'y' => $tk_pronounce_y
+
+  $tk_show.text '查看'
+  $tk_show.background "yellow"
+  $tk_show.foreground "blue"
+  $tk_show.place 'height' => $tk_show_height, 'width' => $tk_show_width, 'x' => $tk_show_x, 'y' => $tk_show_y
+  $tk_show.command do
+    show_secret
+    $tk_show.unplace
+    $tk_yes.place 'height' => $tk_yes_height,'width' => $tk_yes_width,'x' => $tk_yes_x,'y' => $tk_yes_y
+    $tk_no.place 'height' => $tk_no_height, 'width' => $tk_no_width, 'x' => $tk_no_x, 'y' => $tk_no_y
+  end
+
+  $tk_exit.text '退出'
+  $tk_exit.background "yellow"
+  $tk_exit.foreground "blue"
+  $tk_exit.command do
+    exit
+  end
+
+  $tk_yes.text '记得住'
+  $tk_yes.background "yellow"
+  $tk_yes.foreground "blue"
+  $tk_yes.command do
+    hide_secret true, false
+    show_word
+    $tk_show.place 'height' => $tk_show_height, 'width' => $tk_show_width, 'x' => $tk_show_x, 'y' => $tk_show_y
+    $tk_yes.unplace
+    $tk_no.unplace
+  end
+
+  $tk_no.text '记不住'
+  $tk_no.background "yellow"
+  $tk_no.foreground "blue"
+  $tk_no.command do
+    hide_secret false, false
+    show_word
+    $tk_show.place 'height' => $tk_show_height, 'width' => $tk_show_width, 'x' => $tk_show_x, 'y' => $tk_show_y
+    $tk_yes.unplace
+    $tk_no.unplace
+  end
+end
+
 """
 Entry point
 """
@@ -978,6 +975,8 @@ if __FILE__ == $0
   $cursor_of_rows = 0
   dbMgr.closeDB
 
+  make_size
+  make_GUI
   show_word
   Tk.mainloop
 end

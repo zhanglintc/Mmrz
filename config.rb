@@ -68,8 +68,8 @@ class ConfigManager
 
   def refresh
     load File.dirname(__FILE__) + '/comm.rb'
-    $tk_root.minsize $tk_root_width, $tk_root_height
-    $tk_root.maxsize $tk_root_width, $tk_root_height
+    make_size
+    make_GUI
     $tk_root.update
   end
 end
