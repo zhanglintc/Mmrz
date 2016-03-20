@@ -21,6 +21,8 @@ VERSION = "GUI-0.2.3"
 FAVICON = "./fav.ico"
 TTSSupport = find_misaki?
 
+$secret_is_hiding = true # this variable is used only after user has changed settings
+
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
 
@@ -831,11 +833,13 @@ def show_word
 end
 
 def show_secret
+  $secret_is_hiding = false
   $tk_pronounce.text $rows_from_DB[$cursor_of_rows][1]
   speak_word if TTSSupport and COMM::AUTO_SPEAK
 end
 
 def hide_secret remember, pass
+  $secret_is_hiding = true
   if $rows_from_DB.empty?
     Tk.messageBox 'message' => "No word specified"
     return
@@ -888,7 +892,7 @@ def make_GUI
   $tk_show.text '查看'
   $tk_show.background "yellow"
   $tk_show.foreground "blue"
-  $tk_show.place 'height' => $tk_show_height, 'width' => $tk_show_width, 'x' => $tk_show_x, 'y' => $tk_show_y
+  $tk_show.place('height' => $tk_show_height, 'width' => $tk_show_width, 'x' => $tk_show_x, 'y' => $tk_show_y) if $secret_is_hiding
   $tk_show.command do
     show_secret
     $tk_show.unplace
