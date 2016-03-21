@@ -22,6 +22,7 @@ module COMM
   AUTO_CHECK_UPDATE = configMgr.get_settings "AUTO_CHECK_UPDATE"
   DEBUG_MODE = configMgr.get_settings "DEBUG_MODE"
   MMRZ_BUILD_WINDOWS_EXE = configMgr.get_settings "MMRZ_BUILD_WINDOWS_EXE"
+  USE_TTS_ENGINE = configMgr.get_settings "USE_TTS_ENGINE"
   AUTO_SPEAK = configMgr.get_settings "AUTO_SPEAK"
   REVERSE_MODE = configMgr.get_settings "REVERSE_MODE"
   REVERSE_MODE_TIMES = configMgr.get_settings "REVERSE_MODE_TIMES"

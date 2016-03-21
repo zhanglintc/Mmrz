@@ -19,7 +19,7 @@ require 'win32ole' if COMM::WINDOWS
 TITLE   = COMM::REVERSE_MODE ? "Mmrz[R]" : "Mmrz"
 VERSION = "GUI-0.2.3"
 FAVICON = "./fav.ico"
-TTSSupport = find_misaki?
+TTSSupport = COMM::USE_TTS_ENGINE and find_misaki?
 
 $secret_is_hiding = true # this variable is used only after user has changed settings
 
