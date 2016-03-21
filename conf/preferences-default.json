@@ -34,7 +34,7 @@
 
     // 是否使用 TTS 发音引擎
     // true: 使用  false: 不使用
-    "USE_TTS_ENGINE": false,
+    "USE_TTS_ENGINE": true,
 
     // 是否自动发音
     // true: 自动发音  false: 手动发音
