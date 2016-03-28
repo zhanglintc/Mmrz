@@ -193,7 +193,7 @@ def sign_up
 end
 
 def make_win_sign_up
-  TkRoot.messageBox 'title' => "WARNING", 'message' => "测试阶段, 请务必慎重使用! 单词本多做备份!"
+  # TkRoot.messageBox 'title' => "WARNING", 'message' => "测试阶段, 请务必慎重使用! 单词本多做备份!"
 
   frame_width  = 210
   frame_height = 140
@@ -300,7 +300,7 @@ def push_wordbook
 end
 
 def make_win_pull_push type
-  TkRoot.messageBox 'title' => "WARNING", 'message' => "测试阶段, 请务必慎重使用! 单词本多做备份!"
+  # TkRoot.messageBox 'title' => "WARNING", 'message' => "测试阶段, 请务必慎重使用! 单词本多做备份!"
 
   frame_width  = 210
   frame_height = 110
