@@ -910,6 +910,7 @@ def make_GUI
   $tk_yes.text '记得住'
   $tk_yes.background "yellow"
   $tk_yes.foreground "blue"
+  $tk_yes.place 'height' => $tk_yes_height,'width' => $tk_yes_width,'x' => $tk_yes_x,'y' => $tk_yes_y if not $secret_is_hiding
   $tk_yes.command do
     hide_secret true, false
     show_word
@@ -921,6 +922,7 @@ def make_GUI
   $tk_no.text '记不住'
   $tk_no.background "yellow"
   $tk_no.foreground "blue"
+  $tk_no.place 'height' => $tk_no_height, 'width' => $tk_no_width, 'x' => $tk_no_x, 'y' => $tk_no_y if not $secret_is_hiding
   $tk_no.command do
     hide_secret false, false
     show_word
