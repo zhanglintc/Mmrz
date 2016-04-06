@@ -1,6 +1,9 @@
 #!/env/bin/ruby
 # encoding: utf-8
 
+# add temp certificate
+system "set SSL_CERT_FILE=./cacert.pem"
+
 puts "Step1: change download server"
 system "gem sources --add https://ruby.taobao.org/ --remove https://rubygems.org/"
 
