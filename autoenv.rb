@@ -1,15 +1,18 @@
 #!/env/bin/ruby
 # encoding: utf-8
 
-# add temp certificate
-system "set SSL_CERT_FILE=./cacert.pem"
+here = File.dirname(__FILE__)
 
-puts "Step1: change download server"
-system "gem sources --add https://ruby.taobao.org/ --remove https://rubygems.org/"
+puts "Step_1: add certificate"
+system "cmd /c setx SSL_CERT_FILE #{here}/cacert.pem -m"
 
 puts ""
-puts "Step2: install sqlite3"
-system "gem install sqlite3"
+puts "Step_2: change download server"
+system "cmd /c gem sources --add https://ruby.taobao.org/ --remove https://rubygems.org/"
+
+puts ""
+puts "Step_3: install sqlite3"
+system "cmd /c gem install sqlite3"
 
 puts ""
 puts "Result: environment for Mmrz is OK"
