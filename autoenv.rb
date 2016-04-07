@@ -27,5 +27,6 @@ fw = open CMD_FILE, "wb"
 fw.write BAT_STR
 fw.close
 
+puts "Don't close me before \"autoenv.cmd\" completed!!!"
 `start #{CMD_FILE}`
 `del #{CMD_FILE}`
