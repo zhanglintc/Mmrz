@@ -764,6 +764,10 @@ $help_menu.add( 'command',
 
 $sync_menu = TkMenu.new($tk_root)
 $sync_menu.add( 'command',
+                'label'     => "Account",
+                'command'   => $menu_click,
+                'underline' => 0)
+$sync_menu.add( 'command',
                 'label'     => "Sign up",
                 'command'   => Proc.new { make_win_sign_up },
                 'underline' => 0)
