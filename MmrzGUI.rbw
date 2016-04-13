@@ -416,6 +416,19 @@ def add_word
   $tk_add_mean.value = ""
 end
 
+def make_win_account
+  frame_width  = 350
+  frame_height = 230
+
+  $tk_win_account = TkToplevel.new do
+    title "帐号信息"
+    iconbitmap FAVICON
+    # attributes 'topmost' => true
+    minsize frame_width, frame_height
+    maxsize frame_width, frame_height
+  end
+end
+
 def make_win_add
   frame_width  = 350
   frame_height = 230
@@ -765,7 +778,7 @@ $help_menu.add( 'command',
 $sync_menu = TkMenu.new($tk_root)
 $sync_menu.add( 'command',
                 'label'     => "Account",
-                'command'   => $menu_click,
+                'command'   => Proc.new { make_win_account },
                 'underline' => 0)
 $sync_menu.add( 'command',
                 'label'     => "Sign up",
