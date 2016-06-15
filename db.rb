@@ -26,8 +26,8 @@ class MmrzDBManager
 
   def createDB
     begin
-      @db.execute "create table UNMMRZ(word char[255], pronounce char[255], memTimes int, remindTime int, remindTimeStr char[255], wordID int)"
       @db.execute "create table USERINFO(user char[255], password[255])"
+      @db.execute "create table UNMMRZ(word char[255], pronounce char[255], memTimes int, remindTime int, remindTimeStr char[255], wordID int)"
     rescue Exception => e
     end
   end
