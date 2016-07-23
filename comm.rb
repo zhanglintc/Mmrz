@@ -101,6 +101,16 @@ module COMM
   end
 end # end of module COMM
 
+def get_OS
+  if RUBY_PLATFORM.include? "darwin"
+    return "mac"
+  elsif RUBY_PLATFORM.include? "linux"
+    return "linux"
+  else
+    return "win"
+  end
+end
+
 def find_misaki?
   misaki_found = false
   if COMM::WINDOWS
