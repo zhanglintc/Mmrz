@@ -631,6 +631,22 @@ def speak_word
   $speaker.speak $rows_from_DB[$cursor_of_rows][0], 1 if $rows_from_DB != []
 end
 
+def edit_setting
+  if get_OS == "mac"
+    `open -a TextEdit #{ConfigManager.User_setting_path}`
+    Thread.start do
+      while `pgrep -f TextEdit` != "" do end
+      ConfigManager.new.refresh
+    end
+  elsif get_OS == "win"
+    system "notepad #{ConfigManager.User_setting_path}"
+    ConfigManager.new.refresh
+  else
+    puts "Not supported!"
+  end
+end
+
+
 """
 Main menu configurations.
 """
@@ -741,7 +757,7 @@ $edit_menu.add( 'command',
 $edit_menu.add( 'separator' )
 $edit_menu.add( 'command',
                 'label'     => "Setting",
-                'command'   => Proc.new { system "notepad preferences-user.json"; ConfigManager.new.refresh },
+                'command'   => Proc.new { edit_setting },
                 'underline' => 0)
 
 $view_menu = TkMenu.new($tk_root)
