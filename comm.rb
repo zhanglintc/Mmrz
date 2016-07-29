@@ -99,17 +99,18 @@ module COMM
     remindTimeStr = format("%sd-%sh-%sm", day, hour, min)
     format("Next after %s", remindTimeStr)
   end
-end # end of module COMM
 
-def get_OS
-  if RUBY_PLATFORM.include? "darwin"
-    return "mac"
-  elsif RUBY_PLATFORM.include? "linux"
-    return "linux"
-  else
-    return "win"
+  def get_OS
+    if RUBY_PLATFORM.include? "darwin"
+      return "mac"
+    elsif RUBY_PLATFORM.include? "linux"
+      return "linux"
+    else
+      return "win"
+    end
   end
-end
+
+end # end of module COMM
 
 def find_misaki?
   misaki_found = false

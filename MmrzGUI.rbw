@@ -632,13 +632,13 @@ def speak_word
 end
 
 def edit_setting
-  if get_OS == "mac"
+  if COMM::get_OS == "mac"
     `open -a TextEdit #{ConfigManager.User_setting_path}`
     Thread.start do
       while `pgrep -f TextEdit` != "" do end
       ConfigManager.new.refresh
     end
-  elsif get_OS == "win"
+  elsif COMM::get_OS == "win"
     system "notepad #{ConfigManager.User_setting_path}"
     ConfigManager.new.refresh
   else
