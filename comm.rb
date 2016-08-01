@@ -112,21 +112,29 @@ module COMM
     end
   end
 
-end # end of module COMM
+  def find_misaki?
+    if COMM::PLATFORM_WINDOWS
+      speaker = WIN32OLE.new('Sapi.SpVoice')
+      speaker.GetVoices().each do |engine|
+        return true if engine.GetDescription().include? "Misaki"
+      end
+    end
+    return false
+  end
 
-def find_misaki?
-  misaki_found = false
-  if COMM::PLATFORM_WINDOWS
-    $speaker = WIN32OLE.new('Sapi.SpVoice')
-    $speaker.GetVoices().each do |engine|
-      if engine.GetDescription().include? "Misaki"
-        $speaker.Voice = engine
-        $speaker.volume = 100 # range 0(low) - 100(loud)
-        $speaker.rate  = -3 # range -10(slow) - 10(fast)
-        misaki_found = true
+  def make_speaker
+    if COMM::PLATFORM_WINDOWS
+      speaker = WIN32OLE.new('Sapi.SpVoice')
+      speaker.GetVoices().each do |engine|
+        if engine.GetDescription().include? "Misaki"
+          speaker.Voice = engine
+          speaker.volume = 100 # range 0(low) - 100(loud)
+          speaker.rate  = -3 # range -10(slow) - 10(fast)
+          return speaker
+        end
       end
     end
   end
-  return misaki_found
-end
+
+end # end of module COMM
 

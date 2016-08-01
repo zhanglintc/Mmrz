@@ -19,9 +19,12 @@ require 'win32ole' if COMM::PLATFORM_WINDOWS
 TITLE   = COMM::REVERSE_MODE ? "Mmrz[R]" : "Mmrz"
 VERSION = "GUI-0.2.3"
 FAVICON = "./fav.ico"
-TTSSupport = COMM::USE_TTS_ENGINE and find_misaki?
 
-$secret_is_hiding = true # this variable is used only after user has changed settings
+TTSSupport   = (COMM::USE_TTS_ENGINE and (COMM::PLATFORM_WINDOWS ? COMM::find_misaki? : true))
+$tts_speaker = (COMM::make_speaker if TTSSupport)
+
+# this variable is only used when user has changed settings
+$secret_is_hiding = true
 
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
@@ -628,7 +631,7 @@ end
 
 def speak_word
   # speaker.speak( text, syncType )
-  $speaker.speak $rows_from_DB[$cursor_of_rows][0], 1 if $rows_from_DB != []
+  $tts_speaker.speak $rows_from_DB[$cursor_of_rows][0], 1 if $rows_from_DB != []
 end
 
 def edit_setting
@@ -981,7 +984,7 @@ if __FILE__ == $0
 
   check_update if COMM::AUTO_CHECK_UPDATE # automatically check for update at startup
 
-  $speaker.speak "", 1 if TTSSupport # speak a null word at beginning
+  $tts_speaker.speak "", 1 if TTSSupport # speak a null word at beginning
 
   dbMgr = MmrzDBManager.new
   dbMgr.createDB
