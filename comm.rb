@@ -3,6 +3,16 @@
 
 require File.dirname(__FILE__) + '/config.rb'
 
+class MacSpeaker
+  # text is word to be said
+  # paraX is useless, only to make speaker() can accept two parameters
+  def speak text, paraX
+    Thread.start do
+      `say #{text} -v kyoko`
+    end
+  end
+end
+
 module COMM
   configMgr = ConfigManager.new
   if not configMgr.user_conf_exist?
@@ -133,6 +143,11 @@ module COMM
           return speaker
         end
       end
+    end
+
+    if COMM::PLATFORM_MAC
+      speaker = MacSpeaker.new
+      return speaker
     end
   end
 
