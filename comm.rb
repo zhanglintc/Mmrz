@@ -28,7 +28,9 @@ module COMM
   REVERSE_MODE_TIMES = configMgr.get_settings "REVERSE_MODE_TIMES"
 
   ## Constants
-  WINDOWS = RbConfig::CONFIG['target_os'] == "mingw32" ? true : false
+  PLATFORM_WINDOWS = RbConfig::CONFIG['target_os'] == "mingw32"
+  PLATFORM_MAC = RUBY_PLATFORM.include? "darwin"
+  PLATFORM_LINUX = RUBY_PLATFORM.include? "linux"
   SERVERADDR = true ? "http://115.29.192.240:2603" : "http://127.0.0.1:2603"
 
   module_function # public functions begin
@@ -114,7 +116,7 @@ end # end of module COMM
 
 def find_misaki?
   misaki_found = false
-  if COMM::WINDOWS
+  if COMM::PLATFORM_WINDOWS
     $speaker = WIN32OLE.new('Sapi.SpVoice')
     $speaker.GetVoices().each do |engine|
       if engine.GetDescription().include? "Misaki"

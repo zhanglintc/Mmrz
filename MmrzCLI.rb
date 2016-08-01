@@ -43,7 +43,7 @@ def my_readline prompt
 end
 
 def clear_screen
-  if COMM::WINDOWS
+  if COMM::PLATFORM_WINDOWS
     system "cls"
   else
     system "clear"
@@ -219,7 +219,7 @@ def list_word
 
   str_to_less += str_to_less_tail
   dbMgr.closeDB
-  if COMM::WINDOWS
+  if COMM::PLATFORM_WINDOWS
     fw = open File.dirname(__FILE__) + "/temp", "wb"
     fw.write str_to_less.encode("gbk")
     fw.close

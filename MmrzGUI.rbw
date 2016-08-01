@@ -14,7 +14,7 @@ require 'net/http'
 require 'fileutils'
 require 'json'
 require 'base64'
-require 'win32ole' if COMM::WINDOWS
+require 'win32ole' if COMM::PLATFORM_WINDOWS
 
 TITLE   = COMM::REVERSE_MODE ? "Mmrz[R]" : "Mmrz"
 VERSION = "GUI-0.2.3"
@@ -774,12 +774,12 @@ $help_menu.add( 'command',
 $help_menu.add( 'separator' )
 $help_menu.add( 'command',
                 'label'     => "Usage",
-                'command'   => Proc.new { system "#{COMM::WINDOWS ? 'start /min' : 'open'} http://imlane.farbox.com/post/mmrzbang-zhu" },
+                'command'   => Proc.new { system "#{COMM::PLATFORM_WINDOWS ? 'start /min' : 'open'} http://imlane.farbox.com/post/mmrzbang-zhu" },
                 'underline' => 0)
 $help_menu.add( 'command',
                 'label'     => "Home",
                 'underline' => 0,
-                'command'   => Proc.new { system "#{COMM::WINDOWS ? 'start /min' : 'open'} http://github.com/zhanglintc/Mmrz" })
+                'command'   => Proc.new { system "#{COMM::PLATFORM_WINDOWS ? 'start /min' : 'open'} http://github.com/zhanglintc/Mmrz" })
 $help_menu.add( 'command',
                 'label'     => "About",
                 'underline' => 0,
