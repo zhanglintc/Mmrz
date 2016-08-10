@@ -126,7 +126,14 @@ module COMM
     if COMM::PLATFORM_WINDOWS
       speaker = WIN32OLE.new('Sapi.SpVoice')
       speaker.GetVoices().each do |engine|
-        return true if engine.GetDescription().include? "Misaki"
+        if engine.GetDescription().include? "Misaki"
+          begin
+            speaker.speak "", 1
+            return true
+          rescue
+            p "audio device not available"
+          end
+        end
       end
     end
     return false
