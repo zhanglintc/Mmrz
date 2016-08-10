@@ -777,12 +777,12 @@ $help_menu.add( 'command',
 $help_menu.add( 'separator' )
 $help_menu.add( 'command',
                 'label'     => "Usage",
-                'command'   => Proc.new { system "#{COMM::PLATFORM_WINDOWS ? 'start /min' : 'open'} http://imlane.farbox.com/post/mmrzbang-zhu" },
-                'underline' => 0)
-$help_menu.add( 'command',
-                'label'     => "Home",
                 'underline' => 0,
-                'command'   => Proc.new { system "#{COMM::PLATFORM_WINDOWS ? 'start /min' : 'open'} http://github.com/zhanglintc/Mmrz" })
+                'command'   => Proc.new { url = "http://imlane.farbox.com/post/mmrzbang-zhu"; COMM::PLATFORM_WINDOWS ? WIN32OLE.new('Shell.Application').ShellExecute(url) : `open #{url}` })
+$help_menu.add( 'command',
+                'label'     => "GitHub",
+                'underline' => 0,
+                'command'   => Proc.new { url = "http://github.com/zhanglintc/Mmrz"; COMM::PLATFORM_WINDOWS ? WIN32OLE.new('Shell.Application').ShellExecute(url) : `open #{url}` })
 $help_menu.add( 'command',
                 'label'     => "About",
                 'underline' => 0,
