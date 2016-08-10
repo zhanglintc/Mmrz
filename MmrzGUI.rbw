@@ -99,7 +99,7 @@ def show_about
     info = $version_info + "\nNote: new version [#{remote_ver}] available"
   else
     remote_ver = "unknown" if remote_ver == nil
-    info = $version_info + "\nNewest version is: [#{remote_ver}]"
+    info = $version_info + "\nNewest version: [#{remote_ver}]"
   end
 
   return info
@@ -113,7 +113,7 @@ def check_update
     if ms.version_to_int(VERSION) < ms.version_to_int(remote_ver)
       Tk.messageBox( 
         'title'   => "Checking for update",
-        'message' => "New version [#{remote_ver}] available\nLocal version is: [#{VERSION}]\n\nPlease use \"SVN update\" to get latest version"
+        'message' => "New version [#{remote_ver}] available\nLocal version: [#{VERSION}]\n\nPlease use \"SVN update\" to get latest version"
       )
     end
   end
