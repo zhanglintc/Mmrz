@@ -17,7 +17,7 @@ require 'base64'
 require 'win32ole' if COMM::PLATFORM_WINDOWS
 
 TITLE   = COMM::REVERSE_MODE ? "Mmrz[R]" : "Mmrz"
-VERSION = "GUI-0.2.4"
+VERSION = "GUI-0.2.5"
 FAVICON = "./fav.ico"
 
 TTSSupport   = (COMM::USE_TTS_ENGINE and (COMM::PLATFORM_WINDOWS ? COMM::find_misaki? : true))
@@ -135,7 +135,7 @@ def pull_wordbook
 
   params = {
     'username' => username,
-    'password' => password,
+    'password' => Base64.strict_encode64(password),
   }
 
   uri = URI("#{COMM::SERVERADDR}/download_wordbook/?" + urlencode(params))
@@ -289,7 +289,7 @@ def push_wordbook
   dbMgr.closeDB
 
   uri = URI("#{COMM::SERVERADDR}/upload_wordbook/?")
-  post_data = {"username" => username, "password" => password, "wordbook" => rows_all.to_json}
+  post_data = {"username" => username, "password" => Base64.strict_encode64(password), "wordbook" => rows_all.to_json}
   resp = Net::HTTP.post_form(uri, post_data)
   body = JSON.parse resp.body
 
