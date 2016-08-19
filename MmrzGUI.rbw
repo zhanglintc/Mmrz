@@ -150,8 +150,8 @@ def pull_wordbook
   
   rows = received['wordbook']
 
-  wordbook_bak = "wordbook_#{Time.now.strftime("%Y%m%d%H%M%S")}.bak"
-  FileUtils.cp("./wordbook.db", wordbook_bak)
+  wordbook_bak = "#{File.dirname(__FILE__)}/wordbook_#{Time.now.strftime("%Y%m%d%H%M%S")}.bak"
+  FileUtils.cp("#{File.dirname(__FILE__)}/wordbook.db", wordbook_bak)
 
   dbMgr = MmrzDBManager.new
   dbMgr.pruneDB
