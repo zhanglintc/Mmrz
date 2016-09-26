@@ -420,15 +420,48 @@ def add_word
 end
 
 def make_win_account
-  frame_width  = 350
-  frame_height = 230
+  frame_width  = 240
+  frame_height = 150
+
+  account_label_x = 30
+  account_label_y = 10
+
+  accout_text_x = account_label_x + 80
+  accout_text_y = account_label_y
+
+  lock_label_x = account_label_x
+  lock_label_y = account_label_y + 20
+
+  lock_text_x = lock_label_x + 80
+  lock_text_y = lock_label_y
 
   $tk_win_account = TkToplevel.new do
-    title "帐号信息"
+    title "Account info"
     iconbitmap FAVICON
     # attributes 'topmost' => true
     minsize frame_width, frame_height
     maxsize frame_width, frame_height
+  end
+
+  $tk_acct_account_lable = TkLabel.new($tk_win_account) do
+    text "Account:"
+    place 'x' => account_label_x, 'y' => account_label_y
+  end
+
+  $tk_acct_account_text = TkLabel.new($tk_win_account) do
+    text "zhanglin"
+    place 'x' => accout_text_x, 'y' => accout_text_y
+  end
+
+  $tk_acct_lock_label = TkLabel.new($tk_win_account) do
+    text "Locked:"
+    place 'x' => lock_label_x, 'y' => lock_label_y
+  end
+
+  $tk_acct_lock_text = TkLabel.new($tk_win_account) do
+    text "Yes"
+    foreground "dark green"
+    place 'x' => lock_text_x, 'y' => lock_text_y
   end
 end
 
