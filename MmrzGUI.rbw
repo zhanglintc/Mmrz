@@ -443,7 +443,7 @@ def make_win_account
     maxsize frame_width, frame_height
   end
 
-  $tk_acct_account_lable = TkLabel.new($tk_win_account) do
+  $tk_acct_account_label = TkLabel.new($tk_win_account) do
     text "Account:"
     place 'x' => account_label_x, 'y' => account_label_y
   end
@@ -469,18 +469,18 @@ def make_win_add
   frame_width  = 350
   frame_height = 230
 
-  word_lable_x = 10
-  word_lable_y = 10
+  word_label_x = 10
+  word_label_y = 10
 
-  word_x = word_lable_x
-  word_y = word_lable_y + 20
+  word_x = word_label_x
+  word_y = word_label_y + 20
   word_width = frame_width - word_x * 2
 
-  pron_lable_x = word_x
-  pron_lable_y = word_y + 40
+  pron_label_x = word_x
+  pron_label_y = word_y + 40
 
-  pron_x = pron_lable_x
-  pron_y = pron_lable_y + 20
+  pron_x = pron_label_x
+  pron_y = pron_label_y + 20
   pron_width = frame_width - pron_x * 2
 
   mean_label_x = pron_x
@@ -508,7 +508,7 @@ def make_win_add
 
   $tk_add_word_label = TkLabel.new($tk_win_add) do
     text "单词:"
-    place 'x' => word_lable_x, 'y' => word_lable_y
+    place 'x' => word_label_x, 'y' => word_label_y
   end
 
   $tk_add_word = TkEntry.new($tk_win_add) do
@@ -517,7 +517,7 @@ def make_win_add
 
   $tk_add_pron_label = TkLabel.new($tk_win_add) do
     text "发音(可选):"
-    place 'x' => pron_lable_x, 'y' => pron_lable_y
+    place 'x' => pron_label_x, 'y' => pron_label_y
   end
 
   $tk_add_pron = TkEntry.new($tk_win_add) do
