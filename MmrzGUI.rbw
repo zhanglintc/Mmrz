@@ -160,7 +160,7 @@ def pull_wordbook
   end
   dbMgr.closeDB
 
-  $tk_win_pull_push.messageBox 'message' => "下载成功, 原单词本已备份为\"#{wordbook_bak}\""
+  $tk_win_pull_push.messageBox 'message' => "下载成功, 原单词本已备份为\"#{wordbook_bak}\"\n\n注意: 请重启本程序读取最新背诵进度"
   $tk_win_pull_push.focus
 end
 
