@@ -16,7 +16,7 @@ class MmrzSync
 
   def get_remote_version
     begin
-      uri = URI "#{COMM::SERVERADDR}/?" + urlencode('req_thing' => 'version_info')
+      uri = URI "#{COMM::SERVERADDR}/version_info"
       rec = JSON.parse Net::HTTP.get(uri)
       return rec['version_info']['GUI']
     rescue
