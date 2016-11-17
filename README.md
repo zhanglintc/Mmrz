@@ -12,7 +12,7 @@
 - 多客户端同步背诵记录. 同步服务项目: [Mmrz-Sync](https://github.com/zhanglintc/mmrz-sync) (开发中)
 
 ## 展示:
-- GUI版本:
+- GUI 版本:
 
 ![hidden](http://115.29.192.240/hidden.jpg)</br>
 ![shown](http://115.29.192.240/shown.jpg)</br>
@@ -24,7 +24,9 @@
 ![demo](http://115.29.192.240/mmrz.gif)
 
 ## 使用:
-`clone`仓库, 然后使用`ruby Mmrz.rb`运行程序. 或者双击`MmrzGUI.rbw`直接运行.
+`git clone` 本仓库, 然后如下操作:
+- GUI 版本: 输入 `ruby MmrzGUI.rbw` 运行, 或者直接双击 `MmrzGUI.rbw` 运行.
+- 命令行版本: 输入 `ruby MmrzCLI.rb` 运行.
 
 **注意事项:**
 
