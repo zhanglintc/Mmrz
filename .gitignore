@@ -1,4 +1,8 @@
+.DS_Store
+
+*.bak
 wordbook.db
+preferences-user.json
 
 *.gem
 *.rbc
@@ -35,7 +39,3 @@ build/
 
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
 .rvmrc
-
-preferences-user.json
-
-*.bak
