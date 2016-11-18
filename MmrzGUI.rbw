@@ -18,7 +18,7 @@ require 'win32ole' if COMM::PLATFORM_WINDOWS
 
 TITLE   = COMM::REVERSE_MODE ? "Mmrz[R]" : "Mmrz"
 VERSION = "GUI-0.2.5"
-FAVICON = "./fav.ico"
+FAVICON = "./misc/fav.ico"
 
 TTSSupport   = (COMM::USE_TTS_ENGINE and (COMM::PLATFORM_WINDOWS ? COMM::find_misaki? : true))
 $tts_speaker = (COMM::make_speaker if TTSSupport)
