@@ -284,20 +284,30 @@ def push_wordbook
     return
   end
 
-  dbMgr = MmrzDBManager.new
-  rows_all = dbMgr.readAllDB
-  dbMgr.closeDB
-
-  uri = URI("#{COMM::SERVERADDR}/upload_wordbook/?")
-  post_data = {"username" => username, "password" => Base64.strict_encode64(password), "wordbook" => rows_all.to_json}
+  uri = URI("#{COMM::SERVERADDR}/log_in/?")
+  post_data = {"username" => username, "password" => Base64.strict_encode64(password)}
   resp = Net::HTTP.post_form(uri, post_data)
   body = JSON.parse resp.body
 
   verified = body['verified']
-  if verified
-    $tk_win_pull_push.messageBox 'message' => "上传成功!"
-  else
+  if not verified
     $tk_win_pull_push.messageBox 'message' => "账户或密码错误, 登录失败"
+  else
+    dbMgr = MmrzDBManager.new
+    rows_all = dbMgr.readAllDB
+    dbMgr.closeDB
+
+    uri = URI("#{COMM::SERVERADDR}/upload_wordbook/?")
+    post_data = {"username" => username, "password" => Base64.strict_encode64(password), "wordbook" => rows_all.to_json}
+    resp = Net::HTTP.post_form(uri, post_data)
+    body = JSON.parse resp.body
+
+    verified = body['verified']
+    if verified
+      $tk_win_pull_push.messageBox 'message' => "上传成功!"
+    else
+      $tk_win_pull_push.messageBox 'message' => "账户或密码错误, 登录失败"
+    end
   end
   $tk_win_pull_push.focus
 end
