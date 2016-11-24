@@ -182,7 +182,7 @@ def sign_up
   end
 
   uri = URI("#{COMM::SERVERADDR}/sign_up/?")
-  post_data = {"username" => username, "password" => password_1st}
+  post_data = {"username" => username, "password" => Base64.strict_encode64(password_1st)}
   resp = Net::HTTP.post_form(uri, post_data)
   body = JSON.parse resp.body
   
