@@ -17,7 +17,7 @@ require 'base64'
 require 'win32ole' if COMM::PLATFORM_WINDOWS
 
 TITLE   = COMM::REVERSE_MODE ? "Mmrz[R]" : "Mmrz"
-VERSION = "GUI-0.2.5"
+VERSION = "GUI-0.2.6"
 FAVICON = "./misc/fav.ico"
 
 TTSSupport   = (COMM::USE_TTS_ENGINE and (COMM::PLATFORM_WINDOWS ? COMM::find_misaki? : true))
