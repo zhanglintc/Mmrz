@@ -47,6 +47,17 @@
     // 仅在反转模式为true时有效, 提取指定已背诵次数(memTimes)的单词
     "REVERSE_MODE_TIMES": 1,
 
+    // 是否使用智能导入模式. 如果启用智能导入, 将会在导入单词本后将已经导入的单词从单词本中删除
+    // true: 启用智能导入  false: 普通导入模式
+    "SMART_IMPORT": false,
+
+    // 是否随机挑选导入的单词, 仅在智能导入模式下有效
+    // true: 随机导入模式  false: 顺序导入模式
+    "RANDOM_PICK_UP": true,
+
+    // 设定每次导入的单词数量, 仅在智能导入模式下有效
+    "IMPORT_QUANTITY": 50,
+
     // 文件末尾标志， 并没有什么卵用， 不用管这个
     "END_OF_FILE": true
 }

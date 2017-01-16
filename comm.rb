@@ -36,6 +36,9 @@ module COMM
   AUTO_SPEAK = configMgr.get_settings "AUTO_SPEAK"
   REVERSE_MODE = configMgr.get_settings "REVERSE_MODE"
   REVERSE_MODE_TIMES = configMgr.get_settings "REVERSE_MODE_TIMES"
+  SMART_IMPORT = configMgr.get_settings "SMART_IMPORT"
+  RANDOM_PICK_UP = configMgr.get_settings "RANDOM_PICK_UP"
+  IMPORT_QUANTITY = configMgr.get_settings "IMPORT_QUANTITY"
 
   ## Constants
   PLATFORM_WINDOWS = RbConfig::CONFIG['target_os'] == "mingw32"
