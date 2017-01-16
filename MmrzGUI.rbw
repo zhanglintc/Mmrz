@@ -556,6 +556,44 @@ def make_win_add
   end
 end
 
+def smart_inport path
+  # count lines
+  fr = open path, "rb"
+  line_quantity = 0; fr.each_line do |line| line_quantity += 1 end
+  fr.close
+  
+  # get rand indexes
+  idx_range = COMM::RANDOM_PICK_UP ? line_quantity : COMM::IMPORT_QUANTITY
+  idx_amount = [line_quantity, COMM::IMPORT_QUANTITY].min
+  rand_idxes = []
+  while rand_idxes.size != idx_amount do
+    rand_num = rand 1..line_quantity
+    if not rand_idxes.include? rand_num
+      rand_idxes << rand_num
+    end
+  end
+
+  # extract lines
+  extracted = ""; write_back = ""; idx = 0
+  fr = open path, "rb"
+  fr.each_line do |line|
+    idx += 1
+    if rand_idxes.include? idx
+      extracted += line
+    else
+      write_back += line
+    end
+  end
+  fr.close
+
+  # write back
+  fw = open path, "wb"
+  fw.write write_back
+  fw.close
+
+  return extracted
+end
+
 def import_file path
   if "".include? path
     return
