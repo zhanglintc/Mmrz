@@ -556,9 +556,9 @@ def make_win_add
   end
 end
 
-def smart_inport path
+def smart_import path
   # count lines
-  fr = open path, "rb"
+  fr = open path, "r"
   line_quantity = 0; fr.each_line do |line| line_quantity += 1 end
   fr.close
   
@@ -575,7 +575,7 @@ def smart_inport path
 
   # extract lines
   extracted = ""; write_back = ""; idx = 0
-  fr = open path, "rb"
+  fr = open path, "r"
   fr.each_line do |line|
     idx += 1
     if rand_idxes.include? idx
@@ -587,7 +587,7 @@ def smart_inport path
   fr.close
 
   # write back
-  fw = open path, "wb"
+  fw = open path, "w"
   fw.write write_back
   fw.close
 
@@ -595,6 +595,8 @@ def smart_inport path
 end
 
 def import_file path
+  $tk_root.title "#{TITLE} -- Please wait..."
+
   if "".include? path
     return
   end
@@ -614,10 +616,14 @@ def import_file path
 
   begin
     fr = open path
+    content = fr.read
+    fr.close
   rescue
     Tk.messageBox 'message' => "Open file \"#{path}\" failed"
     return
   end
+
+  content = smart_import path if COMM::SMART_IMPORT
 
   dbMgr = MmrzDBManager.new
 
@@ -625,7 +631,7 @@ def import_file path
   line_idx = 0
   no_added = 0
   added = 0
-  fr.each_line do |line|
+  content.each_line do |line|
     line.chomp!
 
     $tk_root.title "#{TITLE} -- Importing line #{line_idx}"
@@ -673,7 +679,6 @@ def import_file path
     added += 1
   end
 
-  fr.close
   dbMgr.closeDB
   show_word # refresh title
   Tk.messageBox  'message' => "Import file \"#{path}\" completed\n\n#{added} words added\n#{no_added} words aborted\n\n\nNot loaded lines are shown below:\n\n#{not_loaded_line}"
