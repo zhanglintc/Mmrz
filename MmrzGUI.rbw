@@ -1,9 +1,9 @@
 #!/env/bin/ruby
 # encoding: utf-8
 
-# TODO: try to use Class(singleton) to handle the mass of global variables
-# TODO: add TTS options(engine select | speed select | etc.)
-# TODO: use namespace
+# TO nerver DO: try to use Class(singleton) to handle the mass of global variables
+# TO nerver DO: add TTS options(engine select | speed select | etc.)
+# TO nerver DO: use namespace
 
 require File.dirname(__FILE__) + '/comm.rb'
 require File.dirname(__FILE__) + '/db.rb'
@@ -641,10 +641,15 @@ def import_file path
       next # ignore comment line or null line
     end
 
+    # TODO: save err to err.log
     if suffix == ".mmz"
       wordInfo = line.encode.split
       if not [2, 3].include? wordInfo.size
+        word      = wordInfo[0]
+        pronounce = (wordInfo.size == 2 ? wordInfo[1] : "#{wordInfo[1]} -- #{wordInfo[2]}")
+        err = format("not loaded: %s <==> %s\n", word, pronounce)
         not_loaded_line += "- line #{line_idx}, format error\n"
+        not_loaded_line += "  #{err}"
         no_added += 1
         next
       end
@@ -659,7 +664,11 @@ def import_file path
           wordInfo = [$1, $2, $3]
         end
       else
+        word      = wordInfo[0]
+        pronounce = (wordInfo.size == 2 ? wordInfo[1] : "#{wordInfo[1]} -- #{wordInfo[2]}")
+        err = format("not loaded: %s <==> %s\n", word, pronounce)
         not_loaded_line += "- line #{line_idx}, format error\n"
+        not_loaded_line += "  #{err}"
         no_added += 1
         next
       end
