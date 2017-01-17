@@ -25,11 +25,11 @@
     "AUTO_CHECK_UPDATE": true,
 
     // Debug模式
-    // 如果想导入后立即进入背诵周期而不用等待5分钟， 请设置为 true
+    // 如果想导入后立即进入背诵周期而不用等待5分钟， 请设置为true
     "DEBUG_MODE": false,
 
-    // 是否用于编译生成 Windows下可执行文件
-    // true: 用于生成 exe  false: 不用于生成 exe
+    // 是否用于编译生成Windows下可执行文件
+    // true: 用于生成exe  false: 不用于生成exe
     "MMRZ_BUILD_WINDOWS_EXE": false,
 
     // 是否使用 TTS 发音引擎
@@ -40,7 +40,7 @@
     // true: 自动发音  false: 手动发音
     "AUTO_SPEAK": true,
 
-    // 反转模式 (释义作为显示部分, 单词作为隐藏部分)
+    // 反转模式(释义作为显示部分, 单词作为隐藏部分)
     // true: 启用反转模式  false: 正常模式
     "REVERSE_MODE": false,
 
