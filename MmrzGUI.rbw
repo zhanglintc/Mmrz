@@ -557,45 +557,38 @@ def make_win_add
 end
 
 def smart_import path
-  # count lines
+  # split & count lines
   fr = open path, "r"
-  line_quantity = 0; fr.each_line do |line| line_quantity += 1 end
+  content = fr.read
   fr.close
-  
-  # get rand indexes
+  content_list = content.split("\n")
+  line_quantity = content_list.size
+
+  # get rand indexes & extract lines
   idx_range = COMM::RANDOM_PICK_UP ? line_quantity : COMM::IMPORT_QUANTITY
   idx_amount = [line_quantity, COMM::IMPORT_QUANTITY].min
   rand_idxes = []
+  extracted = ""
   while rand_idxes.size != idx_amount do
     rand_num = rand 1..line_quantity
     if not rand_idxes.include? rand_num
+      extracted += content_list[rand_num - 1] + "\n"
+      content_list[rand_num - 1] = ""
+
       rand_idxes << rand_num
     end
   end
 
-  # extract lines
-  extracted = ""; write_back = ""; idx = 0
-  fr = open path, "r"
-  fr.each_line do |line|
-    idx += 1
-    if rand_idxes.include? idx
-      extracted += line
-    else
-      write_back += line
-    end
-  end
-  fr.close
-
   # write back
   fw = open path, "w"
-  fw.write write_back
+  content_list.each { |line| fw.puts line + "\n" if line != "" }
   fw.close
 
   return extracted
 end
 
 def import_file path
-  $tk_root.title "#{TITLE} -- Please wait..."
+  $tk_root.title "#{TITLE} -- Preparing..."
 
   if "".include? path
     return
