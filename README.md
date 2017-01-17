@@ -10,6 +10,7 @@
 - 支持发音功能, 加深记忆
 - 支持批量导入生词
 - 多客户端同步背诵记录. 同步服务项目: [Mmrz-Sync](https://github.com/zhanglintc/mmrz-sync) (开发中)
+- 支持网页版访问, 访问地址: [zhanglintc.work](http://zhanglintc.work:2603)
 
 ## 展示:
 - GUI 版本:
