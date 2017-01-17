@@ -621,6 +621,7 @@ def import_file path
   dbMgr = MmrzDBManager.new
 
   not_loaded_line = ""
+  err_log_line = ""
   line_idx = 0
   no_added = 0
   added = 0
@@ -634,15 +635,14 @@ def import_file path
       next # ignore comment line or null line
     end
 
-    # TODO: save err to err.log
     if suffix == ".mmz"
       wordInfo = line.encode.split
       if not [2, 3].include? wordInfo.size
         word      = wordInfo[0]
         pronounce = (wordInfo.size == 2 ? wordInfo[1] : "#{wordInfo[1]} -- #{wordInfo[2]}")
         err = format("not loaded: %s <==> %s\n", word, pronounce)
-        not_loaded_line += "- line #{line_idx}, format error\n"
-        not_loaded_line += "  #{err}"
+        not_loaded_line += "- line #{line_idx}: format error\n"
+        err_log_line += "- line #{line_idx}: #{line}\n"
         no_added += 1
         next
       end
@@ -660,8 +660,8 @@ def import_file path
         word      = wordInfo[0]
         pronounce = (wordInfo.size == 2 ? wordInfo[1] : "#{wordInfo[1]} -- #{wordInfo[2]}")
         err = format("not loaded: %s <==> %s\n", word, pronounce)
-        not_loaded_line += "- line #{line_idx}, format error\n"
-        not_loaded_line += "  #{err}"
+        not_loaded_line += "- line #{line_idx}: format error\n"
+        err_log_line += "- line #{line_idx}: #{line}\n"
         no_added += 1
         next
       end
@@ -681,9 +681,15 @@ def import_file path
     added += 1
   end
 
+  ferr = open "import.log", "a"
+  ferr.puts Time.now
+  ferr.puts err_log_line
+  ferr.puts ""
+  ferr.close
+
   dbMgr.closeDB
   show_word # refresh title
-  Tk.messageBox  'message' => "Import file \"#{path}\" completed\n\n#{added} words added\n#{no_added} words aborted\n\n\nNot loaded lines are shown below:\n\n#{not_loaded_line}"
+  Tk.messageBox  'message' => "Import file \"#{path}\" completed\n\n#{added} words added\n#{no_added} #{no_added < 2 ? 'word' : 'words'} aborted\n\n\nNot loaded lines are shown below.\nSee \"import.log\" for details:\n\n#{not_loaded_line}"
 end
 
 def export_to_file
