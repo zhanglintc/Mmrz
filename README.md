@@ -15,14 +15,14 @@
 ## 展示:
 - GUI 版本:
 
-![hidden](http://115.29.192.240/hidden.jpg)</br>
-![shown](http://115.29.192.240/shown.jpg)</br>
-![finish](http://115.29.192.240/finish.jpg)</br>
-![wordbook](http://115.29.192.240/wordbook.jpg)</br>
+![hidden](https://i.v2ex.co/vnxgBgwd.jpeg)</br>
+![shown](https://i.v2ex.co/2B6T4T3P.jpeg)</br>
+![finish](https://www.v2ex.com/i/7MA9u350.jpeg)</br>
+![wordbook](https://www.v2ex.com/i/agrly2NT.jpeg)</br>
 
 - 命令行版本:
 
-![demo](http://115.29.192.240/mmrz.gif)
+![demo](https://i.v2ex.co/vO1aAlap.gif)
 
 ## 使用:
 `git clone` 本仓库, 然后如下操作:
