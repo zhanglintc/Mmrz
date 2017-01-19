@@ -17,8 +17,8 @@
 
 ![hidden](https://i.v2ex.co/vnxgBgwd.jpeg)</br>
 ![shown](https://i.v2ex.co/2B6T4T3P.jpeg)</br>
-![finish](https://www.v2ex.com/i/7MA9u350.jpeg)</br>
-![wordbook](https://www.v2ex.com/i/agrly2NT.jpeg)</br>
+![finish](https://i.v2ex.co/7MA9u350.jpeg)</br>
+![wordbook](https://i.v2ex.co/agrly2NT.jpeg)</br>
 
 - 命令行版本:
 
