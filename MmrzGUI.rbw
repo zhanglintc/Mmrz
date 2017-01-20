@@ -588,8 +588,6 @@ def smart_import path
 end
 
 def import_file path
-  $tk_root.title "#{TITLE} -- Preparing..."
-
   if "".include? path
     return
   end
@@ -615,6 +613,8 @@ def import_file path
     Tk.messageBox 'message' => "Open file \"#{path}\" failed"
     return
   end
+
+  $tk_root.title "#{TITLE} -- Preparing..."
 
   content = smart_import path if COMM::SMART_IMPORT
 
