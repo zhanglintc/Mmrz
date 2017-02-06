@@ -570,7 +570,7 @@ def smart_import path
   rand_idxes = []
   extracted = ""
   while rand_idxes.size != idx_amount do
-    rand_num = rand 1..line_quantity
+    rand_num = rand 1..idx_range
     if not rand_idxes.include? rand_num
       extracted += content_list[rand_num - 1] + "\n"
       content_list[rand_num - 1] = ""
