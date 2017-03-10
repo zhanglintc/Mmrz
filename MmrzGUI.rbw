@@ -566,7 +566,7 @@ def smart_import path
 
   # get rand indexes & extract lines
   idx_range = COMM::RANDOM_PICK_UP ? line_quantity : COMM::IMPORT_QUANTITY
-  idx_amount = [line_quantity, COMM::IMPORT_QUANTITY].min
+  idx_amount = [idx_range, COMM::IMPORT_QUANTITY].min
   rand_idxes = []
   extracted = ""
   while rand_idxes.size != idx_amount do
