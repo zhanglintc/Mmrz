@@ -12,8 +12,8 @@ MmrzGUI 版本现在极少进行维护, 重点工作已经转入网页版 [Mmrz-
 - 根据遗忘曲线设计背诵时间
 - 支持发音功能, 加深记忆
 - 支持批量导入生词
-- 多客户端同步背诵记录. 同步服务项目: [Mmrz-Sync](https://github.com/zhanglintc/mmrz-sync) (开发中)
-- 支持网页版访问, 访问地址: [zhanglintc.work](http://zhanglintc.work:2603)
+- 多客户端同步背诵记录. 同步服务项目: [Mmrz-Sync](https://github.com/zhanglintc/mmrz-sync)
+- 支持网页版访问, 访问地址: [mmrz.zhanglintc.co](https://mmrz.zhanglintc.co)
 
 ## 展示:
 - GUI 版本:
