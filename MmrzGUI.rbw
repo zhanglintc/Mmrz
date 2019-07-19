@@ -113,10 +113,17 @@ def check_update
     if ms.version_to_int(VERSION) < ms.version_to_int(remote_ver)
       Tk.messageBox(
         'title'   => "Checking for update",
-        'message' => "New version [#{remote_ver}] available\nLocal version: [#{VERSION}]\n\nPlease use \"SVN update\" to get latest version"
+        'message' => "New version [#{remote_ver}] available\nLocal version: [#{VERSION}]\n\nPlease use \"SVN update\" or \"git pull\" to get the latest version"
       )
     end
   end
+end
+
+def no_longer_support
+  Tk.messageBox(
+    'title' => "SORRY",
+    'message' => "Sync related function no longer supported because not enough time for maintenance\n\nVisit \"https://mmrz.zhanglintc.co\" instead"
+  )
 end
 
 def urlencode params
@@ -197,6 +204,7 @@ end
 
 def make_win_sign_up
   # TkRoot.messageBox 'title' => "WARNING", 'message' => "测试阶段, 请务必慎重使用! 单词本多做备份!"
+  return no_longer_support
 
   frame_width  = 210
   frame_height = 140
@@ -314,6 +322,7 @@ end
 
 def make_win_pull_push type
   # TkRoot.messageBox 'title' => "WARNING", 'message' => "测试阶段, 请务必慎重使用! 单词本多做备份!"
+  return no_longer_support
 
   frame_width  = 210
   frame_height = 110
@@ -430,6 +439,8 @@ def add_word
 end
 
 def make_win_account
+  return no_longer_support
+
   frame_width  = 240
   frame_height = 150
 
