@@ -4,7 +4,7 @@
 puts "Step1: change download server"
 system "gem sources --remove https://rubygems.org/"
 system "gem sources --remove https://ruby.taobao.org/"
-system "gem sources --add http://gems.ruby-china.org/"
+system "gem sources --add https://gems.ruby-china.com"
 
 puts ""
 puts "Step2: install sqlite3"
