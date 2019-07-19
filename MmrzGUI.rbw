@@ -111,7 +111,7 @@ def check_update
     remote_ver = ms.get_remote_version
 
     if ms.version_to_int(VERSION) < ms.version_to_int(remote_ver)
-      Tk.messageBox( 
+      Tk.messageBox(
         'title'   => "Checking for update",
         'message' => "New version [#{remote_ver}] available\nLocal version: [#{VERSION}]\n\nPlease use \"SVN update\" to get latest version"
       )
@@ -147,7 +147,7 @@ def pull_wordbook
     $tk_win_pull_push.focus
     return
   end
-  
+
   rows = received['wordbook']
 
   wordbook_bak = "#{File.dirname(__FILE__)}/wordbook_#{Time.now.strftime("%Y%m%d%H%M%S")}.bak"
@@ -185,7 +185,7 @@ def sign_up
   post_data = {"username" => username, "password" => Base64.strict_encode64(password_1st)}
   resp = Net::HTTP.post_form(uri, post_data)
   body = JSON.parse resp.body
-  
+
   verified = body['verified']
   if verified
     $tk_win_sign_up.messageBox 'title' => "成功", 'message' => "恭喜帐号\"#{username}\"注册成功, 请妥善保管"
@@ -666,7 +666,7 @@ def import_file path
         next
       end
     end
-    
+
     word          = wordInfo[0]
     pronounce     = (wordInfo.size == 2 ? wordInfo[1] : "#{wordInfo[1]} -- #{wordInfo[2]}")
     memTimes      = 0
@@ -749,7 +749,7 @@ Main menu configurations.
 """
 $menu_click = Proc.new {
   Tk.messageBox(
-    'type'    => "ok",  
+    'type'    => "ok",
     'icon'    => "info",
     'title'   => "Coming soon",
     'message' => "Under developing"
@@ -831,7 +831,7 @@ $edit_menu = TkMenu.new($tk_root)
 $edit_menu.add( 'command',
                 'label'     => "Pass",
                 'underline' => 0,
-                'command'   => Proc.new { 
+                'command'   => Proc.new {
                                 hide_secret false, true
                                 show_word
                                 $tk_show.place 'height' => $tk_show_height, 'width' => $tk_show_width, 'x' => $tk_show_x, 'y' => $tk_show_y
@@ -882,7 +882,7 @@ $help_menu.add( 'command',
                 'underline' => 0,
                 'command'   => Proc.new {
                   Tk.messageBox(
-                    'type'    => "ok",  
+                    'type'    => "ok",
                     'icon'    => "info",
                     'title'   => "About",
                     'message' => show_about )}
